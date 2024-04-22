@@ -1,0 +1,78 @@
+<template>
+	<nav class="TopNav">
+		<div class="NavContainer between">
+			<div class="Left start">
+				<div class="Logo">
+					<NuxtLink to="/dashboard/home">
+						<img src="/images/va-group.jpg" alt="">
+						<!-- VA Group -->
+					</NuxtLink>
+				</div>
+
+				<div class="Navlinks start">
+					<NuxtLink to="/dashboard/home">
+						Home
+					</NuxtLink>
+
+					<NuxtLink to="/dashboard/home">
+						Agents
+					</NuxtLink>
+				</div>
+			</div>
+
+			<button class="Download p-[3px] relative">
+				<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+
+				<div
+					class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
+					<img src="/svg/download.svg" alt="">
+
+					<span>
+						Download CSV
+					</span>
+				</div>
+			</button>
+		</div>
+	</nav>
+</template>
+
+<script>
+export default {
+
+}
+</script>
+
+<style lang="postcss" scoped>
+.TopNav {
+	@apply px-10 py-6 w-full border-b border-[#E6E6E6] sticky top-0 bg-white;
+
+	.NavContainer {
+		@apply flex justify-between items-center;
+
+		.Left {
+			@apply space-x-20;
+
+			.Logo {
+				a {
+					img {
+						@apply w-20
+					}
+					/* @apply font-bold text-2xl; */
+				}
+			}
+
+			.Navlinks {
+				@apply space-x-10;
+
+				a {
+					@apply text-base font-medium text-[#676767];
+
+					/* &.router-link-active {
+						@apply text-[#000000] underline underline-offset-4 font-bold duration-500;
+					} */
+				}
+			}
+		}
+	}
+}
+</style>
