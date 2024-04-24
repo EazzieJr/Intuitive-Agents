@@ -1,16 +1,16 @@
 <template>
 	<div>
-		<h1>
-		</h1>
 	</div>
 </template>
 
 <script>
+definePageMeta({
+	layout: "dashboard"
+})
+
 export default {
 
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

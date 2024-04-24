@@ -1,8 +1,34 @@
 <template>
 	<div class="DashboardLayout">
-		<div class="w-full h-screen bg-red-500"></div>
+		<TopNav />
 
-		<slot />
+		<!-- <nav class="Sidebar">
+			<div class="NavContainer">
+				<div class="NavHeader">
+					<NuxtLink to="/">
+						VA Group
+					</NuxtLink>
+				</div>
+
+				<div class="NavLinks">
+					<NuxtLink to="/">
+
+					</NuxtLink>
+
+					<NuxtLink to="/">
+						VA Group
+					</NuxtLink>
+
+					<NuxtLink to="/">
+						VA Group
+					</NuxtLink>
+				</div>
+			</div>
+		</nav> -->
+
+		<div class="Main" data-lenis-prevent>
+			<slot />
+		</div>
 	</div>
 </template>
 
