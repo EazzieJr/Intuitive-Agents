@@ -2,13 +2,6 @@
 	<nav class="TopNav">
 		<div class="NavContainer between">
 			<div class="Left start">
-				<div class="Logo">
-					<NuxtLink to="/dashboard/home">
-						<img src="/images/va-group.jpg" alt="">
-						<!-- VA Group -->
-					</NuxtLink>
-				</div>
-
 				<div class="Navlinks start">
 					<NuxtLink to="/dashboard/home">
 						Home
@@ -44,7 +37,7 @@ export default {
 
 <style lang="postcss" scoped>
 .TopNav {
-	@apply px-10 py-6 w-full border-b border-[#E6E6E6] sticky top-0 bg-white;
+	@apply px-10 py-[21px] border-b border-[#E6E6E6] sticky top-0 bg-white ml-[240px];
 
 	.NavContainer {
 		@apply flex justify-between items-center;

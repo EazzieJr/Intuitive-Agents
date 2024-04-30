@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ["~/assets/tailwind/index.css"],
+
   postcss: {
     plugins: {
       "tailwindcss/nesting": {},
@@ -9,4 +10,6 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+
+  modules: ["@pinia/nuxt"]
 });

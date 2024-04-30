@@ -1,7 +1,5 @@
 <template>
-	<div class="DashboardLayout">
-		<div class="w-full h-screen bg-red-500"></div>
-
+	<div class="Default">
 		<slot />
 	</div>
 </template>
