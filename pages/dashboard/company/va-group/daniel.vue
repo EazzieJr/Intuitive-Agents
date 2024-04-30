@@ -50,9 +50,9 @@
 			</div>
 
 			<div class="Numbers start">
-				<SmallTileCard title="Total calls" icon="outgoing" :value="stats?.TotalCalls || 0" />
-				<SmallTileCard title="Call answered" icon="user-answered" :value="stats?.TotalAnsweredCall || 0" />
-				<SmallTileCard title="Unanswered calls" icon="user-declined" :value="stats?.TotalNotAnsweredCalls || 0" />
+				<SmallTileCard title="Total contacts" icon="outgoing" :value="stats?.TotalCalls || 0" />
+				<SmallTileCard title="Called Contacts" icon="user-answered" :value="stats?.TotalAnsweredCall || 0" />
+				<SmallTileCard title="Not Called" icon="user-declined" :value="stats?.TotalNotAnsweredCalls || 0" />
 			</div>
 		</header>
 
@@ -63,81 +63,7 @@
 				</h2>
 			</div>
 
-			<div class="Table">
-				<div class="Header flex items-center grow">
-					<div>S/N</div>
-
-					<div>First Name</div>
-
-					<div>Last Name</div>
-
-					<div>Email</div>
-
-					<div>Phone</div>
-
-					<div>Status</div>
-
-					<div>Agent</div>
-				</div>
-
-				<div class="Data" data-lenis-prevent>
-					<div class="DataContainer">
-						<div class="Row start" v-for="(user, index) in users" :key="index">
-							<div>
-								{{ index + 1 }}
-							</div>
-
-							<div>
-								{{ user.firstname }}
-							</div>
-
-							<div>
-								{{ user.lastname }}
-							</div>
-
-							<div>
-								{{ user.email }}
-							</div>
-
-							<div>
-								{{ user.phone }}
-							</div>
-
-							<div class="start">
-								<img :src="`/svg/calls/${user.status}.svg`" alt="">
-								<span class="Status active">
-									{{ user.status }}
-								</span>
-							</div>
-
-							<div>
-								{{ getAgentName(user.agentId) }}
-							</div>
-
-							<button @click="transcript = user?.referenceToCallId">
-								<img src="/svg/transcript.svg" alt="">
-							</button>
-						</div>
-					</div>
-
-					<div class="Empty col-center h-[400px]" v-if="searching">
-						<img src="/svg/empty.svg" alt="">
-
-						<p>
-							{{ searching ? "Fetching logs for " + moment(date).format('ll') : "No data avalaible for " +
-							moment(date).format('ll') }}
-						</p>
-					</div>
-
-					<div class="Empty col-center h-[400px]" v-if="users.length == 0">
-						<img src="/svg/empty.svg" alt="">
-
-						<p>
-							{{ fetching ? "Fetching table data" : "No data avalaible for " + moment(date).format('ll') }}
-						</p>
-					</div>
-				</div>
-			</div>
+			<Table :users="users" :searching="searching" :totalPages="totalPages" :page="page" @paginate="paginate" :fetching="fetching" />
 		</div>
 
 		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="transcript = {}">
@@ -187,9 +113,11 @@ export default {
 
 			transcript: {},
 			fetching: false,
-			searching: true,
+			searching: false,
 			stats: null,
 			date: new Date(),
+			totalPages: 0,
+			page: 1,
 			moment
 		}
 	},
@@ -198,6 +126,14 @@ export default {
 		transcriptArray() {
 			// console.log("Stuff", this.transcript?.split("\n"));
 			return this.transcript?.transcript?.split("\n")
+		},
+
+
+	},
+
+	watch: {
+		fetching(val) {
+			console.log("Fetching: ", val);
 		}
 	},
 
@@ -256,14 +192,15 @@ export default {
 			}
 		},
 
-		async loadUsers(date) {
+		async loadUsers(page) {
 			// const { logId1, logId2, logId3 } = logs;
-
+			this.fetching = true;
 			try {
-				const response = await fetch("https://retell-backend-yy86.onrender.com/get-metadata", {
+				const response = await fetch(`https://intuitiveagents.io/users/86f0db493888f1da69b7d46bfaecd360`, {
 					method: "POST",
 					body: JSON.stringify({
-						date
+						limit: 100,
+						page: page ? page : this.page
 					}),
 					headers: {
 						"Content-Type": "application/json"
@@ -272,18 +209,27 @@ export default {
 
 				if (!response.ok) {
 					throw new Error(`HTTP error! Status: ${response.status}`);
+					return this.users = [];
 				}
 
 				const users = await response.json(); // Parse the response body as JSON
+				console.log("Response: ", users.result.contacts);
 
-				this.users = users.dailyStats;
+				this.users = users.result.contacts;
+				this.totalPages = users.result.totalPages;
+				if(page) this.page = page;
+				console.log("Total Pages: ", this.totalPages);
 				this.fetching = false;
-				this.searching = false;
+				// this.searching = false;
 			} catch (error) {
 				console.error("Error fetching data:", error);
 				// Return an empty object or handle the error as needed
 				this.users = [];
 			}
+
+			setInterval(() => {
+				refreshNuxtData()
+			}, 7000);
 		},
 
 		async filterByDate() {
@@ -291,11 +237,17 @@ export default {
 			this.getStats(searching)
 			// const pstDate = moment(this.date).tz("America/Los_Angeles").format('YYYY-MM-DD');
 			// this.loadUsers(pstDate);
+		},
+
+		paginate(page) {
+			// this.page = page;
+			this.loadUsers(page)
 		}
 	},
 
 	beforeMount() {
-		this.getStats(false)
+		this.loadUsers()
+		// this.getStats(false)
 	}
 }
 </script>

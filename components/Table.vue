@@ -1,85 +1,89 @@
 <template>
-	<div class="Logs">
-		<div class="Texts">
-			<h2>
-				Call Logs
-			</h2>
+	<div class="Table">
+		<div class="Header flex items-center grow">
+			<div>S/N</div>
+
+			<div>First Name</div>
+
+			<div>Last Name</div>
+
+			<div>Email</div>
+
+			<div>Phone</div>
+
+			<div>Status</div>
+
+			<div>Actions</div>
 		</div>
 
-		<div class="Table">
-			<div class="Header flex items-center grow">
-				<div>S/N</div>
+		<div class="Data" data-lenis-prevent>
+			<div class="DataContainer">
+				<div class="Row start" v-for="(user, index) in users" :key="index">
+					<div>
+						{{ index + 1 }}
+					</div>
 
-				<div>First Name</div>
+					<div>
+						{{ user.firstname }}
+					</div>
 
-				<div>Last Name</div>
+					<div>
+						{{ user.lastname }}
+					</div>
 
-				<div>Email</div>
+					<div>
+						{{ user.email }}
+					</div>
 
-				<div>Phone</div>
+					<div>
+						{{ user.phone }}
+					</div>
 
-				<div>Status</div>
+					<div class="start">
+						<img :src="`/svg/calls/${user.status}.svg`" alt="">
+						<span class="Status active">
+							{{ user.status }}
+						</span>
+					</div>
 
-				<div>Agent</div>
-			</div>
-
-			<div class="Data" data-lenis-prevent>
-				<div class="DataContainer">
-					<div class="Row start" v-for="(user, index) in users" :key="index">
-						<div>
-							{{ index + 1 }}
-						</div>
-
-						<div>
-							{{ user.firstname }}
-						</div>
-
-						<div>
-							{{ user.lastname }}
-						</div>
-
-						<div>
-							{{ user.email }}
-						</div>
-
-						<div>
-							{{ user.phone }}
-						</div>
-
-						<div class="start">
-							<img :src="`/svg/calls/${user.status}.svg`" alt="">
-							<span class="Status active">
-								{{ user.status }}
-							</span>
-						</div>
-
-						<div>
-							{{ getAgentName(user.agentId) }}
-						</div>
-
+					<div>
 						<button @click="transcript = user?.referenceToCallId">
 							<img src="/svg/transcript.svg" alt="">
 						</button>
 					</div>
 				</div>
-
-				<div class="Empty col-center h-[400px]" v-if="searching">
-					<img src="/svg/empty.svg" alt="">
-
-					<p>
-						{{ searching ? "Fetching logs for " + moment(date).format('ll') : "No data avalaible for " +
-						moment(date).format('ll') }}
-					</p>
-				</div>
-
-				<div class="Empty col-center h-[400px]" v-if="users.length == 0">
-					<img src="/svg/empty.svg" alt="">
-
-					<p>
-						{{ fetching ? "Fetching table data" : "No data avalaible for " + moment(date).format('ll') }}
-					</p>
-				</div>
 			</div>
+
+			<div class="Empty col-center h-[400px]" v-if="users.length == 0">
+				<img src="/svg/empty.svg" alt="">
+
+				<p>
+					{{ fetching ? "Fetching table data" : "No Available Contact on this agent" }}
+				</p>
+			</div>
+		</div>
+
+		<div class="Pagination between" v-if="users.length > 0">
+			<button class="Previous" @click="paginate(page - 1)" :disabled="page == 1 || fetching">
+				<span>
+					Previous
+				</span>
+			</button>
+
+			<div>
+				<span class="" v-if="!fetching">
+					{{ page }} of {{ totalPages }}
+				</span>
+
+
+				<img class="animate-spin duration-1000 py-1 w-6" v-else src="/svg/loading-dark.svg" alt="">
+			</div>
+
+			<button class="Next" @click="paginate(page + 1)" :disabled="page == pages || fetching">
+				<span>
+					Next
+				</span>
+			</button>
 		</div>
 	</div>
 </template>
@@ -89,24 +93,34 @@ import moment from "moment-timezone";
 export default {
 	props: {
 		users: {
-			type: Array,
-			default: () => ([])
+			type: Array
+		},
+		searching: {
+			type: Boolean,
+			default: true
+		},
+		totalPages: {
+			type: Number,
+		},
+		page: {
+			type: Number,
+		},
+		fetching: {
+			type: Boolean,
+			// default: true
 		}
 	},
-	
+
 	data() {
 		return {
-			users: [],
-
 			transcript: {},
-			fetching: false,
-			searching: true,
 			stats: null,
 			date: new Date(),
+			tempPage: this.page,
 			moment
 		}
 	},
-	
+
 	computed: {
 		transcriptArray() {
 			// console.log("Stuff", this.transcript?.split("\n"));
@@ -204,11 +218,16 @@ export default {
 			this.getStats(searching)
 			// const pstDate = moment(this.date).tz("America/Los_Angeles").format('YYYY-MM-DD');
 			// this.loadUsers(pstDate);
+		},
+
+		paginate(page) {
+			console.log(page);
+			this.$emit("paginate", page)
 		}
 	},
 
 	beforeMount() {
-		this.getStats(false)
+		// this.getStats(false)
 	}
 }
 </script>
@@ -228,15 +247,15 @@ export default {
 			}
 
 			&:nth-child(2) {
-				@apply basis-[15%];
+				@apply basis-[12%];
 			}
 
 			&:nth-child(3) {
-				@apply basis-[15%];
+				@apply basis-[12%];
 			}
 
 			&:nth-child(4) {
-				@apply basis-[22%];
+				@apply basis-[28%];
 			}
 
 			&:nth-child(5) {
@@ -248,7 +267,7 @@ export default {
 			}
 
 			&:nth-child(7) {
-				@apply basis-[8%];
+				@apply basis-[16%];
 			}
 		}
 	}
@@ -268,15 +287,15 @@ export default {
 					}
 
 					&:nth-child(2) {
-						@apply basis-[15%];
+						@apply basis-[12%];
 					}
 
 					&:nth-child(3) {
-						@apply basis-[15%];
+						@apply basis-[12%];
 					}
 
 					&:nth-child(4) {
-						@apply basis-[22%];
+						@apply basis-[28%];
 					}
 
 					&:nth-child(5) {
@@ -292,7 +311,7 @@ export default {
 					}
 
 					&:nth-child(7) {
-						@apply basis-[8%] font-bold;
+						@apply basis-[16%] font-bold;
 					}
 
 					&:nth-child(8) {
@@ -300,6 +319,18 @@ export default {
 					}
 				}
 			}
+		}
+	}
+
+	.Pagination {
+		@apply px-5 pt-2.5 xl:pt-3 pb-3.5 xl:pb-4;
+
+		button {
+			@apply border border-gray-200 py-2 px-3 xl:px-3.5 rounded-lg text-[#344054] text-sm leading-5
+		}
+
+		span {
+			@apply block text-[#344054] text-sm leading-5
 		}
 	}
 }
