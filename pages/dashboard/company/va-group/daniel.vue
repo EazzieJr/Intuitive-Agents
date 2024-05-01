@@ -16,9 +16,9 @@
 					</button>
 				</div>
 
-				<div class="DateFilter start space-x-2">
-					<!-- {{ date }} -->
-					<!-- <Datepicker v-model="date" /> -->
+				<ExportLogs agentId="86f0db493888f1da69b7d46bfaecd360" agentName="Daniel" />
+
+				<!-- <div class="DateFilter start space-x-2">
 					<vue-date-picker v-model="date" mode="date"></vue-date-picker>
 
 					<button class="Download p-[2px] relative w-full max-w-[84px]" @click="filterByDate" :disabled="searching">
@@ -33,7 +33,7 @@
 							<img class="animate-spin duration-1000 py-1 w-3.5" v-else src="/svg/loading.svg" alt="">
 						</div>
 					</button>
-				</div>
+				</div> -->
 
 				<!-- <button class="Download p-[3px] relative">
 					<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
@@ -50,9 +50,9 @@
 			</div>
 
 			<div class="Numbers start">
-				<SmallTileCard title="Total contacts" icon="outgoing" :value="stats?.TotalCalls || 0" />
-				<SmallTileCard title="Called Contacts" icon="user-answered" :value="stats?.TotalAnsweredCall || 0" />
-				<SmallTileCard title="Not Called" icon="user-declined" :value="stats?.TotalNotAnsweredCalls || 0" />
+				<SmallTileCard title="Total contacts" icon="outgoing" :value="stats?.totalContactForAgent || 0" />
+				<SmallTileCard title="Called Contacts" icon="user-answered" :value="stats?.totalCalledForAgent || 0" />
+				<SmallTileCard title="Not Called" icon="user-declined" :value="stats?.totalNotCalledForAgent || 0" />
 			</div>
 		</header>
 
@@ -63,28 +63,32 @@
 				</h2>
 			</div>
 
-			<Table :users="users" :searching="searching" :totalPages="totalPages" :page="page" @paginate="paginate" :fetching="fetching" />
+			<Table :users="users" :searching="searching" :totalPages="totalPages" :page="page" @paginate="paginate"
+				:fetching="fetching" @setTranscript="setTranscript" />
 		</div>
 
-		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="transcript = {}">
+		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="closeTranscript">
 			<div class="Popup">
 				<div class="Head">
 					<h3>
 						Transcript
 					</h3>
 
-					<button class="Close" @click="transcript = {}">
+					<button class="Close" @click="closeTranscript">
 						<img src="/svg/close.svg" alt="">
 					</button>
 				</div>
 
 				<div class="Body" data-lenis-prevent>
-					<div class="Recording sticky top-0 bg-white pb-5">
+					<div class="Recording sticky top-0 bg-white mb-5">
 						<audio class="w-full bg-opacity-0 appearance-none" controls>
 							<source :src="transcript?.recordingUrl" type="audio/wav" />
 						</audio>
 					</div>
-					<!-- <audio :src="transcript?.recordingUrl"></audio> -->
+
+					<p v-if="analyzedTranscript" class="pb-5 sticky top-[74px]">
+						<span class="font-semibold">Call Sentiment:</span> {{ analyzedTranscript }}
+					</p>
 
 					<div class="Scroller">
 						<p v-for="(text, index) in transcriptArray" :key="index">
@@ -112,6 +116,7 @@ export default {
 			users: [],
 
 			transcript: {},
+			analyzedTranscript: {},
 			fetching: false,
 			searching: false,
 			stats: null,
@@ -127,8 +132,6 @@ export default {
 			// console.log("Stuff", this.transcript?.split("\n"));
 			return this.transcript?.transcript?.split("\n")
 		},
-
-
 	},
 
 	watch: {
@@ -217,8 +220,13 @@ export default {
 
 				this.users = users.result.contacts;
 				this.totalPages = users.result.totalPages;
+				this.stats = {
+					totalContactForAgent: users.result.totalContactForAgent,
+					totalCalledForAgent: users.result.totalCalledForAgent,
+					totalNotCalledForAgent: users.result.totalNotCalledForAgent
+				}
 				if(page) this.page = page;
-				console.log("Total Pages: ", this.totalPages);
+				// console.log("Total Pages: ", this.totalPages);
 				this.fetching = false;
 				// this.searching = false;
 			} catch (error) {
@@ -227,9 +235,9 @@ export default {
 				this.users = [];
 			}
 
-			setInterval(() => {
-				refreshNuxtData()
-			}, 7000);
+			// setInterval(() => {
+			// 	this.loadUsers()
+			// }, 15000);
 		},
 
 		async filterByDate() {
@@ -242,6 +250,16 @@ export default {
 		paginate(page) {
 			// this.page = page;
 			this.loadUsers(page)
+		},
+
+		setTranscript(transcript, analyzedTranscript) {
+			this.transcript = transcript;
+			this.analyzedTranscript = analyzedTranscript;
+		},
+
+		closeTranscript() {
+			this.transcript = {};
+			this.analyzedTranscript = "";
 		}
 	},
 
@@ -386,7 +404,7 @@ export default {
 		@apply bg-black bg-opacity-20 fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center;
 
 		.Popup {
-			@apply relative rounded-3xl bg-white p-5 lg:p-7 flex flex-col items-center w-full max-w-[500px] space-y-5;
+			@apply relative rounded-3xl bg-white p-5 lg:p-7 flex flex-col items-center w-full max-w-[540px] space-y-5;
 
 			.Head {
 				@apply relative w-full;

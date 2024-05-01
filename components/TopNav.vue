@@ -20,8 +20,8 @@
 					class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
 					<img src="/svg/download.svg" alt="">
 
-					<span>
-						Download CSV
+					<span :class="{ 'animate-pulse': exporting }">
+						{{ exporting ? "Exporting" : "Download" }} CSV
 					</span>
 				</div>
 			</button>
@@ -31,7 +31,39 @@
 
 <script>
 export default {
+	data() {
+		return {
+			exporting: false,
+		}
+	},
 
+	methods: {
+		async exportLogs() {
+			const date = new Date().toISOString().split("T")[0];
+			this.exporting = true
+
+			try {
+				const response = await fetch(`https://intuitiveagents.io/get-logs`,
+					{
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json",
+						},
+						body: JSON.stringify({
+							agentId: this.$store.state.agentId,
+							limit: 1000,
+						}),
+					}
+				);
+
+				const blob = new Blob([response?.data], { type: "text/csv;charset=utf-8" });
+				FileSaver.saveAs(blob, `logs-${agentName}-${date}.csv`);
+				this.exporting = false;
+			} catch (err) {
+				//console.log(err);
+			}
+		}
+	}
 }
 </script>
 
@@ -50,6 +82,7 @@ export default {
 					img {
 						@apply w-20
 					}
+
 					/* @apply font-bold text-2xl; */
 				}
 			}

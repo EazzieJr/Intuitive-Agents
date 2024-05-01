@@ -46,9 +46,27 @@
 						</span>
 					</div>
 
-					<div>
-						<button @click="transcript = user?.referenceToCallId">
-							<img src="/svg/transcript.svg" alt="">
+					<div class="!flex start">
+						<button @click="setTranscript(user)" class="w-10 h-10 rounded-lg center">
+							<img class="w-5" src="/svg/transcript.svg" alt="">
+						</button>
+
+						<button
+							class="Call w-10 h-10 rounded-lg text-sm font-medium text-white flex items-center justify-center duration-300 hover:bg-green-200"
+							@click=phoneContact(user)>
+							<img class="w-5" src="/svg/phone.svg" alt="" />
+						</button>
+
+						<button
+							class="Call w-10 h-10 rounded-lg text-sm font-medium text-white flex items-center justify-center duration-300 hover:bg-yellow-100"
+							@click="toggleCreateModal('update', user)">
+							<img class="w-5" src="/svg/edit.svg" alt="" />
+						</button>
+
+						<button
+							class="Call w-10 h-10 rounded-lg text-sm font-medium text-white flex items-center justify-center duration-300 hover:bg-red-200"
+							@click="deleteContact(client)">
+							<img class="w-5" src="/svg/delete.svg" alt="" />
 						</button>
 					</div>
 				</div>
@@ -85,6 +103,98 @@
 				</span>
 			</button>
 		</div>
+
+		<div class="CreateModal bg-black bg-opacity-20 fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center"
+			v-if="modalOpened">
+			<div class="Popup relative rounded-3xl bg-white p-5 lg:p-7 flex flex-col items-center w-full max-w-[400px]">
+				<h3 class="font-bold text-2xl">
+					{{ formType === "create" ? "Create a new contact" : formType === "upload" ? "Upload CSV file" : "Update contact details" }}
+				</h3>
+
+				<button class="Close absolute right-5 top-5" onClick={closeModal}>
+					<img src="/svg/close.svg" alt="" />
+				</button>
+
+				<form action="" class="w-full mt-6" v-if="formType === 'create'">
+					<div class="Inputs space-y-5">
+						<div class="Input">
+							<input type="text" value={firstName} onInput={handleFirstNameChange} placeholder="First Name" />
+						</div>
+
+						<div class="Input">
+							<input type="text" value={lastName} onInput={handleLastNameChange} placeholder="Last Name" />
+						</div>
+						<div class="Input">
+							<input type="email" value={email} onInput={handleEmailChange} placeholder="Email Address" />
+						</div>
+
+						<div class="Input">
+							<input type="phone" value={phone} onInput={handlePhoneChange} placeholder="Phone Number" />
+						</div>
+					</div>
+
+					<button onClick={createUser}
+						class="Submit py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full mt-10">
+						Create
+					</button>
+				</form>
+
+				<div class="UploadFile w-full mt-6" v-else-if="formType === 'upload'">
+					<div
+						class="FIleDrop bg-[#FCFCFD] h-[180px] rounded-lg border border-dashed border-border-2 border-spacing-2 cursor-pointer w-full flex justify-center items-center"
+						onClick={openFileInput} onDragOver={handleDragOver} onDrop={handleDrop}>
+						<p class="text-sm text-[#718096] text-center">
+							Drag and drop assets here <br /> or{" "}
+							<span class="text-[#282c34] font-semibold">upload</span> from your computer
+						</p>
+					</div>
+
+					<div class="OtherDeats flex justify-between items-center mt-5 space-x-5">
+						<p class="text-[#282c34] text-xs">
+							File:{" "}
+							<span class="font-semibold text-[#718096]">
+								{uploadedFiles?.name || "No file selected"}
+							</span>
+						</p>
+
+						<button onClick={uploadFile}
+							class="Upload py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-[160px]">
+							Upload
+						</button>
+					</div>
+
+					<input accept=".csv" type="file" name="file" id="file" class="hidden" onChange={handleFileUpload} />
+				</div>
+
+				<form action="" class="w-full mt-6" v-else>
+					<div class="Inputs space-y-5">
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="text" v-model="user.firstName"
+								placeholder="First Name" />
+						</div>
+
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="text" v-model="user.lastName"
+								placeholder="Last Name" />
+						</div>
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="email" v-model="user.email"
+								placeholder="Email Address" />
+						</div>
+
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="phone" v-model="user.phone"
+								placeholder="Phone Number" />
+						</div>
+					</div>
+
+					<button @click="updateContact"
+						class="Submit py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full mt-10">
+						Update
+					</button>
+				</form>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -113,10 +223,18 @@ export default {
 
 	data() {
 		return {
-			transcript: {},
+			user: {
+				firstName: "",
+				lastName: "",
+				email: "",
+				phone: "",
+				id: ""
+			},
+			formType: "",
 			stats: null,
 			date: new Date(),
 			tempPage: this.page,
+			modalOpened: false,
 			moment
 		}
 	},
@@ -137,6 +255,26 @@ export default {
 			} else if (id == "0411eeeb12d17a340941e91a98a766d0") {
 				return "RST"
 			}
+		},
+
+		toggleCreateModal(formType, user) {
+			if (formType) {
+				this.formType = formType;
+			}
+
+			if (client) {
+				const { _id, phone, firstname, lastname, email } = user;
+
+				this.user = {
+					id: _id,
+					firstname,
+					lastname,
+					email,
+					phone
+				}
+			}
+
+			this.modalOpened = !this.modalOpened;
 		},
 
 		async getStats(searching) {
@@ -220,9 +358,37 @@ export default {
 			// this.loadUsers(pstDate);
 		},
 
+		async updateContact() {
+			try {
+				const response = await axios.patch(`https://intuitiveagents.io/users/update`, {
+					id,
+					fields: {
+						firstname: firstName,
+						lastname: lastName,
+						email: email,
+						phone: phone,
+					},
+				});
+
+				this.loadUsers(this.page);
+
+				toggleCreateModal();
+
+				//console.log("Response: ", response);
+			} catch (err) {
+				//console.log(err);
+			}
+		},
+
 		paginate(page) {
 			console.log(page);
 			this.$emit("paginate", page)
+		},
+
+		setTranscript(user) {
+			const transcript = user.referenceToCallId
+			const analyzedTranscript = user.analyzedTranscript
+			this.$emit("setTranscript", transcript, analyzedTranscript)
 		}
 	},
 
