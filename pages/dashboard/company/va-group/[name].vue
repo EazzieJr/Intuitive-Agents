@@ -16,7 +16,7 @@
 					</button>
 				</div>
 
-				<ExportLogs agentId="86f0db493888f1da69b7d46bfaecd360" :agentName="agentDetails.name" />
+				<ExportLogs :agentId="agentDetails.id" :agentName="agentDetails.name" />
 			</div>
 
 			<div class="Numbers start">
