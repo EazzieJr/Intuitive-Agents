@@ -84,7 +84,7 @@ export default {
 	data() {
 		return {
 			users: [],
-			agentDetails: {},
+			agentDetails: "",
 
 			transcript: {},
 			analyzedTranscript: {},
@@ -169,9 +169,28 @@ export default {
 			this.loadUsers(page)
 		},
 
-		setTranscript(transcript, analyzedTranscript) {
+		async setTranscript(transcript, analyzedTranscript) {
 			this.transcript = transcript;
-			this.analyzedTranscript = analyzedTranscript;
+
+			try {
+				const sent = await fetch(`https://intuitiveagents.io/review-transcript`, {
+					method: "POST",
+					body: JSON.stringify({
+						transcript: transcript.transcript
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				});
+
+				const data = await sent.json();
+				// console.log("Sentiment: ", data.result.message.content);
+				this.analyzedTranscript = data.result.message.content;
+			} catch (error) {
+				console.error("Error fetching data:", error);
+				// Return an empty object or handle the error as needed
+				this.analyzedTranscript = "";
+			}
 		},
 
 		closeTranscript() {
