@@ -47,39 +47,100 @@
 </template>
 
 <script>
+// import { mapState } from 'pinia';
+
 export default {
 	data() {
 		return {
 			items: [
 				[{
 					label: 'Reset statuses',
-					icon: 'i-heroicons-pencil-square-20-solid',
+					icon: 'i-heroicons-arrow-path-20-solid',
 					shortcuts: ['R'],
 					click: () => {
 						console.log('Edit')
 					}
-				}, {
-					label: 'Duplicate',
-					icon: 'i-heroicons-document-duplicate-20-solid',
-					shortcuts: ['D'],
-					disabled: true
-				}], [{
-					label: 'Archive',
-					icon: 'i-heroicons-archive-box-20-solid'
-				}, {
-					label: 'Move',
-					icon: 'i-heroicons-arrow-right-circle-20-solid'
-				}], [{
-					label: 'Delete contacts',
-					icon: 'i-heroicons-trash-20-solid',
-					// shortcuts: ['⌘', 'D']
-				}]
-			]
+				}], [
+					{
+						label: 'Delete',
+						icon: 'i-heroicons-trash-20-solid',
+							click: () => this.deleteAllContacts(),
+						class: 'hover:text-white hover:fill-current hover:bg-red-500',
+						iconClass: 'fill-current'
+					}
+				]
+			],
+
+			agentId: ""
 		}
 	},
 
-	methods: {
+	watch: {
+		// Listen to route
+		'$route'() {
+			this.agentId = localStorage.getItem("agentId");
+			console.log("ID: ", this.agentId);
+		}
+	},
+	
+	computed: {
+		// ...mapState('main', ['agentId'])
+	},
 
+	methods: {
+		async deleteAllContacts () {
+			try {
+				// USe fetch
+
+				const response = await fetch(`https://intuitiveagents.io/deleteAll`, {
+					method: 'PATCH',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						agentId: this.agentId
+					})
+				});
+
+				if (!response.ok) {
+					throw new Error(`HTTP error! Status: ${response.status}`);
+				}
+				
+			} catch (err) {
+				//console.log(err);
+			}
+		},
+
+		async resetStatuses() {
+			try {
+
+				// Use fetch
+				const response = await fetch(`https://intuitiveagents.io/users/status/reset`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						agentId: this.agentId
+					})
+				});
+				
+				// const response = await axios.post(`https://intuitiveagents.io/users/status/reset`, {
+				// 	agentId,
+				// });
+
+				// mutate("https://intuitiveagents.io/users");
+
+				// console.log(response);
+			} catch (err) {
+				//console.log(err);
+			}
+		}
+	},
+
+	mounted() {
+		this.agentId = localStorage.getItem("agentId");
+		console.log("ID: ", this.agentId);
 	}
 }
 </script>

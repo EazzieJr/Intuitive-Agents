@@ -74,6 +74,7 @@
 <script>
 // import Datepicker from 'vue3-datepicker'
 import moment from "moment-timezone";
+import { useStore } from '@/store/index'
 
 definePageMeta({
 	layout: "dashboard"
@@ -94,6 +95,7 @@ export default {
 			date: new Date(),
 			totalPages: 0,
 			page: 1,
+			store: useStore(),
 			moment
 		}
 	},
@@ -166,6 +168,7 @@ export default {
 
 		paginate(page) {
 			// this.page = page;
+			localStorage.setItem("page", page);
 			this.loadUsers(page)
 		},
 
@@ -223,9 +226,12 @@ export default {
 
 			// Save agent id to pinia and local storage
 			localStorage.setItem("agentId", this.agentDetails.id);
+			// this.store.$patch({
+			// 	agentId: this.agentDetails.id
+			// })
+			// console.log("Store", this.store.)
+			
 			// this.$store.state.agentId = this.agentDetails.id;
-
-			console.log("Store", this.$store)
 		}
 	},
 
