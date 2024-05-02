@@ -18,31 +18,10 @@
 					<UButton color="white" label="Options" trailing-icon="i-heroicons-chevron-down-20-solid" />
 				</UDropdown>
 			</div>
-
-
-
-			<!-- <template> -->
-			<!-- <UButton>
-					Button
-				</UButton> -->
-			<!-- <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
-					<UButton color="white" label="Options" trailing-icon="i-heroicons-chevron-down-20-solid" />
-				</UDropdown> -->
-			<!-- </template> -->
-
-			<!-- <button class="Download p-[3px] relative">
-				<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
-
-				<div
-					class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
-					<img src="/svg/download.svg" alt="">
-
-					<span :class="{ 'animate-pulse': exporting }">
-						{{ exporting ? "Exporting" : "Download" }} CSV
-					</span>
-				</div>
-			</button> -->
 		</div>
+
+		<GetSchedules v-if="schedularModal" :agentId="agentId" @closeSchedular="closeSchedular" />
+
 	</nav>
 </template>
 
@@ -54,6 +33,19 @@ export default {
 		return {
 			items: [
 				[{
+					label: 'Schedules',
+					icon: 'i-heroicons-clock-20-solid',
+					click: () => {
+						this.schedularModal = true
+						console.log(this.schedularModal)
+					}
+				}, {
+						label: 'Create schedule',
+						icon: 'i-heroicons-plus-20-solid',
+						click: () => this.deleteAllContacts(),
+						class: 'hover:text-white hover:fill-current hover:bg-red-500',
+						iconClass: 'fill-current'
+					}], [{
 					label: 'Reset statuses',
 					icon: 'i-heroicons-arrow-path-20-solid',
 					shortcuts: ['R'],
@@ -71,7 +63,8 @@ export default {
 				]
 			],
 
-			agentId: ""
+			agentId: "",
+			schedularModal: false
 		}
 	},
 
@@ -135,6 +128,10 @@ export default {
 			} catch (err) {
 				//console.log(err);
 			}
+		},
+
+		closeSchedular() {
+			this.schedularModal = false
 		}
 	},
 
@@ -147,7 +144,7 @@ export default {
 
 <style lang="postcss" scoped>
 .TopNav {
-	@apply px-10 py-[21px] border-b border-[#E6E6E6] sticky top-0 bg-white ml-[240px] z-50;
+	@apply px-10 py-6 border-b border-[#E6E6E6] sticky top-0 bg-white ml-[240px] z-50;
 
 	.NavContainer {
 		@apply flex justify-between items-center;

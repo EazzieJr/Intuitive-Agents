@@ -27,14 +27,26 @@
 		</header>
 
 		<div class="Logs">
-			<div class="Texts">
+			<div class="Texts between">
 				<h2>
 					Call Logs
 				</h2>
+
+				<Schedular v-if="schedularModal" :agentId="agentDetails.id" :fromNumber="agentDetails.number"
+					@close="schedularModal = false" />
+
+				<button class="Download p-[3px] relative" @click="schedularModal = true">
+					<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+
+					<div
+						class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
+						Schedule call
+					</div>
+				</button>
 			</div>
 
-			<Table :users="users" :searching="searching" :totalPages="totalPages" :page="page" :agentDetails="agentDetails" @paginate="paginate"
-				:fetching="fetching" @setTranscript="setTranscript" @loadUsers="loadUsers" />
+			<Table :users="users" :searching="searching" :totalPages="totalPages" :page="page" :agentDetails="agentDetails"
+				@paginate="paginate" :fetching="fetching" @setTranscript="setTranscript" @loadUsers="loadUsers" />
 		</div>
 
 		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="closeTranscript">
@@ -85,7 +97,9 @@ export default {
 	data() {
 		return {
 			users: [],
-			agentDetails: "",
+			agentDetails: {},
+			timerModal: false,
+			schedularModal: false,
 
 			transcript: {},
 			analyzedTranscript: {},
@@ -208,19 +222,22 @@ export default {
 				this.agentDetails = {
 					name: "Daniel",
 					alias: "Virtual Help Desk",
-					id: "86f0db493888f1da69b7d46bfaecd360"
+					id: "86f0db493888f1da69b7d46bfaecd360",
+					number: "+17257268989"
 				}
 			} else if (name == "ethan") {
 				this.agentDetails = {
 					name: "Ethan",
 					alias: "Virtual Team Expert",
-					id: "214e92da684138edf44368d371da764c"
+					id: "214e92da684138edf44368d371da764c",
+					number: "+17252399747"
 				}
 			} else if (name == "chloe") {
 				this.agentDetails = {
 					name: "Chloe",
 					alias: "Remote Solutions Team",
-					id: "0411eeeb12d17a340941e91a98a766d0"
+					id: "0411eeeb12d17a340941e91a98a766d0",
+					number: "+17252399297"
 				}
 			}
 
