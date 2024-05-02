@@ -482,11 +482,11 @@ export default {
 			}
 
 			&:nth-child(6) {
-				@apply basis-[15%];
+				@apply basis-[17%];
 			}
 
 			&:nth-child(7) {
-				@apply basis-[14%];
+				@apply basis-[12%];
 			}
 		}
 	}
@@ -494,6 +494,10 @@ export default {
 	.Data {
 		.DataContainer {
 			@apply overflow-y-scroll h-fit max-h-[500px];
+
+			&::-webkit-scrollbar {
+				display: none;
+			}
 
 			.Row {
 				@apply p-4 border-b border-gray-200;
@@ -522,7 +526,7 @@ export default {
 					}
 
 					&:nth-child(6) {
-						@apply basis-[15%] space-x-2 !flex;
+						@apply basis-[17%] space-x-2 !flex;
 
 						img {
 							@apply w-4
@@ -530,7 +534,7 @@ export default {
 					}
 
 					&:nth-child(7) {
-						@apply basis-[14%] font-bold;
+						@apply basis-[12%] font-bold;
 					}
 				}
 			}

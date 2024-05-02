@@ -8,7 +8,7 @@
 			</div>
 
 			<div class="Links center">
-				<NuxtLink :to="`/dashboard/company/${company.name.toLowerCase().split(' ').join('-')}/${company.agents[0].name}`" class="Link"
+				<NuxtLink :to="company?.link ? company.link : `/dashboard/company/${company.name.toLowerCase().split(' ').join('-')}/${company.agents[0].name}`" class="Link"
 					v-for="company in companies" :key="company.name">
 					<div class="Image">
 						<img :src="`/images/companies/${company.name.toLowerCase().split(' ').join('-')}.jpg`" alt="">
@@ -56,6 +56,7 @@ export default {
 
 				{
 					name: "Be + well",
+					link: "/dashboard/company/be-well/katherine",
 					agents: [
 						{
 							name: "katherine",
