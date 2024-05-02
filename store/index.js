@@ -32,6 +32,8 @@ export const useStore = defineStore({
 				]
 			}
 		],
+
+		agentId: "",
 	}),
 	// mutations: {
 	// 	toggleSignInModal() {

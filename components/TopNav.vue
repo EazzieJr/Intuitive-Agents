@@ -52,12 +52,7 @@ export default {
 		return {
 			items: [
 				[{
-					label: 'Profile',
-					avatar: {
-						src: 'https://avatars.githubusercontent.com/u/739984?v=4'
-					}
-				}], [{
-					label: 'Reset',
+					label: 'Reset statuses',
 					icon: 'i-heroicons-pencil-square-20-solid',
 					shortcuts: ['R'],
 					click: () => {
@@ -75,9 +70,9 @@ export default {
 					label: 'Move',
 					icon: 'i-heroicons-arrow-right-circle-20-solid'
 				}], [{
-					label: 'Delete',
+					label: 'Delete contacts',
 					icon: 'i-heroicons-trash-20-solid',
-					shortcuts: ['⌘', 'D']
+					// shortcuts: ['⌘', 'D']
 				}]
 			]
 		}

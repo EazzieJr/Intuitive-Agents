@@ -201,6 +201,12 @@ export default {
 					id: "0411eeeb12d17a340941e91a98a766d0"
 				}
 			}
+
+			// Save agent id to pinia and local storage
+			localStorage.setItem("agentId", this.agentDetails.id);
+			// this.$store.state.agentId = this.agentDetails.id;
+
+			console.log("Store", this.$store)
 		}
 	},
 
