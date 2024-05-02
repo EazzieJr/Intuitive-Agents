@@ -422,6 +422,22 @@ export default {
 			}
 		},
 
+		async deleteContact(user) {
+			try {
+				const response = await fetch(`https://intuitiveagents.io/users/delete`, {
+					method: "PATCH",
+					body: JSON.stringify({
+						id: user._id
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				})
+			} catch (err) {
+				console.log(err);
+			}
+		},
+
 		paginate(page) {
 			console.log(page);
 			this.$emit("paginate", page)
