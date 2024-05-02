@@ -1,5 +1,5 @@
 <template>
-	<div class="Table">
+	<div class="Table overflow-hidden">
 		<div class="Header flex items-center grow">
 			<div>S/N</div>
 
@@ -40,14 +40,19 @@
 					</div>
 
 					<div class="start">
-						<img :src="`/svg/calls/${user.status}.svg`" alt="">
+						<img :src="`/svg/calls/${user.status.split(' ').join('-')}.svg`" alt="">
 						<span class="Status active">
 							{{ user.status }}
 						</span>
 					</div>
 
 					<div class="!flex start">
-						<button @click="setTranscript(user)" class="w-10 h-10 rounded-lg center">
+						<UDropdown :items="dropdownItems(user)" mode=hover
+							:popper="{ offsetDistance: 0, placement: 'bottom-start' }">
+							<UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
+						</UDropdown>
+
+						<!-- <button @click="setTranscript(user)" class="w-10 h-10 rounded-lg center">
 							<img class="w-5" src="/svg/transcript.svg" alt="">
 						</button>
 
@@ -67,7 +72,7 @@
 							class="Call w-10 h-10 rounded-lg text-sm font-medium text-white flex items-center justify-center duration-300 hover:bg-red-200"
 							@click="deleteContact(client)">
 							<img class="w-5" src="/svg/delete.svg" alt="" />
-						</button>
+						</button> -->
 					</div>
 				</div>
 			</div>
@@ -93,7 +98,6 @@
 					{{ page }} of {{ totalPages }}
 				</span>
 
-
 				<img class="animate-spin duration-1000 py-1 w-6" v-else src="/svg/loading-dark.svg" alt="">
 			</div>
 
@@ -105,37 +109,50 @@
 		</div>
 
 		<div class="CreateModal bg-black bg-opacity-20 fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center"
-			v-if="modalOpened">
+			v-if="modalOpened" @click.self="closeModal">
 			<div class="Popup relative rounded-3xl bg-white p-5 lg:p-7 flex flex-col items-center w-full max-w-[400px]">
 				<h3 class="font-bold text-2xl">
-					{{ formType === "create" ? "Create a new contact" : formType === "upload" ? "Upload CSV file" : "Update contact details" }}
+					{{ formType === "create" ?
+					"Create a new contact" :
+					formType === "upload" ?
+					"Upload CSV file" :
+					"Update contact details" }}
 				</h3>
 
-				<button class="Close absolute right-5 top-5" onClick={closeModal}>
+				<button class="Close absolute right-5 top-5" @click="closeModal">
 					<img src="/svg/close.svg" alt="" />
 				</button>
 
-				<form action="" class="w-full mt-6" v-if="formType === 'create'">
+				<form @submit.prevent action="" class="w-full mt-6" v-if="formType === 'create'">
 					<div class="Inputs space-y-5">
-						<div class="Input">
-							<input type="text" value={firstName} onInput={handleFirstNameChange} placeholder="First Name" />
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="text" v-model="user.firstName"
+								placeholder="First Name" />
 						</div>
 
-						<div class="Input">
-							<input type="text" value={lastName} onInput={handleLastNameChange} placeholder="Last Name" />
-						</div>
-						<div class="Input">
-							<input type="email" value={email} onInput={handleEmailChange} placeholder="Email Address" />
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="text" v-model="user.lastName"
+								placeholder="Last Name" />
 						</div>
 
-						<div class="Input">
-							<input type="phone" value={phone} onInput={handlePhoneChange} placeholder="Phone Number" />
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="email" v-model="user.email"
+								placeholder="Email Address" />
+						</div>
+
+						<div class="Input border rounded-lg overflow-hidden">
+							<input class=" py-3 px-2.5 focus:outline-none w-full" type="phone" v-model="user.phone"
+								placeholder="Phone Number" />
 						</div>
 					</div>
 
-					<button onClick={createUser}
-						class="Submit py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full mt-10">
-						Create
+					<button @click="createUser"
+						class="Submit center py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full mt-10">
+						<span v-if="!updating">
+							Create
+						</span>
+
+						<img class="animate-spin duration-1000 py-1 w-6" v-else src="/svg/loading.svg" alt="">
 					</button>
 				</form>
 
@@ -166,7 +183,7 @@
 					<input accept=".csv" type="file" name="file" id="file" class="hidden" onChange={handleFileUpload} />
 				</div>
 
-				<form action="" class="w-full mt-6" v-else>
+				<form @submit.prevent action="" class="w-full mt-6 " v-else>
 					<div class="Inputs space-y-5">
 						<div class="Input border rounded-lg overflow-hidden">
 							<input class=" py-3 px-2.5 focus:outline-none w-full" type="text" v-model="user.firstName"
@@ -177,6 +194,7 @@
 							<input class=" py-3 px-2.5 focus:outline-none w-full" type="text" v-model="user.lastName"
 								placeholder="Last Name" />
 						</div>
+
 						<div class="Input border rounded-lg overflow-hidden">
 							<input class=" py-3 px-2.5 focus:outline-none w-full" type="email" v-model="user.email"
 								placeholder="Email Address" />
@@ -235,6 +253,7 @@ export default {
 			date: new Date(),
 			tempPage: this.page,
 			modalOpened: false,
+			updating: false,
 			moment
 		}
 	},
@@ -247,6 +266,35 @@ export default {
 	},
 
 	methods: {
+		dropdownItems(user) {
+			return [
+				[{
+					label: 'Call',
+					icon: 'i-heroicons-phone-20-solid',
+					click: () => this.callContact(user)
+				}, {
+					label: 'Transcript',
+					icon: 'i-heroicons-document-text-20-solid',
+					click: () => this.setTranscript(user)
+				}],
+				[{
+					label: 'Edit',
+					icon: 'i-heroicons-pencil-square-20-solid',
+					click: () => this.toggleCreateModal('update', user)
+				},],
+				[
+					{
+						label: 'Delete',
+						icon: 'i-heroicons-trash-20-solid',
+						click: () => this.deleteContact(user),
+						class: 'hover:bg-red-500',
+						iconClass: 'fill-red-500 hover:fill-white'
+					}
+				]
+				// Add more items as needed
+			];
+		},
+
 		getAgentName(id) {
 			if (id == "86f0db493888f1da69b7d46bfaecd360") {
 				return "VHD"
@@ -262,13 +310,13 @@ export default {
 				this.formType = formType;
 			}
 
-			if (client) {
+			if (user) {
 				const { _id, phone, firstname, lastname, email } = user;
 
 				this.user = {
 					id: _id,
-					firstname,
-					lastname,
+					firstName: firstname,
+					lastName: lastname,
 					email,
 					phone
 				}
@@ -321,34 +369,8 @@ export default {
 			}
 		},
 
-		async loadUsers(date) {
-			// const { logId1, logId2, logId3 } = logs;
-
-			try {
-				const response = await fetch("https://retell-backend-yy86.onrender.com/get-metadata", {
-					method: "POST",
-					body: JSON.stringify({
-						date
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
-				});
-
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
-				}
-
-				const users = await response.json(); // Parse the response body as JSON
-
-				this.users = users.dailyStats;
-				this.fetching = false;
-				this.searching = false;
-			} catch (error) {
-				console.error("Error fetching data:", error);
-				// Return an empty object or handle the error as needed
-				this.users = [];
-			}
+		loadUsers(page) {
+			this.$emit("loadUsers", page)
 		},
 
 		async filterByDate() {
@@ -359,20 +381,78 @@ export default {
 		},
 
 		async updateContact() {
+			const {email, firstName, lastName, phone, id} = this.user
 			try {
-				const response = await axios.patch(`https://intuitiveagents.io/users/update`, {
-					id,
-					fields: {
-						firstname: firstName,
-						lastname: lastName,
-						email: email,
-						phone: phone,
+				const response = await fetch(`https://intuitiveagents.io/users/update`, {
+					method: "PATCH",
+					headers: {
+						"Content-Type": "application/json"
 					},
+					body: JSON.stringify({
+						id,
+						fields: {
+							firstname: firstName,
+							lastname: lastName,
+							email,
+							phone,
+						}
+					})
 				});
 
 				this.loadUsers(this.page);
 
-				toggleCreateModal();
+				this.toggleCreateModal();
+
+				//console.log("Response: ", response);
+			} catch (err) {
+				//console.log(err);
+			}
+		},
+
+		async callContact(user) {
+			const { _id, phone } = user;
+			try {
+				const response = await axios.post(`https://intuitiveagents.io/create-phone-call/${this.agentId}`, {
+					fromNumber: "+17257268989",
+					toNumber: phone,
+					userId: _id,
+				});
+
+				//console.log("Response: ", response);
+			} catch (err) {
+				//console.log(err);
+			}
+		},
+
+		async createUser() {
+			const { email, firstName, lastName, phone } = this.user
+			this.updating = true;
+			try {
+				const response = await fetch(`https://intuitiveagents.io/users/create`, {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						firstname: firstName,
+						lastname: lastName,
+						email,
+						phone,
+						agentId: this.agentId
+					})
+				});
+
+				this.loadUsers(this.page);
+
+				this.updating = false;
+				this.toggleCreateModal();
+				this.user = {
+					firstName: "",
+					lastName: "",
+					email: "",
+					phone: "",
+					id: ""
+				}
 
 				//console.log("Response: ", response);
 			} catch (err) {
@@ -389,6 +469,17 @@ export default {
 			const transcript = user.referenceToCallId
 			const analyzedTranscript = user.analyzedTranscript
 			this.$emit("setTranscript", transcript, analyzedTranscript)
+		},
+
+		closeModal() {
+			this.modalOpened = false;
+			this.user = {
+				firstName: "",
+				lastName: "",
+				email: "",
+				phone: "",
+				id: ""
+			}
 		}
 	},
 

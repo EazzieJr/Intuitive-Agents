@@ -13,7 +13,24 @@
 				</div>
 			</div>
 
-			<button class="Download p-[3px] relative">
+			<div class="More">
+				<UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
+					<UButton color="white" label="Options" trailing-icon="i-heroicons-chevron-down-20-solid" />
+				</UDropdown>
+			</div>
+
+
+
+			<!-- <template> -->
+			<!-- <UButton>
+					Button
+				</UButton> -->
+			<!-- <UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
+					<UButton color="white" label="Options" trailing-icon="i-heroicons-chevron-down-20-solid" />
+				</UDropdown> -->
+			<!-- </template> -->
+
+			<!-- <button class="Download p-[3px] relative">
 				<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
 
 				<div
@@ -24,7 +41,7 @@
 						{{ exporting ? "Exporting" : "Download" }} CSV
 					</span>
 				</div>
-			</button>
+			</button> -->
 		</div>
 	</nav>
 </template>
@@ -33,43 +50,48 @@
 export default {
 	data() {
 		return {
-			exporting: false,
+			items: [
+				[{
+					label: 'Profile',
+					avatar: {
+						src: 'https://avatars.githubusercontent.com/u/739984?v=4'
+					}
+				}], [{
+					label: 'Reset',
+					icon: 'i-heroicons-pencil-square-20-solid',
+					shortcuts: ['R'],
+					click: () => {
+						console.log('Edit')
+					}
+				}, {
+					label: 'Duplicate',
+					icon: 'i-heroicons-document-duplicate-20-solid',
+					shortcuts: ['D'],
+					disabled: true
+				}], [{
+					label: 'Archive',
+					icon: 'i-heroicons-archive-box-20-solid'
+				}, {
+					label: 'Move',
+					icon: 'i-heroicons-arrow-right-circle-20-solid'
+				}], [{
+					label: 'Delete',
+					icon: 'i-heroicons-trash-20-solid',
+					shortcuts: ['⌘', 'D']
+				}]
+			]
 		}
 	},
 
 	methods: {
-		async exportLogs() {
-			const date = new Date().toISOString().split("T")[0];
-			this.exporting = true
 
-			try {
-				const response = await fetch(`https://intuitiveagents.io/get-logs`,
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json",
-						},
-						body: JSON.stringify({
-							agentId: this.$store.state.agentId,
-							limit: 1000,
-						}),
-					}
-				);
-
-				const blob = new Blob([response?.data], { type: "text/csv;charset=utf-8" });
-				FileSaver.saveAs(blob, `logs-${agentName}-${date}.csv`);
-				this.exporting = false;
-			} catch (err) {
-				//console.log(err);
-			}
-		}
 	}
 }
 </script>
 
 <style lang="postcss" scoped>
 .TopNav {
-	@apply px-10 py-[21px] border-b border-[#E6E6E6] sticky top-0 bg-white ml-[240px];
+	@apply px-10 py-[21px] border-b border-[#E6E6E6] sticky top-0 bg-white ml-[240px] z-50;
 
 	.NavContainer {
 		@apply flex justify-between items-center;

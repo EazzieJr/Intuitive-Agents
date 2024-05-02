@@ -64,7 +64,7 @@
 			</div>
 
 			<Table :users="users" :searching="searching" :totalPages="totalPages" :page="page" @paginate="paginate"
-				:fetching="fetching" @setTranscript="setTranscript" />
+				:fetching="fetching" @setTranscript="setTranscript" @loadUsers="loadUsers" />
 		</div>
 
 		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="closeTranscript">
@@ -260,10 +260,19 @@ export default {
 		closeTranscript() {
 			this.transcript = {};
 			this.analyzedTranscript = "";
+		},
+
+		getAgent() {
+			const { id } = this.$route.params;
+			console.log("Params: ", params);
 		}
 	},
 
 	beforeMount() {
+		this.getAgent()
+	},
+
+	mounted() {
 		this.loadUsers()
 		// this.getStats(false)
 	}
