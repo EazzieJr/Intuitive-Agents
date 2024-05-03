@@ -87,6 +87,7 @@
 // import Datepicker from 'vue3-datepicker'
 import moment from "moment-timezone";
 import { useStore } from '@/store/index'
+import Cookie from 'js-cookie'
 
 definePageMeta({
 	layout: "dashboard"
@@ -109,7 +110,7 @@ export default {
 			date: new Date(),
 			totalPages: 0,
 			page: 1,
-			store: useStore(),
+			// store: useStore(),
 			moment
 		}
 	},
@@ -223,7 +224,7 @@ export default {
 					name: "Daniel",
 					alias: "Virtual Help Desk",
 					id: "86f0db493888f1da69b7d46bfaecd360",
-					number: "+17257268989"
+					number: "+`17257268989`"
 				}
 			} else if (name == "ethan") {
 				this.agentDetails = {
@@ -241,14 +242,9 @@ export default {
 				}
 			}
 
-			// Save agent id to pinia and local storage
-			localStorage.setItem("agentId", this.agentDetails.id);
-			// this.store.$patch({
-			// 	agentId: this.agentDetails.id
-			// })
-			// console.log("Store", this.store.)
-			
-			// this.$store.state.agentId = this.agentDetails.id;
+			useStore().$patch({
+				agentId: this.agentDetails.id
+			})
 		}
 	},
 

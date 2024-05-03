@@ -26,7 +26,8 @@
 </template>
 
 <script>
-// import { mapState } from 'pinia';
+import { mapState } from 'pinia'
+import { useStore } from '~/store/index'
 
 export default {
 	data() {
@@ -37,51 +38,43 @@ export default {
 					icon: 'i-heroicons-clock-20-solid',
 					click: () => {
 						this.schedularModal = true
-						console.log(this.schedularModal)
+						// console.log(this.schedularModal)
 					}
 				}, {
-						label: 'Create schedule',
-						icon: 'i-heroicons-plus-20-solid',
-						click: () => this.deleteAllContacts(),
-						class: 'hover:text-white hover:fill-current hover:bg-red-500',
-						iconClass: 'fill-current'
-					}], [{
+					label: 'Create schedule',
+					icon: 'i-heroicons-plus-20-solid',
+					click: () => this.deleteAllContacts(),
+					class: 'hover:text-white hover:fill-current hover:bg-red-500',
+					iconClass: 'fill-current'
+				}], [{
 					label: 'Reset statuses',
 					icon: 'i-heroicons-arrow-path-20-solid',
 					shortcuts: ['R'],
 					click: () => {
-						console.log('Edit')
+						this.resetStatuses()
 					}
 				}], [
 					{
 						label: 'Delete',
 						icon: 'i-heroicons-trash-20-solid',
-							click: () => this.deleteAllContacts(),
+						click: () => this.deleteAllContacts(),
 						class: 'hover:text-white hover:fill-current hover:bg-red-500',
 						iconClass: 'fill-current'
 					}
 				]
 			],
 
-			agentId: "",
+			// agentId: "",
 			schedularModal: false
 		}
 	},
 
-	watch: {
-		// Listen to route
-		'$route'() {
-			this.agentId = localStorage.getItem("agentId");
-			console.log("ID: ", this.agentId);
-		}
-	},
-	
 	computed: {
-		// ...mapState('main', ['agentId'])
+		...mapState(useStore, ['agentId'])
 	},
 
 	methods: {
-		async deleteAllContacts () {
+		async deleteAllContacts() {
 			try {
 				// USe fetch
 
@@ -98,7 +91,7 @@ export default {
 				if (!response.ok) {
 					throw new Error(`HTTP error! Status: ${response.status}`);
 				}
-				
+
 			} catch (err) {
 				//console.log(err);
 			}
@@ -106,7 +99,6 @@ export default {
 
 		async resetStatuses() {
 			try {
-
 				// Use fetch
 				const response = await fetch(`https://intuitiveagents.io/users/status/reset`, {
 					method: 'POST',
@@ -117,14 +109,6 @@ export default {
 						agentId: this.agentId
 					})
 				});
-				
-				// const response = await axios.post(`https://intuitiveagents.io/users/status/reset`, {
-				// 	agentId,
-				// });
-
-				// mutate("https://intuitiveagents.io/users");
-
-				// console.log(response);
 			} catch (err) {
 				//console.log(err);
 			}
@@ -133,18 +117,13 @@ export default {
 		closeSchedular() {
 			this.schedularModal = false
 		}
-	},
-
-	mounted() {
-		this.agentId = localStorage.getItem("agentId");
-		console.log("ID: ", this.agentId);
 	}
 }
 </script>
 
 <style lang="postcss" scoped>
 .TopNav {
-	@apply px-10 py-6 border-b border-[#E6E6E6] sticky top-0 bg-white ml-[240px] z-50;
+	@apply px-10 py-7 border-b border-[#E6E6E6] sticky top-0 bg-white ml-[240px] z-50;
 
 	.NavContainer {
 		@apply flex justify-between items-center;

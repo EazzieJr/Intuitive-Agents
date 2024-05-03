@@ -82,6 +82,7 @@ export default {
 		schedules() {
 			const filteredData = this.tempSchedules?.filter((schedule) => schedule.agentId === this.agentId);
 
+			console.log("AgentID: ", this.agentId)
 			console.log("filtered :", filteredData);
 			return filteredData;
 		}
