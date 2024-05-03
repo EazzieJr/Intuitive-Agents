@@ -40,12 +40,6 @@ export default {
 						this.schedularModal = true
 						// console.log(this.schedularModal)
 					}
-				}, {
-					label: 'Create schedule',
-					icon: 'i-heroicons-plus-20-solid',
-					click: () => this.deleteAllContacts(),
-					class: 'hover:text-white hover:fill-current hover:bg-red-500',
-					iconClass: 'fill-current'
 				}], [{
 					label: 'Reset statuses',
 					icon: 'i-heroicons-arrow-path-20-solid',

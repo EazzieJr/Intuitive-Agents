@@ -61,7 +61,7 @@ export default {
 	
 	data() {
 		return {
-			limit: 0,
+			limit: "",
 			selectedHour: 0,
 			selectedMinute: 0,
 			loading: false
@@ -74,15 +74,18 @@ export default {
 		},
 
 		async schedule() {
-			const { agentId, fromNumber, limit } = this
+			const { agentId, fromNumber, limit, selectedHour, selectedMinute } = this
 			this.loading = true
 			try {
 				const response = await fetch("https://intuitiveagents.io/schedule", {
 					method: "POST",
+					headers: {
+						"Content-Type": "application/json"
+					},
 					body: JSON.stringify({
 						agentId,
-						hour: selectedHours,
-						minute: selectedMinutes,
+						hour: selectedHour,
+						minute: selectedMinute,
 						limit,
 						fromNumber
 					})

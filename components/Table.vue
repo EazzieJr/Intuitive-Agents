@@ -51,28 +51,6 @@
 							:popper="{ offsetDistance: 0, placement: 'bottom-start' }">
 							<UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
 						</UDropdown>
-
-						<!-- <button @click="setTranscript(user)" class="w-10 h-10 rounded-lg center">
-							<img class="w-5" src="/svg/transcript.svg" alt="">
-						</button>
-
-						<button
-							class="Call w-10 h-10 rounded-lg text-sm font-medium text-white flex items-center justify-center duration-300 hover:bg-green-200"
-							@click=phoneContact(user)>
-							<img class="w-5" src="/svg/phone.svg" alt="" />
-						</button>
-
-						<button
-							class="Call w-10 h-10 rounded-lg text-sm font-medium text-white flex items-center justify-center duration-300 hover:bg-yellow-100"
-							@click="toggleCreateModal('update', user)">
-							<img class="w-5" src="/svg/edit.svg" alt="" />
-						</button>
-
-						<button
-							class="Call w-10 h-10 rounded-lg text-sm font-medium text-white flex items-center justify-center duration-300 hover:bg-red-200"
-							@click="deleteContact(client)">
-							<img class="w-5" src="/svg/delete.svg" alt="" />
-						</button> -->
 					</div>
 				</div>
 			</div>
@@ -86,7 +64,7 @@
 			</div>
 		</div>
 
-		<div class="Pagination between" v-if="users.length > 0">
+		<div class="Pagination between" v-if="users.length > 0 && !filter">
 			<button class="Previous" @click="paginate(page - 1)" :disabled="page == 1 || fetching">
 				<span>
 					Previous
@@ -240,6 +218,9 @@ export default {
 		agentDetails: {
 			type: Object
 		},
+		filter: {
+			type: Boolean
+		}
 	},
 
 	data() {

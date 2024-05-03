@@ -35,18 +35,38 @@
 				<Schedular v-if="schedularModal" :agentId="agentDetails.id" :fromNumber="agentDetails.number"
 					@close="schedularModal = false" />
 
-				<button class="Download p-[3px] relative" @click="schedularModal = true">
-					<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+				<div class="Actions start space-x-5">
+					<button class="Download p-[2px] relative" @click="schedularModal = true">
+						<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
 
-					<div
-						class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
-						Schedule call
+						<div
+							class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent text-sm">
+							Schedule call
+						</div>
+					</button>
+
+					<div class="Search start">
+						<div class="Input border rounded-lg overflow-hidden">
+							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search..."
+								v-model="search" type="search" @input="handleInput($event)" />
+							<!-- <template #trailing>
+									<UButton class="text-gray-500 dark:text-gray-400 text-xs font-bold" @click="clearSearch">Clear</UButton>
+								</template> -->
+							<!-- </UInput> -->
+						</div>
 					</div>
-				</button>
+				</div>
 			</div>
 
-			<Table :users="users" :searching="searching" :totalPages="totalPages" :page="page" :agentDetails="agentDetails"
-				@paginate="paginate" :fetching="fetching" @setTranscript="setTranscript" @loadUsers="loadUsers" />
+			<div class="Tables">
+				<Table v-if="search == ''" :users="users" :searching="searching" :totalPages="totalPages" :page="page"
+					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
+					@loadUsers="loadUsers" />
+
+				<Table v-else :users="searches" :searching="searching" :totalPages="totalPages" :page="page"
+					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
+					@loadUsers="loadUsers" />
+			</div>
 		</div>
 
 		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="closeTranscript">
@@ -98,6 +118,7 @@ export default {
 	data() {
 		return {
 			users: [],
+			searches: [],
 			agentDetails: {},
 			timerModal: false,
 			schedularModal: false,
@@ -110,6 +131,9 @@ export default {
 			date: new Date(),
 			totalPages: 0,
 			page: 1,
+			search: "",
+			debounceTimeout: null,
+
 			// store: useStore(),
 			moment
 		}
@@ -159,7 +183,7 @@ export default {
 					totalCalledForAgent: users.result.totalCalledForAgent,
 					totalNotCalledForAgent: users.result.totalNotCalledForAgent
 				}
-				if(page) this.page = page;
+				if (page) this.page = page;
 				// console.log("Total Pages: ", this.totalPages);
 				this.fetching = false;
 				// this.searching = false;
@@ -224,7 +248,7 @@ export default {
 					name: "Daniel",
 					alias: "Virtual Help Desk",
 					id: "86f0db493888f1da69b7d46bfaecd360",
-					number: "+`17257268989`"
+					number: "+17257268989"
 				}
 			} else if (name == "ethan") {
 				this.agentDetails = {
@@ -245,6 +269,86 @@ export default {
 			useStore().$patch({
 				agentId: this.agentDetails.id
 			})
+		},
+
+		handleInput(e) {
+			clearTimeout(this.debounceTimeout);
+			this.debounceTimeout = setTimeout(this.searchContact(e), 2000); // Adjust debounce delay as needed
+		},
+
+		// debounce(func, delay) {
+		// 	let timeoutId;
+		// 	return (...args) => {
+		// 		clearTimeout(timeoutId);
+		// 		timeoutId = setTimeout(() => {
+		// 			func(...args);
+		// 		}, delay);
+		// 	};
+		// },
+
+		// async searchContact(event) {
+		// 	// Debounce the searchContact method with a delay of 500 milliseconds
+		// 	const debouncedSearchContact = this.debounce(async (searchTerm) => {
+		// 		this.search = searchTerm;
+		// 		if (this.search === '') {
+		// 			this.loadUsers();
+		// 			return;
+		// 		} else {
+		// 			try {
+		// 				const response = await fetch(`https://intuitiveagents.io/search`, {
+		// 					method: "POST",
+		// 					body: JSON.stringify({
+		// 						searchTerm: this.search,
+		// 						agentId: this.agentDetails.id
+		// 					}),
+		// 					headers: {
+		// 						"Content-Type": "application/json"
+		// 					}
+		// 				});
+
+		// 				const users = await response.json();
+		// 				console.log("Search Response: ", users);
+		// 				this.searches = users;
+		// 			} catch (error) {
+		// 				console.error("Error fetching data:", error);
+		// 				this.searches = [];
+		// 			}
+		// 		}
+		// 	}, 10000); // Adjust debounce delay as needed
+
+		// 	// Call the debouncedSearchContact function with the search term from the input event
+		// 	debouncedSearchContact(event.target.value);
+		// }
+
+		async searchContact(event) {
+			// console.log("Key", event.target.value);
+			this.search = event.target.value;
+			if (this.search == '') {
+				this.loadUsers()
+				return;
+			} else {
+				try {
+					const response = await fetch(`https://intuitiveagents.io/search`, {
+						method: "POST",
+						body: JSON.stringify({
+							searchTerm: this.search,
+							agentId: this.agentDetails.id
+						}),
+						headers: {
+							"Content-Type": "application/json"
+						}
+					});
+
+					const users = await response.json();
+					console.log("Search Response: ", users);
+					this.searches = users;
+					// this.searching = true;
+				} catch (error) {
+					console.error("Error fetching data:", error);
+					// Return an empty object or handle the error as needed
+					this.searches = [];
+				}
+			}
 		}
 	},
 
