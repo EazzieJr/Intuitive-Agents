@@ -268,7 +268,7 @@ export default {
 			}
 
 			useStore().$patch({
-				agentId: this.agentDetails.id
+				agentId: this.agentDetails
 			})
 		},
 
@@ -319,82 +319,7 @@ export default {
 
 			// Call the debouncedSearchContact function with the search term from the input event
 			debouncedSearchContact(event.target.value);
-		},
-
-		// debounce(func, delay) {
-		// 	let timeoutId;
-		// 	return (...args) => {
-		// 		clearTimeout(timeoutId);
-		// 		timeoutId = setTimeout(() => {
-		// 			func(...args);
-		// 		}, delay);
-		// 	};
-		// },
-
-		// async searchContact(event) {
-		// 	// Debounce the searchContact method with a delay of 500 milliseconds
-		// 	const debouncedSearchContact = this.debounce(async (searchTerm) => {
-		// 		this.search = searchTerm;
-		// 		if (this.search === '') {
-		// 			this.loadUsers();
-		// 			return;
-		// 		} else {
-		// 			try {
-		// 				const response = await fetch(`https://intuitiveagents.io/search`, {
-		// 					method: "POST",
-		// 					body: JSON.stringify({
-		// 						searchTerm: this.search,
-		// 						agentId: this.agentDetails.id
-		// 					}),
-		// 					headers: {
-		// 						"Content-Type": "application/json"
-		// 					}
-		// 				});
-
-		// 				const users = await response.json();
-		// 				console.log("Search Response: ", users);
-		// 				this.searches = users;
-		// 			} catch (error) {
-		// 				console.error("Error fetching data:", error);
-		// 				this.searches = [];
-		// 			}
-		// 		}
-		// 	}, 10000); // Adjust debounce delay as needed
-
-		// 	// Call the debouncedSearchContact function with the search term from the input event
-		// 	debouncedSearchContact(event.target.value);
-		// }
-
-		// async searchContact(event) {
-		// 	// console.log("Key", event.target.value);
-		// 	this.search = event.target.value;
-		// 	if (this.search == '') {
-		// 		this.loadUsers()
-		// 		return;
-		// 	} else {
-		// 		try {
-		// 			const response = await fetch(`https://intuitiveagents.io/search`, {
-		// 				method: "POST",
-		// 				body: JSON.stringify({
-		// 					searchTerm: this.search,
-		// 					agentId: this.agentDetails.id
-		// 				}),
-		// 				headers: {
-		// 					"Content-Type": "application/json"
-		// 				}
-		// 			});
-
-		// 			const users = await response.json();
-		// 			console.log("Search Response: ", users);
-		// 			this.searches = users;
-		// 			// this.searching = true;
-		// 		} catch (error) {
-		// 			console.error("Error fetching data:", error);
-		// 			// Return an empty object or handle the error as needed
-		// 			this.searches = [];
-		// 		}
-		// 	}
-		// }
+		}
 	},
 
 	beforeMount() {

@@ -20,8 +20,9 @@
 			</div>
 		</div>
 
-		<GetSchedules v-if="schedularModal" :agentId="agentId" @closeSchedular="closeSchedular" />
-
+		<GetSchedules v-if="scheduleModal" :agentId="agentDetails.id" @closeSchedular="scheduleModal = false" />
+		<Schedular v-if="schedularModal" :agentId="agentDetails.id" :fromNumber="agentDetails.number"
+			@close="schedularModal = false" />
 	</nav>
 </template>
 
@@ -37,10 +38,17 @@ export default {
 					label: 'Schedules',
 					icon: 'i-heroicons-clock-20-solid',
 					click: () => {
-						this.schedularModal = true
+						this.scheduleModal = true
 						// console.log(this.schedularModal)
 					}
-				}], [{
+				},{
+						label: 'Create Schedule',
+						icon: 'i-heroicons-plus-20-solid',
+						click: () => {
+							this.schedularModal = true
+							console.log(this.schedularModal)
+						}
+					}], [{
 					label: 'Reset statuses',
 					icon: 'i-heroicons-arrow-path-20-solid',
 					shortcuts: ['R'],
@@ -59,12 +67,13 @@ export default {
 			],
 
 			// agentId: "",
+			scheduleModal: false,
 			schedularModal: false
 		}
 	},
 
 	computed: {
-		...mapState(useStore, ['agentId'])
+		...mapState(useStore, ['agentDetails'])
 	},
 
 	methods: {
@@ -78,7 +87,7 @@ export default {
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						agentId: this.agentId
+						agentId: this.agentDetails.id
 					})
 				});
 
@@ -100,7 +109,7 @@ export default {
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						agentId: this.agentId
+						agentId: this.agentDetails.id
 					})
 				});
 			} catch (err) {
