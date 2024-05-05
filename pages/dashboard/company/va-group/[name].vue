@@ -48,7 +48,7 @@
 					<div class="Search start">
 						<div class="Input border rounded-lg overflow-hidden">
 							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search..."
-								v-model="search" type="search" @input="handleInput($event)" />
+								v-model="search" type="search" @input="searchContact($event)" />
 							<!-- <template #trailing>
 									<UButton class="text-gray-500 dark:text-gray-400 text-xs font-bold" @click="clearSearch">Clear</UButton>
 								</template> -->
@@ -133,6 +133,7 @@ export default {
 			page: 1,
 			search: "",
 			debounceTimeout: null,
+			timeoutId: 0,
 
 			// store: useStore(),
 			moment
@@ -271,9 +272,53 @@ export default {
 			})
 		},
 
-		handleInput(e) {
-			clearTimeout(this.debounceTimeout);
-			this.debounceTimeout = setTimeout(this.searchContact(e), 2000); // Adjust debounce delay as needed
+		debounce(func, delay) {
+			console.log("Debounce", this.timeoutId);
+			// timeoutId;
+			return (...args) => {
+				const context = this;
+				console.log("Before", this.timeoutId);
+				clearTimeout(this.timeoutId);
+				this.timeoutId = setTimeout(() => {
+					func.apply(context, args);
+				}, delay);
+				console.log("After", this.timeoutId);
+			};
+		},
+
+		async searchContact(event) {
+			// Debounce the searchContact method with a delay of 500 milliseconds
+			const debouncedSearchContact = this.debounce(async (searchTerm) => {
+				this.search = searchTerm;
+				if (this.search === '') {
+					this.searches = []
+					this.loadUsers();
+					return;
+				} else {
+					try {
+						const response = await fetch(`https://intuitiveagents.io/search`, {
+							method: "POST",
+							body: JSON.stringify({
+								searchTerm: this.search,
+								agentId: this.agentDetails.id
+							}),
+							headers: {
+								"Content-Type": "application/json"
+							}
+						});
+
+						const users = await response.json();
+						console.log("Search Response: ", users);
+						this.searches = users;
+					} catch (error) {
+						console.error("Error fetching data:", error);
+						this.searches = [];
+					}
+				}
+			}, 1000); // Adjust debounce delay as needed
+
+			// Call the debouncedSearchContact function with the search term from the input event
+			debouncedSearchContact(event.target.value);
 		},
 
 		// debounce(func, delay) {
@@ -320,36 +365,36 @@ export default {
 		// 	debouncedSearchContact(event.target.value);
 		// }
 
-		async searchContact(event) {
-			// console.log("Key", event.target.value);
-			this.search = event.target.value;
-			if (this.search == '') {
-				this.loadUsers()
-				return;
-			} else {
-				try {
-					const response = await fetch(`https://intuitiveagents.io/search`, {
-						method: "POST",
-						body: JSON.stringify({
-							searchTerm: this.search,
-							agentId: this.agentDetails.id
-						}),
-						headers: {
-							"Content-Type": "application/json"
-						}
-					});
+		// async searchContact(event) {
+		// 	// console.log("Key", event.target.value);
+		// 	this.search = event.target.value;
+		// 	if (this.search == '') {
+		// 		this.loadUsers()
+		// 		return;
+		// 	} else {
+		// 		try {
+		// 			const response = await fetch(`https://intuitiveagents.io/search`, {
+		// 				method: "POST",
+		// 				body: JSON.stringify({
+		// 					searchTerm: this.search,
+		// 					agentId: this.agentDetails.id
+		// 				}),
+		// 				headers: {
+		// 					"Content-Type": "application/json"
+		// 				}
+		// 			});
 
-					const users = await response.json();
-					console.log("Search Response: ", users);
-					this.searches = users;
-					// this.searching = true;
-				} catch (error) {
-					console.error("Error fetching data:", error);
-					// Return an empty object or handle the error as needed
-					this.searches = [];
-				}
-			}
-		}
+		// 			const users = await response.json();
+		// 			console.log("Search Response: ", users);
+		// 			this.searches = users;
+		// 			// this.searching = true;
+		// 		} catch (error) {
+		// 			console.error("Error fetching data:", error);
+		// 			// Return an empty object or handle the error as needed
+		// 			this.searches = [];
+		// 		}
+		// 	}
+		// }
 	},
 
 	beforeMount() {
