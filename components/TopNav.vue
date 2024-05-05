@@ -20,6 +20,7 @@
 			</div>
 		</div>
 
+		<UploadFile v-if="uploadModal" :agentId="agentDetails.id" @closeModal="uploadModal = false" />
 		<GetSchedules v-if="scheduleModal" :agentId="agentDetails.id" @closeSchedular="scheduleModal = false" />
 		<Schedular v-if="schedularModal" :agentId="agentDetails.id" :fromNumber="agentDetails.number"
 			@close="schedularModal = false" />
@@ -68,7 +69,8 @@ export default {
 
 			// agentId: "",
 			scheduleModal: false,
-			schedularModal: false
+			schedularModal: false,
+			uploadModal: true
 		}
 	},
 

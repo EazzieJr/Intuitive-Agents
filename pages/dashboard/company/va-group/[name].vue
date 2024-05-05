@@ -32,19 +32,7 @@
 					Call Logs
 				</h2>
 
-				<Schedular v-if="schedularModal" :agentId="agentDetails.id" :fromNumber="agentDetails.number"
-					@close="schedularModal = false" />
-
 				<div class="Actions start space-x-5">
-					<button class="Download p-[2px] relative" @click="schedularModal = true">
-						<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
-
-						<div
-							class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent text-sm">
-							Schedule call
-						</div>
-					</button>
-
 					<div class="Search start">
 						<div class="Input border rounded-lg overflow-hidden">
 							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search..."

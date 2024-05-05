@@ -22,11 +22,11 @@
 						</option>
 						))}
 					</select> -->
-					<USelectMenu class="w-20" v-model="selectedHour" :options="[...Array(24).keys()]" />
+					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedHour" :options="[...Array(24).keys()]" placeholder="Hours" />
 
 					<span class="block">:</span>
 
-					<USelectMenu class="w-20" v-model="selectedMinute" :options="[...Array(60).keys()]" />
+					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedMinute" :options="[...Array(60).keys()]" placeholder="Minutes" />
 					<!-- <select class="rounded-xl p-2.5 border border-[#C4C4C4] h-fit max-h-[100px] block w-[60px] text-center"
 						value={selectedMinutes} onChange={handleMinutesChange}>
 						{[...Array(60).keys()].map((minute) => (
@@ -37,10 +37,11 @@
 						))}
 					</select> -->
 
-					<UInput class="w-20" v-model="limit" />
+					<UInput size="lg" class="w-28 h-10" v-model="limit" placeholder="Limit" />
 				</div>
 
-				<button @click="schedule" class="Submit center py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full" :disabled="loading">
+				<button @click="schedule"
+					class="Submit center py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full" :disabled="loading">
 					<span v-if="!loading">
 						Schedule
 					</span>
