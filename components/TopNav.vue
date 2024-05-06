@@ -81,7 +81,7 @@ export default {
 			],
 
 			// agentId: "",
-			createModal: true,
+			createModal: false,
 			scheduleModal: false,
 			schedularModal: false,
 			uploadModal: false
