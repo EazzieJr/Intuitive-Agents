@@ -20,6 +20,7 @@
 			</div>
 		</div>
 
+		<CreateModal v-if="createModal" :agentId="agentDetails.id" @closeModal="createModal = false" />
 		<UploadFile v-if="uploadModal" :agentId="agentDetails.id" @closeModal="uploadModal = false" />
 		<GetSchedules v-if="scheduleModal" :agentId="agentDetails.id" @closeSchedular="scheduleModal = false" />
 		<Schedular v-if="schedularModal" :agentId="agentDetails.id" :fromNumber="agentDetails.number"
@@ -42,17 +43,29 @@ export default {
 						this.scheduleModal = true
 						// console.log(this.schedularModal)
 					}
-				},{
-						label: 'Create Schedule',
-						icon: 'i-heroicons-plus-20-solid',
-						click: () => {
-							this.schedularModal = true
-							console.log(this.schedularModal)
-						}
+				}, {
+					label: 'Create Schedule',
+					icon: 'i-heroicons-plus-20-solid',
+					click: () => {
+						this.schedularModal = true
+						console.log(this.schedularModal)
+					}
 					}], [{
+						label: 'Create contact',
+						icon: 'i-heroicons-user-plus-20-solid',
+						click: () => {
+							this.createModal = true
+						}
+					}, {
+					label: 'Upload CSV',
+					icon: 'i-heroicons-arrow-up-on-square-stack-20-solid',
+					click: () => {
+						this.uploadModal = true
+					}
+				}, {
 					label: 'Reset statuses',
 					icon: 'i-heroicons-arrow-path-20-solid',
-					shortcuts: ['R'],
+					// shortcuts: ['R'],
 					click: () => {
 						this.resetStatuses()
 					}
@@ -68,9 +81,10 @@ export default {
 			],
 
 			// agentId: "",
+			createModal: true,
 			scheduleModal: false,
 			schedularModal: false,
-			uploadModal: true
+			uploadModal: false
 		}
 	},
 
