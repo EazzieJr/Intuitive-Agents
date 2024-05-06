@@ -59,7 +59,7 @@
 				<img src="/svg/empty.svg" alt="">
 
 				<p>
-					{{ fetching ? "Fetching table data" : "No Available Contact on this agent" }}
+					{{ fetching ? "Fetching table data" : filter ? "No result for your search" : "No Available Contact on this agent" }}
 				</p>
 			</div>
 		</div>
