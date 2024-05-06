@@ -93,8 +93,8 @@
 					{{ formType === "create" ?
 					"Create a new contact" :
 					formType === "upload" ?
-					"Upload CSV file" :
-					"Update contact details" }}
+						"Upload CSV file" :
+						"Update contact details" }}
 				</h3>
 
 				<button class="Close absolute right-5 top-5" @click="closeModal">
@@ -220,7 +220,10 @@ export default {
 		},
 		filter: {
 			type: Boolean
-		}
+		},
+		query: {
+			type: String
+		},
 	},
 
 	data() {
@@ -311,7 +314,7 @@ export default {
 		},
 
 		async updateContact() {
-			const {email, firstName, lastName, phone, id} = this.user
+			const { email, firstName, lastName, phone, id } = this.user
 			try {
 				const response = await fetch(`https://intuitiveagents.io/users/update`, {
 					method: "PATCH",
@@ -329,7 +332,8 @@ export default {
 					})
 				});
 
-				this.loadUsers(this.page);
+				this.searchContact();
+				// this.loadUsers(this.page);
 
 				this.toggleCreateModal();
 
@@ -354,7 +358,7 @@ export default {
 						userId: _id,
 					})
 				});
-				
+
 				// const response = await axios.post(`https://intuitiveagents.io/create-phone-call/${this.agentDetails.id}`, {
 				// 	fromNumber: "+17257268989",
 				// 	toNumber: phone,
@@ -416,6 +420,28 @@ export default {
 				})
 			} catch (err) {
 				console.log(err);
+			}
+		},
+
+		async searchContact() {
+			try {
+				const response = await fetch(`https://intuitiveagents.io/search`, {
+					method: "POST",
+					body: JSON.stringify({
+						searchTerm: this.query,
+						agentId: this.agentDetails.id
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				});
+
+				const users = await response.json();
+				console.log("Search Response: ", users);
+				this.$emit("updateSearch", users)
+			} catch (error) {
+				console.error("Error fetching data:", error);
+				this.searches = [];
 			}
 		},
 

@@ -51,9 +51,9 @@
 					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
 					@loadUsers="loadUsers" />
 
-				<Table v-else :users="searches" :searching="searching" :totalPages="totalPages" :page="page"
+				<Table v-else :users="searches" :searching="searching" :query="search" :totalPages="totalPages" :page="page"
 					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					@loadUsers="loadUsers" />
+					@updateSearch="updateSearch" />
 			</div>
 		</div>
 
@@ -256,7 +256,7 @@ export default {
 			}
 
 			useStore().$patch({
-				agentId: this.agentDetails
+				agentDetails: this.agentDetails
 			})
 		},
 
@@ -307,7 +307,11 @@ export default {
 
 			// Call the debouncedSearchContact function with the search term from the input event
 			debouncedSearchContact(event.target.value);
-		}
+		},
+
+		updateSearch(data) {
+			this.searches = data;
+		},
 	},
 
 	beforeMount() {

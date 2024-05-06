@@ -47,6 +47,9 @@
 </template>
 
 <script>
+import { mapState } from 'pinia'
+import { useStore } from '~/store/index'
+
 export default {
 	props: {
 		agentId: {
@@ -68,23 +71,26 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapState(useStore, ["agentDetails"])
+	},
+
 	methods: {
 		async createUser(e) {
 			this.updating = true;
 			try {
 				// Use fetch
+				console.log("Latest log: ", this.user, this.agentId);
 				const response = await fetch(`https://intuitiveagents.io/users/create`, {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'
 					},
 					body: JSON.stringify({
-						fields: {
-							firstName: this.user.firstName,
-							email: this.user.email,
-							lastName: this.user.lastName,
-							phone: this.user.phone
-						},
+						firstname: this.user.firstName,
+						email: this.user.email,
+						lastname: this.user.lastName,
+						phone: this.user.phone,
 						agentId: this.agentId,
 					})
 				});
@@ -104,6 +110,11 @@ export default {
 		closeModal() {
 			this.$emit("closeModal");
 		}
+	},
+
+	mounted() {
+		console.log("Agent ID: ", this.agentId);
+		console.log("Agent Details 2: ", this.agentDetails);
 	}
 }
 </script>

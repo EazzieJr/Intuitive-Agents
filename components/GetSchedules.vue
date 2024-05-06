@@ -150,6 +150,7 @@ export default {
 
 	mounted() {
 		this.getSchedules()
+		console.log("Get sched: ", this.agentId);
 	}
 }
 </script>

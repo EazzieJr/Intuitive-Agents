@@ -20,7 +20,7 @@
 			</div>
 		</div>
 
-		<CreateModal v-if="createModal" :agentId="agentDetails.id" @closeModal="createModal = false" />
+		<CreateModal v-if="createModal" :agentId="agentDetails?.id" @closeModal="createModal = false" />
 		<UploadFile v-if="uploadModal" :agentId="agentDetails.id" @closeModal="uploadModal = false" />
 		<GetSchedules v-if="scheduleModal" :agentId="agentDetails.id" @closeSchedular="scheduleModal = false" />
 		<Schedular v-if="schedularModal" :agentId="agentDetails.id" :fromNumber="agentDetails.number"
@@ -87,6 +87,15 @@ export default {
 			uploadModal: false
 		}
 	},
+
+	// watch: {
+	// 	agentDetails: {
+	// 		handler() {
+	// 			console.log("Agent details: ", this.agentDetails)
+	// 		},
+	// 		deep: true
+	// 	}
+	// },
 
 	computed: {
 		...mapState(useStore, ['agentDetails'])
