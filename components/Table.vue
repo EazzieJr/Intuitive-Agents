@@ -71,9 +71,11 @@
 				</span>
 			</button>
 
-			<div>
+			<div class="start space-x-2.5">
+				<USelectMenu v-model="tempPage" :options="[...Array(totalPages).keys()].map(i => i + 1)"  v-if="!fetching" />
+				
 				<span class="" v-if="!fetching">
-					{{ page }} of {{ totalPages }}
+					of {{ totalPages }}
 				</span>
 
 				<img class="animate-spin duration-1000 py-1 w-6" v-else src="/svg/loading-dark.svg" alt="">
@@ -242,6 +244,20 @@ export default {
 			modalOpened: false,
 			updating: false,
 			moment
+		}
+	},
+
+	watch: {
+		page(val) {
+			this.tempPage = val;
+		},
+		
+		tempPage(val) {
+			if (this.page > val && this.page == val) {
+				retun;
+			} else {
+				this.paginate(val)
+			}
 		}
 	},
 
