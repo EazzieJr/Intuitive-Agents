@@ -18,7 +18,7 @@
 
 		<div class="Data" data-lenis-prevent>
 			<div class="DataContainer">
-				<div class="Row start" v-for="(user, index) in users" :key="index">
+				<div class="Row start" :class="{'opacity-50': user._id == deleting._id}" v-for="(user, index) in users" :key="index">
 					<div>
 						{{ index + 1 }}
 					</div>
@@ -243,6 +243,7 @@ export default {
 			tempPage: this.page,
 			modalOpened: false,
 			updating: false,
+			deleting: {},
 			moment
 		}
 	},
@@ -434,6 +435,8 @@ export default {
 						"Content-Type": "application/json"
 					}
 				})
+
+				this.searchContact();
 			} catch (err) {
 				console.log(err);
 			}
