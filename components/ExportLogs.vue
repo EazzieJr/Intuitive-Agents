@@ -35,7 +35,7 @@ export default {
 			this.exporting = true
 
 			try {
-				const response = await fetch(`https://intuitiveagents.io/get-logs`, {
+				const response = await fetch(`https://intuitiveagents.io/call-logs-csv`, {
 					method: "POST",
 					body: JSON.stringify({
 						agentId: this.agentId,
