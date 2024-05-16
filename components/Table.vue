@@ -364,7 +364,19 @@ export default {
 			const { _id, phone } = user;
 			try {
 				// Use fetch
-				const response = await fetch(`https://intuitiveagents.io/create-phone-call/${this.agentDetails.id}`, {
+				// const response = await fetch(`https://intuitiveagents.io/create-phone-call/${this.agentDetails.id}`, {
+				// 	method: "POST",
+				// 	headers: {
+				// 		"Content-Type": "application/json"
+				// 	},
+				// 	body: JSON.stringify({
+				// 		fromNumber: this.agentDetails.number,
+				// 		toNumber: phone,
+				// 		userId: _id,
+				// 	})
+				// });
+
+				const response = await fetch(`https://intuitiveagents.io/create-llm-phone-call`, {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json"
@@ -373,9 +385,10 @@ export default {
 						fromNumber: this.agentDetails.number,
 						toNumber: phone,
 						userId: _id,
+						agentId: this.agentDetails.id
 					})
 				});
-
+					
 				// const response = await axios.post(`https://intuitiveagents.io/create-phone-call/${this.agentDetails.id}`, {
 				// 	fromNumber: "+17257268989",
 				// 	toNumber: phone,
