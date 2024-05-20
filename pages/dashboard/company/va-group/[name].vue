@@ -237,7 +237,7 @@ export default {
 					name: "Daniel",
 					alias: "Virtual Help Desk",
 					id: "86f0db493888f1da69b7d46bfaecd360",
-					number: "+17257268989"
+					number: "+17026209498"
 				}
 			} else if (name == "ethan") {
 				this.agentDetails = {
