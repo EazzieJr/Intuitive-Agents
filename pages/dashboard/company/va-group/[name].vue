@@ -293,24 +293,32 @@ export default {
 					this.loadUsers();
 					return;
 				} else {
-					try {
-						const response = await fetch(`https://intuitiveagents.io/search`, {
-							method: "POST",
-							body: JSON.stringify({
-								searchTerm: this.search,
-								agentId: this.agentDetails.id
-							}),
-							headers: {
-								"Content-Type": "application/json"
-							}
-						});
+					const searchItemChars = this.search.split(" ")
+					if (searchItemChars[searchItemChars.length - 1] == '') {
+						// console.log("fake")
+						return
+					} else {
+						// console.log("Actual")
 
-						const users = await response.json();
-						console.log("Search Response: ", users);
-						this.searches = users;
-					} catch (error) {
-						console.error("Error fetching data:", error);
-						this.searches = [];
+						try {
+							const response = await fetch(`https://intuitiveagents.io/search`, {
+								method: "POST",
+								body: JSON.stringify({
+									searchTerm: this.search,
+									agentId: this.agentDetails.id
+								}),
+								headers: {
+									"Content-Type": "application/json"
+								}
+							});
+	
+							const users = await response.json();
+							console.log("Search Response: ", users);
+							this.searches = users;
+						} catch (error) {
+							console.error("Error fetching data:", error);
+							this.searches = [];
+						}
 					}
 				}
 			}, 1000); // Adjust debounce delay as needed
