@@ -33,6 +33,14 @@
 				</h2>
 
 				<div class="Actions start space-x-5">
+					<button v-if="search" class="BatchDelete center py-2.5 w-[160px] rounded-lg bg-red-600 text-white font-medium text-sm" @click="batchDelete">
+						<span v-if="!batchDeleting">
+							Batch delete
+						</span>
+
+						<img class="animate-spin duration-1000 py-1 w-4" v-else src="/svg/loading.svg" alt="">
+					</button>
+
 					<div class="Search start">
 						<div class="Input border rounded-lg overflow-hidden">
 							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search..."
@@ -103,6 +111,7 @@ definePageMeta({
 
 export default {
 	layout: "dashboard",
+
 	data() {
 		return {
 			users: [],
@@ -110,6 +119,7 @@ export default {
 			agentDetails: {},
 			timerModal: false,
 			schedularModal: false,
+			batchDeleting: false,
 
 			transcript: {},
 			analyzedTranscript: {},
@@ -312,6 +322,33 @@ export default {
 		updateSearch(data) {
 			this.searches = data;
 		},
+
+		async batchDelete() {
+			this.batchDeleting = true;
+			const ids = this.searches.map(user => user._id);
+
+			console.log("Batch Delete: ", ids);
+			try {
+				const response = await fetch(`https://intuitiveagents.io/batch-delete-users`, {
+					method: "POST",
+					body: JSON.stringify({
+						contactsToDelete: ids
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				});
+
+				const users = await response.json();
+				console.log("Delete Response: ", users);
+				this.loadUsers();
+				this.batchDeleting = false;
+				this.search = "";
+			} catch (error) {
+				console.error("Error fetching data:", error);
+				this.batchDeleting = false;
+			}
+		}
 	},
 
 	beforeMount() {
