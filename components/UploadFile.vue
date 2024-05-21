@@ -64,7 +64,10 @@ export default {
 				// Use fetch
 				const response = await fetch(`https://intuitiveagents.io/upload/${this.agentId}`, {
 					method: "POST",
-					body: formData
+					body: formData,
+					headers: {
+						"Content-Type": "multipart/form-data",
+					},
 				});
 
 				if (!response.ok) {
