@@ -261,7 +261,7 @@ export default {
 					name: "Chloe",
 					alias: "Remote Solutions Team",
 					id: "0411eeeb12d17a340941e91a98a766d0",
-					number: "+17252399297"
+					number: "+17025533532"
 				}
 			}
 
