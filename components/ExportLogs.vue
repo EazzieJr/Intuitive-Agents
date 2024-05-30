@@ -39,6 +39,7 @@ export default {
 					method: "POST",
 					body: JSON.stringify({
 						agentId: this.agentId,
+						statusOption: "Called",
 						// limit,
 					}),
 					headers: {
