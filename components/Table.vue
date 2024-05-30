@@ -3,47 +3,56 @@
 		<div class="Scroller">
 			<div class="Header flex items-center grow">
 				<div>S/N</div>
-	
+
 				<div>First Name</div>
-	
+
 				<div>Last Name</div>
-	
+
 				<div>Email</div>
-	
+
 				<div>Phone</div>
-	
+
 				<div>Status</div>
 
-				<div>Transcript</div>
+				<div class="!flex between pr-5">
+					<span class="block">
+						Transcript
+					</span>
+
+					<button @click="showTranscript = !showTranscript">
+						<img class="w-5" :src="`/svg/eye${showTranscript ? '-slash' : ''}.svg`" alt="">
+					</button>
+				</div>
 
 				<div>Timestamp</div>
-	
+
 				<div>Actions</div>
 			</div>
-			
+
 			<div class="Data" data-lenis-prevent>
 				<div class="DataContainer">
-					<div class="Row start !items-start" :class="{'opacity-50': user._id == deleting._id}" v-for="(user, index) in users" :key="index">
+					<div class="Row start !items-start" :class="{ 'opacity-50': user._id == deleting._id }"
+						v-for="(user, index) in users" :key="index">
 						<div>
 							{{ index + 1 }}
 						</div>
-	
+
 						<div>
 							{{ user.firstname }}
 						</div>
-	
+
 						<div>
 							{{ user.lastname }}
 						</div>
-	
+
 						<div>
 							{{ user.email }}
 						</div>
-	
+
 						<div>
 							{{ user.phone }}
 						</div>
-	
+
 						<div class="start">
 							<img :src="`/svg/calls/${user.status.split(' ').join('-')}.svg`" alt="">
 							<span class="Status active">
@@ -51,16 +60,21 @@
 							</span>
 						</div>
 
-						<div class="Transcript !block space-y-2.5 pr-2.5">
-							<p class="block font-normal" v-for="(text, index) in transcriptArray(user?.referenceToCallId?.transcript)" :key="index">
-								{{ text }}
+						<div class="Transcript !block space-y-2.5 pr-2.5 overflow-hidden" :class="showTranscript ? 'h-fit' : 'h-5'">
+							<p class="block font-normal" v-for="(text, index) in transcriptArray(user?.referenceToCallId?.transcript)"
+								:key="index">
+								{{ text}}
+							</p>
+
+							<p class="!mt-0" v-if="!user?.referenceToCallId?.transcript">
+								No transcript available
 							</p>
 						</div>
 
 						<div>
 							{{ moment(user.datesCalled[user.datesCalled.length - 1]).format("MMM DD, YYYY") }}
 						</div>
-	
+
 						<div class="!flex start">
 							<UDropdown :items="dropdownItems(user)" mode=hover
 								:popper="{ offsetDistance: 0, placement: 'bottom-start' }">
@@ -69,12 +83,14 @@
 						</div>
 					</div>
 				</div>
-	
+
 				<div class="Empty col-center h-[400px]" v-if="users.length == 0">
 					<img src="/svg/empty.svg" alt="">
-	
+
 					<p>
-						{{ fetching ? "Fetching table data" : filter ? "No result for your search" : "No Available Contact on this agent" }}
+						{{ fetching ? "Fetching table data" :
+						filter ? "No result for your search" :
+						"No Available Contact on this agent" }}
 					</p>
 				</div>
 			</div>
@@ -88,8 +104,8 @@
 			</button>
 
 			<div class="start space-x-2.5">
-				<USelectMenu v-model="tempPage" :options="[...Array(totalPages).keys()].map(i => i + 1)"  v-if="!fetching" />
-				
+				<USelectMenu v-model="tempPage" :options="[...Array(totalPages).keys()].map(i => i + 1)" v-if="!fetching" />
+
 				<span class="" v-if="!fetching">
 					of {{ totalPages }}
 				</span>
@@ -111,8 +127,8 @@
 					{{ formType === "create" ?
 					"Create a new contact" :
 					formType === "upload" ?
-						"Upload CSV file" :
-						"Update contact details" }}
+					"Upload CSV file" :
+					"Update contact details" }}
 				</h3>
 
 				<button class="Close absolute right-5 top-5" @click="closeModal">
@@ -259,6 +275,7 @@ export default {
 			tempPage: this.page,
 			modalOpened: false,
 			updating: false,
+			showTranscript: false,
 			deleting: {},
 			moment
 		}
@@ -268,7 +285,7 @@ export default {
 		page(val) {
 			this.tempPage = val;
 		},
-		
+
 		tempPage(val) {
 			if (this.page > val && this.page == val) {
 				retun;
@@ -397,7 +414,7 @@ export default {
 						agentId: this.agentDetails.id
 					})
 				});
-					
+
 				// const response = await axios.post(`https://intuitiveagents.io/create-phone-call/${this.agentDetails.id}`, {
 				// 	fromNumber: "+17257268989",
 				// 	toNumber: phone,
@@ -525,7 +542,7 @@ export default {
 
 	.Scroller {
 		@apply min-w-[1500px] max-w-full;
-		
+
 		>.Header {
 			@apply bg-gray-100 p-4;
 
