@@ -1,66 +1,82 @@
 <template>
-	<div class="Table overflow-hidden">
-		<div class="Header flex items-center grow">
-			<div>S/N</div>
+	<div class="Table overflow-x-scroll">
+		<div class="Scroller">
+			<div class="Header flex items-center grow">
+				<div>S/N</div>
+	
+				<div>First Name</div>
+	
+				<div>Last Name</div>
+	
+				<div>Email</div>
+	
+				<div>Phone</div>
+	
+				<div>Status</div>
 
-			<div>First Name</div>
+				<div>Transcript</div>
 
-			<div>Last Name</div>
+				<div>Timestamp</div>
+	
+				<div>Actions</div>
+			</div>
+			
+			<div class="Data" data-lenis-prevent>
+				<div class="DataContainer">
+					<div class="Row start !items-start" :class="{'opacity-50': user._id == deleting._id}" v-for="(user, index) in users" :key="index">
+						<div>
+							{{ index + 1 }}
+						</div>
+	
+						<div>
+							{{ user.firstname }}
+						</div>
+	
+						<div>
+							{{ user.lastname }}
+						</div>
+	
+						<div>
+							{{ user.email }}
+						</div>
+	
+						<div>
+							{{ user.phone }}
+						</div>
+	
+						<div class="start">
+							<img :src="`/svg/calls/${user.status.split(' ').join('-')}.svg`" alt="">
+							<span class="Status active">
+								{{ user.status }}
+							</span>
+						</div>
 
-			<div>Email</div>
+						<div class="Transcript !block space-y-2.5 pr-2.5">
+							<p class="block font-normal" v-for="(text, index) in transcriptArray(user?.referenceToCallId?.transcript)" :key="index">
+								{{ text }}
+							</p>
+						</div>
 
-			<div>Phone</div>
-
-			<div>Status</div>
-
-			<div>Actions</div>
-		</div>
-
-		<div class="Data" data-lenis-prevent>
-			<div class="DataContainer">
-				<div class="Row start" :class="{'opacity-50': user._id == deleting._id}" v-for="(user, index) in users" :key="index">
-					<div>
-						{{ index + 1 }}
-					</div>
-
-					<div>
-						{{ user.firstname }}
-					</div>
-
-					<div>
-						{{ user.lastname }}
-					</div>
-
-					<div>
-						{{ user.email }}
-					</div>
-
-					<div>
-						{{ user.phone }}
-					</div>
-
-					<div class="start">
-						<img :src="`/svg/calls/${user.status.split(' ').join('-')}.svg`" alt="">
-						<span class="Status active">
-							{{ user.status }}
-						</span>
-					</div>
-
-					<div class="!flex start">
-						<UDropdown :items="dropdownItems(user)" mode=hover
-							:popper="{ offsetDistance: 0, placement: 'bottom-start' }">
-							<UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
-						</UDropdown>
+						<div>
+							{{ moment(user.datesCalled[user.datesCalled.length - 1]).format("MMM DD, YYYY") }}
+						</div>
+	
+						<div class="!flex start">
+							<UDropdown :items="dropdownItems(user)" mode=hover
+								:popper="{ offsetDistance: 0, placement: 'bottom-start' }">
+								<UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
+							</UDropdown>
+						</div>
 					</div>
 				</div>
-			</div>
-
-			<div class="Empty col-center h-[400px]" v-if="users.length == 0">
-				<img src="/svg/empty.svg" alt="">
-
-				<p>
-					{{ fetching ? "Fetching table data" : filter ? "No result for your search" : "No Available Contact on this agent" }}
-				</p>
+	
+				<div class="Empty col-center h-[400px]" v-if="users.length == 0">
+					<img src="/svg/empty.svg" alt="">
+	
+					<p>
+						{{ fetching ? "Fetching table data" : filter ? "No result for your search" : "No Available Contact on this agent" }}
+					</p>
+				</div>
 			</div>
 		</div>
 
@@ -259,13 +275,6 @@ export default {
 			} else {
 				this.paginate(val)
 			}
-		}
-	},
-
-	computed: {
-		transcriptArray() {
-			// console.log("Stuff", this.transcript?.split("\n"));
-			return this.transcript?.transcript?.split("\n")
 		}
 	},
 
@@ -497,6 +506,10 @@ export default {
 				phone: "",
 				id: ""
 			}
+		},
+
+		transcriptArray(transcript) {
+			return transcript?.split("\n")
 		}
 	},
 
@@ -508,88 +521,108 @@ export default {
 
 <style lang="postcss" scoped>
 .Table {
-	@apply rounded-xl border border-gray-200 bg-white overflow-hidden;
+	@apply rounded-xl border border-gray-200 bg-white;
 
-	>.Header {
-		@apply bg-gray-100 p-4;
+	.Scroller {
+		@apply min-w-[1500px] max-w-full;
+		
+		>.Header {
+			@apply bg-gray-100 p-4;
 
-		div {
-			@apply block;
+			div {
+				@apply block;
 
-			&:nth-child(1) {
-				@apply basis-[4%];
-			}
+				&:nth-child(1) {
+					@apply basis-[4%];
+				}
 
-			&:nth-child(2) {
-				@apply basis-[12%];
-			}
+				&:nth-child(2) {
+					@apply basis-[10%];
+				}
 
-			&:nth-child(3) {
-				@apply basis-[12%];
-			}
+				&:nth-child(3) {
+					@apply basis-[10%];
+				}
 
-			&:nth-child(4) {
-				@apply basis-[28%];
-			}
+				&:nth-child(4) {
+					@apply basis-[25%];
+				}
 
-			&:nth-child(5) {
-				@apply basis-[15%];
-			}
+				&:nth-child(5) {
+					@apply basis-[8%];
+				}
 
-			&:nth-child(6) {
-				@apply basis-[17%];
-			}
+				&:nth-child(6) {
+					@apply basis-[10%];
+				}
 
-			&:nth-child(7) {
-				@apply basis-[12%];
+				&:nth-child(7) {
+					@apply basis-[18%];
+				}
+
+				&:nth-child(8) {
+					@apply basis-[7%];
+				}
+
+				&:nth-child(9) {
+					@apply basis-[7%];
+				}
 			}
 		}
-	}
 
-	.Data {
-		.DataContainer {
-			@apply overflow-y-scroll h-fit max-h-[500px];
+		.Data {
+			.DataContainer {
+				@apply overflow-y-scroll h-fit max-h-[500px];
 
-			&::-webkit-scrollbar {
-				display: none;
-			}
+				&::-webkit-scrollbar {
+					display: none;
+				}
 
-			.Row {
-				@apply p-4 border-b border-gray-200;
+				.Row {
+					@apply p-4 border-b border-gray-200;
 
-				div {
-					@apply block text-[#09090B] capitalize text-sm;
+					div {
+						@apply block text-[#09090B] capitalize text-sm;
 
-					&:nth-child(1) {
-						@apply basis-[4%];
-					}
-
-					&:nth-child(2) {
-						@apply basis-[12%];
-					}
-
-					&:nth-child(3) {
-						@apply basis-[12%];
-					}
-
-					&:nth-child(4) {
-						@apply basis-[28%];
-					}
-
-					&:nth-child(5) {
-						@apply basis-[15%];
-					}
-
-					&:nth-child(6) {
-						@apply basis-[17%] space-x-2 !flex;
-
-						img {
-							@apply w-4
+						&:nth-child(1) {
+							@apply basis-[4%];
 						}
-					}
 
-					&:nth-child(7) {
-						@apply basis-[12%] font-bold;
+						&:nth-child(2) {
+							@apply basis-[10%];
+						}
+
+						&:nth-child(3) {
+							@apply basis-[10%];
+						}
+
+						&:nth-child(4) {
+							@apply basis-[25%];
+						}
+
+						&:nth-child(5) {
+							@apply basis-[8%];
+						}
+
+						&:nth-child(6) {
+							@apply basis-[10%] space-x-2 !flex;
+
+							img {
+								@apply w-4
+							}
+						}
+
+						&:nth-child(7) {
+							@apply basis-[18%] font-bold;
+						}
+
+						&:nth-child(8) {
+							@apply basis-[7%] font-bold;
+						}
+
+						&:nth-child(9) {
+							@apply basis-[7%] font-bold;
+						}
 					}
 				}
 			}
@@ -597,7 +630,7 @@ export default {
 	}
 
 	.Pagination {
-		@apply px-5 pt-2.5 xl:pt-3 pb-3.5 xl:pb-4;
+		@apply px-5 pt-2.5 xl:pt-3 pb-3.5 xl:pb-4 sticky left-0;
 
 		button {
 			@apply border border-gray-200 py-2 px-3 xl:px-3.5 rounded-lg text-[#344054] text-sm leading-5

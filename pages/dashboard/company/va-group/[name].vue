@@ -410,7 +410,7 @@ export default {
 		}
 
 		.Table {
-			@apply rounded-xl border border-gray-200 bg-white overflow-hidden;
+			@apply rounded-xl border border-gray-200 bg-white;
 
 			>.Header {
 				@apply bg-gray-100 p-4;
