@@ -24,6 +24,8 @@
 					</button>
 				</div>
 
+				<div>Summary</div>
+
 				<div>Timestamp</div>
 
 				<div>Actions</div>
@@ -68,6 +70,12 @@
 
 							<p class="!mt-0" v-if="!user?.referenceToCallId?.transcript">
 								No transcript available
+							</p>
+						</div>
+
+						<div class="Summary">
+							<p>
+								{{ user?.referenceToCallId?.retellCallSummary || "No summary available"}}
 							</p>
 						</div>
 
@@ -541,7 +549,7 @@ export default {
 	@apply rounded-xl border border-gray-200 bg-white;
 
 	.Scroller {
-		@apply min-w-[1500px] max-w-full;
+		@apply min-w-[1800px] max-w-full;
 
 		>.Header {
 			@apply bg-gray-100 p-4;
@@ -574,15 +582,19 @@ export default {
 				}
 
 				&:nth-child(7) {
-					@apply basis-[18%];
+					@apply basis-[12%];
 				}
 
 				&:nth-child(8) {
-					@apply basis-[7%];
+					@apply basis-[8%];
 				}
 
 				&:nth-child(9) {
 					@apply basis-[7%];
+				}
+
+				&:nth-child(10) {
+					@apply basis-[5%];
 				}
 			}
 		}
@@ -614,7 +626,7 @@ export default {
 						}
 
 						&:nth-child(4) {
-							@apply basis-[25%];
+							@apply basis-[22%];
 						}
 
 						&:nth-child(5) {
@@ -630,15 +642,19 @@ export default {
 						}
 
 						&:nth-child(7) {
-							@apply basis-[18%] font-bold;
+							@apply basis-[13%] font-bold;
 						}
 
 						&:nth-child(8) {
-							@apply basis-[7%] font-bold;
+							@apply basis-[10%];
 						}
 
 						&:nth-child(9) {
 							@apply basis-[7%] font-bold;
+						}
+
+						&:nth-child(10) {
+							@apply basis-[5%] font-bold;
 						}
 					}
 				}
