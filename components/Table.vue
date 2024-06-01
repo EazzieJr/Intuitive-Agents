@@ -24,7 +24,15 @@
 					</button>
 				</div>
 
-				<div>Summary</div>
+				<div class="!flex between pr-5">
+					<span>
+						Summary
+					</span>
+
+					<button @click="showSummary = !showSummary">
+						<img class="w-5" :src="`/svg/eye${showSummary ? '-slash' : ''}.svg`" alt="">
+					</button>
+				</div>
 
 				<div>Timestamp</div>
 
@@ -73,8 +81,8 @@
 							</p>
 						</div>
 
-						<div class="Summary">
-							<p>
+						<div class="Summary pr-2.5 overflow-hidden" :class="showSummary ? 'h-fit' : 'h-5'">
+							<p :class="{ 'font-bold' : !user?.referenceToCallId?.retellCallSummary }">
 								{{ user?.referenceToCallId?.retellCallSummary || "No summary available"}}
 							</p>
 						</div>
@@ -284,6 +292,7 @@ export default {
 			modalOpened: false,
 			updating: false,
 			showTranscript: false,
+			showSummary: false,
 			deleting: {},
 			moment
 		}
@@ -570,7 +579,7 @@ export default {
 				}
 
 				&:nth-child(4) {
-					@apply basis-[25%];
+					@apply basis-[20%];
 				}
 
 				&:nth-child(5) {
@@ -582,11 +591,11 @@ export default {
 				}
 
 				&:nth-child(7) {
-					@apply basis-[12%];
+					@apply basis-[13%];
 				}
 
 				&:nth-child(8) {
-					@apply basis-[8%];
+					@apply basis-[12%];
 				}
 
 				&:nth-child(9) {
@@ -626,7 +635,7 @@ export default {
 						}
 
 						&:nth-child(4) {
-							@apply basis-[22%];
+							@apply basis-[20%];
 						}
 
 						&:nth-child(5) {
@@ -646,7 +655,7 @@ export default {
 						}
 
 						&:nth-child(8) {
-							@apply basis-[10%];
+							@apply basis-[12%];
 						}
 
 						&:nth-child(9) {
