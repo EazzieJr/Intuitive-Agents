@@ -34,6 +34,8 @@
 					</button>
 				</div>
 
+				<div>Sentiment</div>
+
 				<div>Timestamp</div>
 
 				<div>Actions</div>
@@ -85,6 +87,10 @@
 							<p :class="{ 'font-bold' : !user?.referenceToCallId?.retellCallSummary }">
 								{{ user?.referenceToCallId?.retellCallSummary || "No summary available"}}
 							</p>
+						</div>
+
+						<div class="Sentiment">
+							{{ user?.analyzedTranscript }}
 						</div>
 
 						<div>
@@ -558,7 +564,7 @@ export default {
 	@apply rounded-xl border border-gray-200 bg-white;
 
 	.Scroller {
-		@apply min-w-[1800px] max-w-full;
+		@apply min-w-[2000px] max-w-full;
 
 		>.Header {
 			@apply bg-gray-100 p-4;
@@ -567,19 +573,19 @@ export default {
 				@apply block;
 
 				&:nth-child(1) {
-					@apply basis-[4%];
+					@apply basis-[2%];
 				}
 
 				&:nth-child(2) {
-					@apply basis-[10%];
+					@apply basis-[8%];
 				}
 
 				&:nth-child(3) {
-					@apply basis-[10%];
+					@apply basis-[8%];
 				}
 
 				&:nth-child(4) {
-					@apply basis-[20%];
+					@apply basis-[19%];
 				}
 
 				&:nth-child(5) {
@@ -603,6 +609,10 @@ export default {
 				}
 
 				&:nth-child(10) {
+					@apply basis-[7%];
+				}
+
+				&:nth-child(11) {
 					@apply basis-[5%];
 				}
 			}
@@ -623,19 +633,19 @@ export default {
 						@apply block text-[#09090B] capitalize text-sm;
 
 						&:nth-child(1) {
-							@apply basis-[4%];
+							@apply basis-[2%];
 						}
 
 						&:nth-child(2) {
-							@apply basis-[10%];
+							@apply basis-[8%];
 						}
 
 						&:nth-child(3) {
-							@apply basis-[10%];
+							@apply basis-[8%];
 						}
 
 						&:nth-child(4) {
-							@apply basis-[20%];
+							@apply basis-[19%];
 						}
 
 						&:nth-child(5) {
@@ -659,10 +669,14 @@ export default {
 						}
 
 						&:nth-child(9) {
-							@apply basis-[7%] font-bold;
+							@apply basis-[7%] font-semibold;
 						}
 
 						&:nth-child(10) {
+							@apply basis-[7%] font-bold;
+						}
+
+						&:nth-child(11) {
 							@apply basis-[5%] font-bold;
 						}
 					}
