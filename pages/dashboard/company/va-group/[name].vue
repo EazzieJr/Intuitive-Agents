@@ -23,6 +23,7 @@
 				<SmallTileCard title="Total contacts" icon="outgoing" :value="stats?.totalContactForAgent || 0" />
 				<SmallTileCard title="Called Contacts" icon="user-answered" :value="stats?.totalCalledForAgent || 0" />
 				<SmallTileCard title="Not Called" icon="user-declined" :value="stats?.totalNotCalledForAgent || 0" />
+				<SmallTileCard title="Answered by VM" icon="user-declined" :value="stats?.vm || 0" />
 				<SmallTileCard title="Failed calls" icon="user-declined" :value="stats?.failedCalls || 0" />
 			</div>
 		</header>
@@ -184,7 +185,8 @@ export default {
 					totalContactForAgent: users.result.totalContactForAgent,
 					totalCalledForAgent: users.result.totalCalledForAgent,
 					totalNotCalledForAgent: users.result.totalNotCalledForAgent,
-					failedCalls: users.result.failedCalls
+					failedCalls: users.result.failedCalls,
+					vm: users.result.vm
 				}
 				if (page) this.page = page;
 				// console.log("Total Pages: ", this.totalPages);
@@ -400,7 +402,7 @@ export default {
 		}
 
 		.Numbers {
-			@apply space-x-6 mt-6;
+			@apply gap-6 mt-6 flex-wrap;
 		}
 	}
 

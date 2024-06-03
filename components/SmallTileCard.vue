@@ -28,7 +28,7 @@ export default {
 
 <style lang="postcss" scoped>
 .SmallTileCard {
-	@apply p-5 bg-white rounded-xl border border-gray-200 space-y-3 w-[300px] text-black;
+	@apply p-5 bg-white rounded-xl border border-gray-200 space-y-3 w-[250px] text-black;
 
 	.Top {
 		p {
