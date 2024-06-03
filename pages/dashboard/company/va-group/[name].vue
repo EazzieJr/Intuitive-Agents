@@ -23,6 +23,7 @@
 				<SmallTileCard title="Total contacts" icon="outgoing" :value="stats?.totalContactForAgent || 0" />
 				<SmallTileCard title="Called Contacts" icon="user-answered" :value="stats?.totalCalledForAgent || 0" />
 				<SmallTileCard title="Not Called" icon="user-declined" :value="stats?.totalNotCalledForAgent || 0" />
+				<SmallTileCard title="Failed calls" icon="user-declined" :value="stats?.failedCalls || 0" />
 			</div>
 		</header>
 
@@ -33,7 +34,9 @@
 				</h2>
 
 				<div class="Actions start space-x-5">
-					<button v-if="search" class="BatchDelete center py-2.5 w-[160px] rounded-lg bg-red-600 text-white font-medium text-sm" @click="batchDelete">
+					<button v-if="search"
+						class="BatchDelete center py-2.5 w-[160px] rounded-lg bg-red-600 text-white font-medium text-sm"
+						@click="batchDelete">
 						<span v-if="!batchDeleting">
 							Batch delete
 						</span>
@@ -180,7 +183,8 @@ export default {
 				this.stats = {
 					totalContactForAgent: users.result.totalContactForAgent,
 					totalCalledForAgent: users.result.totalCalledForAgent,
-					totalNotCalledForAgent: users.result.totalNotCalledForAgent
+					totalNotCalledForAgent: users.result.totalNotCalledForAgent,
+					failedCalls: users.result.failedCalls
 				}
 				if (page) this.page = page;
 				// console.log("Total Pages: ", this.totalPages);
