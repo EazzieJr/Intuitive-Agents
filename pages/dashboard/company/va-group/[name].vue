@@ -260,7 +260,7 @@ export default {
 					name: "Ethan",
 					alias: "Virtual Team Expert",
 					id: "214e92da684138edf44368d371da764c",
-					number: "+17025533532"
+					number: "+17026209498"
 				}
 			} else if (name == "chloe") {
 				this.agentDetails = {

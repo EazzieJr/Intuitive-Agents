@@ -1,16 +1,18 @@
 <template>
-	<button class="Download p-[3px] relative" @click="exportLogs">
-		<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+	<UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
+		<button class="Download p-[3px] relative">
+			<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
 
-		<div
-			class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
-			<img src="/svg/download.svg" alt="">
+			<div
+				class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
+				<img src="/svg/download.svg" alt="">
 
-			<span :class="{ 'animate-pulse': exporting }">
-				{{ exporting ? "Exporting" : "Download" }} CSV
-			</span>
-		</div>
-	</button>
+				<span :class="{ 'animate-pulse': exporting }">
+					{{ exporting ? "Exporting" : "Download" }} CSV
+				</span>
+			</div>
+		</button>
+	</UDropdown>
 </template>
 
 <script>
@@ -25,12 +27,59 @@ export default {
 	data() {
 		return {
 			exporting: false,
-			// Filesaver
+			items: [
+				[{
+					label: 'All',
+					click: () => {
+						this.exportLogs('All')
+					}
+				}, {
+					label: 'Called',
+					click: () => {
+						this.exportLogs('Called')
+					}
+				}, {
+					label: 'Scheduled',
+					click: () => {
+						this.exportLogs('Called', 'Scheduled')
+					}
+				}], [{
+					label: 'Interested',
+					click: () => {
+						this.exportLogs('Called', 'Interested')
+					}
+				}, {
+					label: 'Incomplete call',
+					Click: () => {
+						this.exportLogs('Called', 'Incomplete call')
+					}
+				}], [{
+					label: 'Voicemail',
+					click: () => {
+						this.exportLogs('vm')
+					}
+				}, {
+					label: 'Uninterested',
+					click: () => {
+						this.exportLogs('Called', 'Uninterested')
+					}
+				}], [{
+					label: 'Not called',
+					click: () => {
+						this.exportLogs('notCalled')
+					}
+				}, {
+					label: 'Failed',
+					click: () => {
+						this.exportLogs('Failed')
+					}
+				}]
+			]
 		}
 	},
 
 	methods: {
-		async exportLogs() {
+		async exportLogs(statusOption, sentimentOption) {
 			const date = new Date().toISOString().split("T")[0];
 			this.exporting = true
 
@@ -39,7 +88,8 @@ export default {
 					method: "POST",
 					body: JSON.stringify({
 						agentId: this.agentId,
-						statusOption: "Called",
+						statusOption,
+						sentimentOption: sentimentOption ? sentimentOption : null,
 						// limit,
 					}),
 					headers: {
