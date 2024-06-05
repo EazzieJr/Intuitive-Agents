@@ -1,18 +1,22 @@
 <template>
-	<UDropdown :items="items" :popper="{ placement: 'bottom-start' }">
-		<button class="Download p-[3px] relative">
-			<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
+	<div class="Exp start">
+		<vue-date-picker v-model="date" mode="date" range></vue-date-picker>
 
-			<div
-				class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
-				<img src="/svg/download.svg" alt="">
+		<UDropdown class="shrink-0" :items="items" :popper="{ placement: 'bottom-start' }">
+			<button class="Download p-[2px] relative">
+				<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
 
-				<span :class="{ 'animate-pulse': exporting }">
-					{{ exporting ? "Exporting" : "Download" }} CSV
-				</span>
-			</div>
-		</button>
-	</UDropdown>
+				<div
+					class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
+					<img src="/svg/download.svg" alt="">
+
+					<span class="font-" :class="{ 'animate-pulse': exporting }">
+						{{ exporting ? "Exporting" : "Download" }} CSV
+					</span>
+				</div>
+			</button>
+		</UDropdown>
+	</div>
 </template>
 
 <script>
@@ -74,7 +78,9 @@ export default {
 						this.exportLogs('Failed')
 					}
 				}]
-			]
+			],
+
+			date: []
 		}
 	},
 
@@ -119,4 +125,7 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="postcss" scoped>
+.Exp {
+}
+</style>
