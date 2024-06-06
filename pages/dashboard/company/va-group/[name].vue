@@ -34,7 +34,7 @@
 					Call Logs
 				</h2>
 
-				<div class="Actions start space-x-5">
+				<div class="Actions start space-x-2.5">
 					<button v-if="search"
 						class="BatchDelete center py-2.5 w-[160px] rounded-lg bg-red-600 text-white font-medium text-sm"
 						@click="batchDelete">
@@ -44,6 +44,10 @@
 
 						<img class="animate-spin duration-1000 py-1 w-4" v-else src="/svg/loading.svg" alt="">
 					</button>
+
+					<UDropdown :items="searchItems" :popper="{ placement: 'bottom-start' }" size="xl">
+						<UButton color="white" :label="searchBy ? searchBy : 'Search by'" trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+					</UDropdown>
 
 					<div class="Search start">
 						<div class="Input border rounded-lg overflow-hidden">
@@ -136,6 +140,31 @@ export default {
 			search: "",
 			debounceTimeout: null,
 			timeoutId: 0,
+			searchBy: '',
+			searchItems: [
+				[{
+					label: 'Contacts',
+					click: () => {
+						this.searchBy = 'contacts'
+						// console.log(this.schedularModal)
+					}
+				}, {
+					label: 'Dates',
+					click: () => {
+						this.searchBy = 'dates'
+					}
+				}], [{
+					label: 'Sentiments',
+					click: () => {
+						this.searchBy = 'sentiments'
+					}
+				}, {
+					label: 'Statuses',
+					click: () => {
+						this.searchBy = 'statuses'
+					}
+				}]
+			],
 
 			// store: useStore(),
 			moment
@@ -317,7 +346,7 @@ export default {
 									"Content-Type": "application/json"
 								}
 							});
-	
+
 							const users = await response.json();
 							console.log("Search Response: ", users);
 							this.searches = users;
