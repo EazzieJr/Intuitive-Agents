@@ -96,8 +96,8 @@ export default {
 						agentId: this.agentId,
 						statusOption,
 						sentimentOption: sentimentOption ? sentimentOption : null,
-						startDate: this.date[0],
-						endDate: this.date[1],
+						startDate: this.date[0] || "",
+						endDate: this.date[1] || "",
 						// limit,
 					}),
 					headers: {
