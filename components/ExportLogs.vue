@@ -1,5 +1,5 @@
 <template>
-	<div class="Exp start">
+	<div class="Exp start space-x-2.5">
 		<vue-date-picker v-model="date" mode="date" range></vue-date-picker>
 
 		<UDropdown class="shrink-0" :items="items" :popper="{ placement: 'bottom-start' }">
@@ -7,10 +7,10 @@
 				<div class="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
 
 				<div
-					class="start space-x-3.5 px-5 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
-					<img src="/svg/download.svg" alt="">
+					class="start space-x-3.5 px-4 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent">
+					<img class="w-5" src="/svg/download.svg" alt="">
 
-					<span class="font-" :class="{ 'animate-pulse': exporting }">
+					<span class="text-sm" :class="{ 'animate-pulse': exporting }">
 						{{ exporting ? "Exporting" : "Download" }} CSV
 					</span>
 				</div>
@@ -96,6 +96,8 @@ export default {
 						agentId: this.agentId,
 						statusOption,
 						sentimentOption: sentimentOption ? sentimentOption : null,
+						startDate: this.date[0],
+						endDate: this.date[1],
 						// limit,
 					}),
 					headers: {
