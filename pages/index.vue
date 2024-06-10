@@ -11,7 +11,7 @@
 				<NuxtLink :to="company?.link ? company.link : `/dashboard/company/${company.name.toLowerCase().split(' ').join('-')}/${company.agents[0].name}`" class="Link"
 					v-for="company in companies" :key="company.name">
 					<div class="Image">
-						<img :src="`/images/companies/${company.name.toLowerCase().split(' ').join('-')}.jpg`" alt="">
+						<img :src="`/images/companies/${company.name.toLowerCase().split(' ').join('-')}.png`" alt="">
 					</div>
 
 					<span class="Name">
@@ -39,18 +39,18 @@ export default {
 				{
 					name: "Va Group",
 					agents: [
-						{
-							name: "daniel",
-							alias: "Virtual Help Desk"
-						},
+						// {
+						// 	name: "daniel",
+						// 	alias: "Virtual Help Desk"
+						// },
 						{
 							name: "ethan",
 							alias: "Virtual Team Expert"
 						},
-						{
-							name: "chloe",
-							alias: "Remote Solutions Team"
-						}
+						// {
+						// 	name: "chloe",
+						// 	alias: "Remote Solutions Team"
+						// }
 					]
 				},
 

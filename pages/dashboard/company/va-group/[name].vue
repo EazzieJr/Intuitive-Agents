@@ -1,9 +1,14 @@
 <template>
 	<div class="Dashboard">
 		<header>
-			<h1>
-				{{ agentDetails.alias }} - {{ agentDetails.name }}
-			</h1>
+			<div class="Left start !items-end space-x-5">
+				<div class="Image w-14 h-14 rounded-full overflow-hidden">
+					<img class="w-full h-full object-bottom object-cover" :src="`/images/${agentDetails?.alias?.toLowerCase().split(' ').join('-')}.png`" alt="">
+				</div>
+				<h1>
+					{{ agentDetails.alias }} - {{ agentDetails.name }}
+				</h1>
+			</div>
 
 			<div class="Misc between">
 				<div class="Switches start">

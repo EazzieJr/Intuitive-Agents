@@ -7,7 +7,7 @@
 				<div class="NavHeader start">
 					<NuxtLink to="/" class="start">
 						<div class="Image">
-							<img :src="`/images/companies/${companyName}.jpg`" alt="">
+							<img :src="`/images/companies/${companyName}.png`" alt="">
 						</div>
 
 						<span>

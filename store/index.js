@@ -7,18 +7,18 @@ export const useStore = defineStore({
 			{
 				name: "Va Group",
 				agents: [
-					{
-						name: "daniel",
-						alias: "Virtual Help Desk"
-					},
+					// {
+					// 	name: "daniel",
+					// 	alias: "Virtual Help Desk"
+					// },
 					{
 						name: "ethan",
 						alias: "Virtual Team Expert"
 					},
-					{
-						name: "chloe",
-						alias: "Remote Solutions Team"
-					}
+					// {
+					// 	name: "chloe",
+					// 	alias: "Remote Solutions Team"
+					// }
 				]
 			},
 
