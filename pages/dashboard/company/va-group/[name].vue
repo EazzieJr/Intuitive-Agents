@@ -46,7 +46,8 @@
 					</button>
 
 					<UDropdown :items="searchItems" :popper="{ placement: 'bottom-start' }" size="xl">
-						<UButton color="white" :label="searchBy ? searchBy : 'Search by'" trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+						<UButton color="white" :label="searchBy ? searchBy : 'Search by'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 					</UDropdown>
 
 					<div class="Search start">
