@@ -65,6 +65,7 @@
 <script>
 import moment from 'moment-timezone';
 import fetcher from "@/utils/fetcher";
+
 export default {
 	props: {
 		agentId: String
@@ -116,36 +117,38 @@ export default {
 		},
 		
 		async endSchedule(jobId, status) {
-			try {
-				// Use fetch
+			const response = await fetcher(status.toLowerCase() === "calling" ? "/stop-job" : "/cancel-schedule", "POST", {jobId})
+			
+			// try {
+			// 	// Use fetch
 
-				const response = await fetch(
-					`https://intuitiveagents.io/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"}`,
-					{
-						method: "POST",
-						headers: {
-							"Content-Type": "application/json"
-						},
-						body: JSON.stringify({
-							jobId
-						})
-					}
-				);
+			// 	const response = await fetch(
+			// 		`https://intuitiveagents.io/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"}`,
+			// 		{
+			// 			method: "POST",
+			// 			headers: {
+			// 				"Content-Type": "application/json"
+			// 			},
+			// 			body: JSON.stringify({
+			// 				jobId
+			// 			})
+			// 		}
+			// 	);
 
-				const schedules = await response.json();
-				// const response = await axios.post(
-				// 	`https://intuitiveagents.io/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"
-				// 	}`,
-				// 	{
-				// 		jobId,
-				// 	}
-				// );
+			// 	const schedules = await response.json();
+			// 	// const response = await axios.post(
+			// 	// 	`https://intuitiveagents.io/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"
+			// 	// 	}`,
+			// 	// 	{
+			// 	// 		jobId,
+			// 	// 	}
+			// 	// );
 
 
-				// console.log(response);
-			} catch (error) {
-				console.error(error);
-			}
+			// 	// console.log(response);
+			// } catch (error) {
+			// 	console.error(error);
+			// }
 		},
 
 		closeModal() {
@@ -160,4 +163,5 @@ export default {
 }
 </script>
 
-<style></style>
+<style>
+</style>
