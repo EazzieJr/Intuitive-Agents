@@ -11,6 +11,8 @@ export default defineNuxtConfig({
     },
   },
 
+  // setup middleware
+
   modules: ["@pinia/nuxt", "@nuxt/ui"],
 
   colorMode: {

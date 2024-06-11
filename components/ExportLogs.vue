@@ -45,17 +45,17 @@ export default {
 				}, {
 					label: 'Scheduled',
 					click: () => {
-						this.exportLogs('Called', 'Scheduled')
+						this.exportLogs('', 'Scheduled')
 					}
 				}], [{
 					label: 'Interested',
 					click: () => {
-						this.exportLogs('Called', 'Interested')
+						this.exportLogs('', 'Interested')
 					}
 				}, {
 					label: 'Incomplete call',
 					Click: () => {
-						this.exportLogs('Called', 'Incomplete call')
+						this.exportLogs('', 'Incomplete call')
 					}
 				}], [{
 					label: 'Voicemail',
@@ -65,7 +65,7 @@ export default {
 				}, {
 					label: 'Uninterested',
 					click: () => {
-						this.exportLogs('Called', 'Uninterested')
+						this.exportLogs('', 'Uninterested')
 					}
 				}], [{
 					label: 'Not called',

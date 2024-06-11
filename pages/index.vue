@@ -28,13 +28,16 @@
 </template>
 
 <script>
+import { useStore } from '@/store/index'
 definePageMeta({
-	layout: "default"
+	layout: "default",
+	middleware: "auth"
 })
 
 export default {
 	data() {
 		return {
+			store: useStore(),
 			companies: [
 				{
 					name: "Va Group",
@@ -66,6 +69,10 @@ export default {
 				}
 			]
 		}
+	},
+
+	mounted() {
+		// this.store.dispatch('setCompanies', this.companies)
 	}
 }
 </script>

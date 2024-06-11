@@ -45,5 +45,8 @@ export const useStore = defineStore({
 	},
 	actions: {
 		// Define your store actions here
+		signIn() {
+			console.log('signing in')
+		}
 	},
 })

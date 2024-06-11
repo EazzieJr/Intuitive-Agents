@@ -3,7 +3,8 @@
 		<header>
 			<div class="Left start !items-end space-x-5">
 				<div class="Image w-14 h-14 rounded-full overflow-hidden">
-					<img class="w-full h-full object-bottom object-cover" :src="`/images/${agentDetails?.alias?.toLowerCase().split(' ').join('-')}.png`" alt="">
+					<img class="w-full h-full object-bottom object-cover"
+						:src="`/images/${agentDetails?.alias?.toLowerCase().split(' ').join('-')}.png`" alt="">
 				</div>
 				<h1>
 					{{ agentDetails.alias }} - {{ agentDetails.name }}
@@ -118,6 +119,7 @@
 import moment from "moment-timezone";
 import { useStore } from '@/store/index'
 import Cookie from 'js-cookie'
+import fetcher from '@/utils/fetcher'
 
 definePageMeta({
 	layout: "dashboard"
@@ -194,44 +196,71 @@ export default {
 		async loadUsers(page) {
 			// const { logId1, logId2, logId3 } = logs;
 			this.fetching = true;
-			try {
-				const response = await fetch(`https://intuitiveagents.io/users/${this.agentDetails.id}`, {
-					method: "POST",
-					body: JSON.stringify({
-						limit: 100,
-						page: page ? page : this.page
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
-				});
 
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
-					return this.users = [];
-				}
+			const response = await fetcher(`/users/${this.agentDetails.id}`, "POST", {
+				limit: 100,
+				page: page ? page : this.page
+			});
 
-				const users = await response.json(); // Parse the response body as JSON
-				console.log("Response: ", users.result.contacts);
+			console.log("Responserrrrrr: ", response);
 
-				this.users = users.result.contacts;
-				this.totalPages = users.result.totalPages;
-				this.stats = {
-					totalContactForAgent: users.result.totalContactForAgent,
-					totalCalledForAgent: users.result.totalCalledForAgent,
-					totalNotCalledForAgent: users.result.totalNotCalledForAgent,
-					failedCalls: users.result.failedCalls,
-					vm: users.result.vm
-				}
-				if (page) this.page = page;
-				// console.log("Total Pages: ", this.totalPages);
-				this.fetching = false;
-				// this.searching = false;
-			} catch (error) {
-				console.error("Error fetching data:", error);
-				// Return an empty object or handle the error as needed
-				this.users = [];
+			// if (!response.ok) {
+			// 	throw new Error(`HTTP error! Status: ${response.status}`);
+			// 	return this.users = [];
+			// }
+
+			console.log("espanyol: ", response.result.contacts);
+			this.users = response.result.contacts;
+			this.totalPages = response.result.totalPages;
+			this.stats = {
+				totalContactForAgent: response.result.totalContactForAgent,
+				totalCalledForAgent: response.result.totalCalledForAgent,
+				totalNotCalledForAgent: response.result.totalNotCalledForAgent,
+				failedCalls: response.result.failedCalls,
+				vm: response.result.vm
 			}
+
+			if (page) this.page = page;
+			this.fetching = false;
+
+			// try {
+			// 	const response = await fetch(`https://intuitiveagents.io/users/${this.agentDetails.id}`, {
+			// 		method: "POST",
+			// 		body: JSON.stringify({
+			// 			limit: 100,
+			// 			page: page ? page : this.page
+			// 		}),
+			// 		headers: {
+			// 			"Content-Type": "application/json"
+			// 		}
+			// 	});
+
+			// 	if (!response.ok) {
+			// 		throw new Error(`HTTP error! Status: ${response.status}`);
+			// 		return this.users = [];
+			// 	}
+
+			// 	const users = await response.json(); // Parse the response body as JSON
+			// 	console.log("Response: ", users.result.contacts);
+
+			// 	this.users = users.result.contacts;
+			// 	this.totalPages = users.result.totalPages;
+			// 	this.stats = {
+			// 		totalContactForAgent: users.result.totalContactForAgent,
+			// 		totalCalledForAgent: users.result.totalCalledForAgent,
+			// 		totalNotCalledForAgent: users.result.totalNotCalledForAgent,
+			// 		failedCalls: users.result.failedCalls,
+			// 		vm: users.result.vm
+			// 	}
+			// 	if (page) this.page = page;
+			// 	// console.log("Total Pages: ", this.totalPages);
+			// 	this.fetching = false;
+			// 	// this.searching = false;
+			// } catch (error) {
+			// 	console.error("Error fetching data:", error);
+			// 	// Return an empty object or handle the error as needed
+			// 	this.users = [];
+			// }
 
 			// setInterval(() => {
 			// 	this.loadUsers()

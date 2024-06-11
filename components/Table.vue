@@ -94,7 +94,7 @@
 						</div>
 
 						<div>
-							{{ moment(user.datesCalled[user.datesCalled.length - 1]).format("MMM DD, YYYY") }}
+							{{ moment(user.datesCalled[user?.datesCalled.length - 1]).format("MMM DD, YYYY") }}
 						</div>
 
 						<div class="!flex start">

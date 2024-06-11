@@ -64,6 +64,7 @@
 
 <script>
 import moment from 'moment-timezone';
+import fetcher from "@/utils/fetcher";
 export default {
 	props: {
 		agentId: String
@@ -91,15 +92,19 @@ export default {
 	methods: {
 		async getSchedules() {
 			try {
-				const response = await fetch(
-					"https://intuitiveagents.io/schedules/get",
-					{
-						method: "GET",
-						headers: {
-							"Content-Type": "application/json"
-						}
-					}
-				)
+				const response = await fetcher("/schedules/get")
+
+				this.tempSchedules = response.result;
+				this.loading = false
+				// const response = await fetch(
+				// 	"https://intuitiveagents.io/schedules/get",
+				// 	{
+				// 		method: "GET",
+				// 		headers: {
+				// 			"Content-Type": "application/json"
+				// 		}
+				// 	}
+				// )
 
 				const schedules = await response.json();
 				console.log("Schedules: ", schedules);

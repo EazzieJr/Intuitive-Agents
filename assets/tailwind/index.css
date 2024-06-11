@@ -5,6 +5,10 @@
 @tailwind utilities;
 
 @layer base {
+	* {
+		@apply outline-none focus:outline-none;
+	}
+	
 	body {
 		@apply duration-300 bg-white font-poppins;
 	}

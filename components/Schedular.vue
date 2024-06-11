@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import fetcher from "@/utils/fetcher";
+
 export default {
 	props: {
 		agentId: String,
@@ -77,27 +79,41 @@ export default {
 		async schedule() {
 			const { agentId, fromNumber, limit, selectedHour, selectedMinute } = this
 			this.loading = true
-			try {
-				const response = await fetch("https://intuitiveagents.io/schedule", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						agentId,
-						hour: selectedHour,
-						minute: selectedMinute,
-						limit,
-						fromNumber
-					})
-				});
 
-				this.loading = false
-				this.closeModal()
-				console.log(response);
-			} catch (err) {
-				console.log(err);
-			}
+			const response = await fetcher("/schedule", "POST", {
+				agentId,
+				hour: selectedHour,
+				minute: selectedMinute,
+				limit,
+				fromNumber
+			})
+
+			this.loading = false
+			this.closeModal()
+			console.log(response)
+			
+			
+			// try {
+			// 	const response = await fetch("https://intuitiveagents.io/schedule", {
+			// 		method: "POST",
+			// 		headers: {
+			// 			"Content-Type": "application/json"
+			// 		},
+			// 		body: JSON.stringify({
+			// 			agentId,
+			// 			hour: selectedHour,
+			// 			minute: selectedMinute,
+			// 			limit,
+			// 			fromNumber
+			// 		})
+			// 	});
+
+			// 	this.loading = false
+			// 	this.closeModal()
+			// 	console.log(response);
+			// } catch (err) {
+			// 	console.log(err);
+			// }
 		}
 	}
 }
