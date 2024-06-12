@@ -122,7 +122,8 @@ import Cookie from 'js-cookie'
 import fetcher from '@/utils/fetcher'
 
 definePageMeta({
-	layout: "dashboard"
+	layout: "dashboard",
+	middleware: "auth"
 })
 
 export default {
@@ -185,7 +186,7 @@ export default {
 			return this.transcript?.transcript?.split("\n")
 		},
 	},
-	
+
 	watch: {
 		fetching(val) {
 			console.log("Fetching: ", val);
