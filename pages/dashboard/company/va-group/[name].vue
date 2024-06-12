@@ -1,7 +1,7 @@
 <template>
 	<div class="Dashboard">
 		<header>
-			<div class="Left start !items-end space-x-5">
+			<div class="Left space-y-5">
 				<div class="Image w-14 h-14 rounded-full overflow-hidden">
 					<img class="w-full h-full object-bottom object-cover"
 						:src="`/images/${agentDetails?.alias?.toLowerCase().split(' ').join('-')}.png`" alt="">
@@ -27,10 +27,13 @@
 
 			<div class="Numbers start">
 				<SmallTileCard title="Total contacts" icon="outgoing" :value="stats?.totalContactForAgent || 0" />
-				<SmallTileCard title="Called Contacts" icon="user-answered" :value="stats?.totalCalledForAgent || 0" />
-				<SmallTileCard title="Not Called" icon="user-declined" :value="stats?.totalNotCalledForAgent || 0" />
-				<SmallTileCard title="Answered by VM" icon="user-declined" :value="stats?.vm || 0" />
-				<SmallTileCard title="Failed calls" icon="user-declined" :value="stats?.failedCalls || 0" />
+				<SmallTileCard title="Total Calls" icon="user-answered" :value="stats?.totalCalledForAgent || 0" />
+				<SmallTileCard title="Total Not Called" icon="user-declined" :value="stats?.totalNotCalledForAgent || 0" />
+				<SmallTileCard title="Total Answered: VM/AM" icon="user-declined" :value="stats?.vm || 0" />
+				<SmallTileCard title="Total Calls: Failed" icon="user-declined" :value="stats?.failedCalls || 0" />
+				<SmallTileCard title="Total answered: Contacts" icon="user-declined" :value="stats?.failedCalls || 0" />
+				<SmallTileCard title="Total calls: Transferred" icon="user-declined" :value="stats?.failedCalls || 0" />
+				<SmallTileCard title="Total Appointments" icon="user-declined" :value="stats?.failedCalls || 0" />
 			</div>
 		</header>
 
@@ -320,9 +323,9 @@ export default {
 					id: "86f0db493888f1da69b7d46bfaecd360",
 					number: "+17026209498"
 				}
-			} else if (name == "ethan") {
+			} else if (name == "ava") {
 				this.agentDetails = {
-					name: "Ethan",
+					name: "Ava",
 					alias: "Virtual Team Expert",
 					id: "214e92da684138edf44368d371da764c",
 					number: "+17026209498"

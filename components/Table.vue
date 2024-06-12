@@ -252,6 +252,8 @@
 
 <script>
 import moment from "moment-timezone";
+import fetcher from "@/utils/fetcher";
+
 export default {
 	props: {
 		users: {
@@ -372,100 +374,54 @@ export default {
 			this.$emit("loadUsers", page)
 		},
 
-		async filterByDate() {
-			const searching = true;
-			this.getStats(searching)
-			// const pstDate = moment(this.date).tz("America/Los_Angeles").format('YYYY-MM-DD');
-			// this.loadUsers(pstDate);
-		},
-
 		async updateContact() {
-			const { email, firstName, lastName, phone, id } = this.user
+			const { email, firstName, lastName, phone, id } = this.user;
 			try {
-				const response = await fetch(`https://intuitiveagents.io/users/update`, {
-					method: "PATCH",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						id,
-						fields: {
-							firstname: firstName,
-							lastname: lastName,
-							email,
-							phone,
-						}
-					})
+				await fetcher('/users/update', 'PATCH', {
+					id,
+					fields: {
+						firstname: firstName,
+						lastname: lastName,
+						email,
+						phone,
+					}
 				});
 
 				this.searchContact();
 				// this.loadUsers(this.page);
 
 				this.toggleCreateModal();
-
-				//console.log("Response: ", response);
 			} catch (err) {
-				//console.log(err);
+				console.error(err);
 			}
 		},
 
 		async callContact(user) {
 			const { _id, phone } = user;
 			try {
-				// Use fetch
-				// const response = await fetch(`https://intuitiveagents.io/create-phone-call/${this.agentDetails.id}`, {
-				// 	method: "POST",
-				// 	headers: {
-				// 		"Content-Type": "application/json"
-				// 	},
-				// 	body: JSON.stringify({
-				// 		fromNumber: this.agentDetails.number,
-				// 		toNumber: phone,
-				// 		userId: _id,
-				// 	})
-				// });
-
-				const response = await fetch(`https://intuitiveagents.io/create-llm-phone-call`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						fromNumber: this.agentDetails.number,
-						toNumber: phone,
-						userId: _id,
-						agentId: this.agentDetails.id
-					})
+				await fetcher('/create-llm-phone-call', 'POST', {
+					fromNumber: this.agentDetails.number,
+					toNumber: phone,
+					userId: _id,
+					agentId: this.agentDetails.id
 				});
-
-				// const response = await axios.post(`https://intuitiveagents.io/create-phone-call/${this.agentDetails.id}`, {
-				// 	fromNumber: "+17257268989",
-				// 	toNumber: phone,
-				// 	userId: _id,
-				// });
 
 				//console.log("Response: ", response);
 			} catch (err) {
-				//console.log(err);
+				console.error(err);
 			}
 		},
 
 		async createUser() {
-			const { email, firstName, lastName, phone } = this.user
+			const { email, firstName, lastName, phone } = this.user;
 			this.updating = true;
 			try {
-				const response = await fetch(`https://intuitiveagents.io/users/create`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						firstname: firstName,
-						lastname: lastName,
-						email,
-						phone,
-						agentId: this.agentDetails.id
-					})
+				await fetcher('/users/create', 'POST', {
+					firstname: firstName,
+					lastname: lastName,
+					email,
+					phone,
+					agentId: this.agentDetails.id
 				});
 
 				this.loadUsers(this.page);
@@ -473,55 +429,41 @@ export default {
 				this.updating = false;
 				this.toggleCreateModal();
 				this.user = {
-					firstName: "",
-					lastName: "",
-					email: "",
-					phone: "",
-					id: ""
-				}
-
-				//console.log("Response: ", response);
+					firstName: '',
+					lastName: '',
+					email: '',
+					phone: '',
+					id: ''
+				};
 			} catch (err) {
-				//console.log(err);
+				console.error(err);
+				this.updating = false;
 			}
 		},
 
 		async deleteContact(user) {
 			try {
-				const response = await fetch(`https://intuitiveagents.io/users/delete`, {
-					method: "PATCH",
-					body: JSON.stringify({
-						id: user._id
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
-				})
+				await fetcher('/users/delete', 'PATCH', {
+					id: user._id
+				});
 
 				this.searchContact();
 			} catch (err) {
-				console.log(err);
+				console.error(err);
 			}
 		},
 
 		async searchContact() {
 			try {
-				const response = await fetch(`https://intuitiveagents.io/search`, {
-					method: "POST",
-					body: JSON.stringify({
-						searchTerm: this.query,
-						agentId: this.agentDetails.id
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
+				const users = await fetcher('/search', 'POST', {
+					searchTerm: this.query,
+					agentId: this.agentDetails.id
 				});
 
-				const users = await response.json();
-				console.log("Search Response: ", users);
-				this.$emit("updateSearch", users)
+				console.log('Search Response: ', users);
+				this.$emit('updateSearch', users);
 			} catch (error) {
-				console.error("Error fetching data:", error);
+				console.error('Error fetching data:', error);
 				this.searches = [];
 			}
 		},
