@@ -185,7 +185,7 @@ export default {
 			return this.transcript?.transcript?.split("\n")
 		},
 	},
-
+	
 	watch: {
 		fetching(val) {
 			console.log("Fetching: ", val);

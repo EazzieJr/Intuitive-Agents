@@ -21,6 +21,8 @@
 
 <script>
 import Filesaver from 'file-saver'
+import fetcher from '@/utils/fetcher'
+import Cookies from 'js-cookie'
 
 export default {
 	props: {
@@ -89,6 +91,24 @@ export default {
 			const date = new Date().toISOString().split("T")[0];
 			this.exporting = true
 
+			// const response = await fetcher("/call-logs-csv", "POST", {
+			// 	agentId: this.agentId,
+			// 	statusOption,
+			// 	sentimentOption: sentimentOption ? sentimentOption : null,
+			// 	startDate: this.date[0] || "",
+			// 	endDate: this.date[1] || "",
+			// 	// limit,
+			// })
+
+			// const logs = response.result;
+			// const blob = new Blob([logs], { type: "text/csv;charset=utf-8" });
+			// Filesaver.saveAs(blob, `logs-${this.agentName}-${date}.csv`);
+			// this.exporting = false
+
+
+
+			const token = Cookies.get('token')
+
 			try {
 				const response = await fetch(`https://intuitiveagents.io/call-logs-csv`, {
 					method: "POST",
@@ -102,6 +122,7 @@ export default {
 					}),
 					headers: {
 						"Content-Type": "application/json",
+						Authorization: `Bearer ${token}`,
 					},
 				});
 
@@ -118,16 +139,11 @@ export default {
 				// Return an empty object or handle the error as needed
 				this.users = [];
 			}
-
-			// } catch (err) {
-			// 	//console.log(err);
-			// }
 		}
 	}
 }
 </script>
 
 <style lang="postcss" scoped>
-.Exp {
-}
+.Exp {}
 </style>
