@@ -1,10 +1,10 @@
 <template>
 	<div class="Dashboard">
 		<header>
-			<div class="Left space-y-5">
+			<div class="Left start !items-end space-x-5">
 				<div class="Image w-14 h-14 rounded-full overflow-hidden">
 					<img class="w-full h-full object-bottom object-cover"
-						:src="`/images/${agentDetails?.alias?.toLowerCase().split(' ').join('-')}.png`" alt="">
+						:src="`/svg/${agentDetails?.alias?.toLowerCase().split(' ').join('-')}.svg`" alt="">
 				</div>
 				<h1>
 					{{ agentDetails.alias }} - {{ agentDetails.name }}
@@ -26,14 +26,15 @@
 			</div>
 
 			<div class="Numbers start">
-				<SmallTileCard title="Total contacts" icon="outgoing" :value="stats?.totalContactForAgent || 0" />
-				<SmallTileCard title="Total Calls" icon="user-answered" :value="stats?.totalCalledForAgent || 0" />
-				<SmallTileCard title="Total Not Called" icon="user-declined" :value="stats?.totalNotCalledForAgent || 0" />
-				<SmallTileCard title="Total Answered: VM/AM" icon="user-declined" :value="stats?.vm || 0" />
-				<SmallTileCard title="Total Calls: Failed" icon="user-declined" :value="stats?.failedCalls || 0" />
-				<SmallTileCard title="Total answered: Contacts" icon="user-declined" :value="stats?.failedCalls || 0" />
-				<SmallTileCard title="Total calls: Transferred" icon="user-declined" :value="stats?.failedCalls || 0" />
-				<SmallTileCard title="Total Appointments" icon="user-declined" :value="stats?.failedCalls || 0" />
+				<SmallTileCard title="Total contacts" icon="total-contacts" :value="stats?.totalContactForAgent || 0" />
+				<SmallTileCard title="Total Calls" icon="total-calls" :value="stats?.totalCalledForAgent || 0" />
+				<SmallTileCard title="Total Not Called" icon="total-not-called" :value="stats?.totalNotCalledForAgent || 0" />
+				<SmallTileCard title="Total Answered: VM/AM" icon="total-answered-vm-am" :value="stats?.totalAnsweredByVm || 0" />
+				<SmallTileCard title="Total Calls: Failed" icon="total-calls-failed" :value="stats?.totalCallsFailed || 0" />
+				<SmallTileCard title="Total answered: Contacts" icon="total-answered-contacts" :value="stats?.totalAnsweredCalls || 0" />
+				<SmallTileCard title="Total calls: Transferred" icon="total-calls-transferred"
+					:value="stats?.totalCallsTransffered || 0" />
+				<SmallTileCard title="Total Appointments" icon="total-appointments" :value="stats?.totalAppointment || 0" />
 			</div>
 		</header>
 
@@ -218,10 +219,13 @@ export default {
 			this.totalPages = response.result.totalPages;
 			this.stats = {
 				totalContactForAgent: response.result.totalContactForAgent,
-				totalCalledForAgent: response.result.totalCalledForAgent,
+				totalCalledForAgent: response.result.totalCalls,
 				totalNotCalledForAgent: response.result.totalNotCalledForAgent,
-				failedCalls: response.result.failedCalls,
-				vm: response.result.vm
+				totalCallsFailed: response.result.totalCallsFailed,
+				totalAnsweredByVm: response.result.totalAnsweredByVm,
+				totalAnsweredCalls: response.result.totalAnsweredCalls,
+				totalCallsTransffered: response.result.totalCallsTransffered,
+				totalAppointment: response.result.totalAppointment,
 			}
 
 			if (page) this.page = page;

@@ -5,7 +5,9 @@
 				{{ title }}
 			</p>
 
-			<img :src="`/svg/${icon}.svg`" alt="">
+			<div class="Image w-10 h-10 overflow-hidden">
+				<img :src="`/svg/${icon}.svg`" alt="">
+				</div>
 		</div>
 
 		<div class="Bottom">
@@ -36,7 +38,7 @@ export default {
 		}
 
 		img {
-			@apply w-5
+			@apply w-full h-full object-cover object-center
 		}
 	}
 
