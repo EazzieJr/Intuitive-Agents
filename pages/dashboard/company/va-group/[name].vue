@@ -415,18 +415,8 @@ export default {
 
 			console.log("Batch Delete: ", ids);
 			try {
-				const response = await fetch(`https://intuitiveagents.io/batch-delete-users`, {
-					method: "POST",
-					body: JSON.stringify({
-						contactsToDelete: ids
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
-				});
+				const response = await fetcher("/batch-delete-users", "POST", {contactsToDelete: ids})
 
-				const users = await response.json();
-				console.log("Delete Response: ", users);
 				this.loadUsers();
 				this.batchDeleting = false;
 				this.search = "";
