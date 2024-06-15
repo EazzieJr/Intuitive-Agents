@@ -401,12 +401,8 @@ export default {
 			console.log("Batch Delete: ", ids);
 
 			try {
-				const response = await fetcher(`/batch-delete-users`, "POST", {
-					contactsToDelete: ids
-				});
+				const response = await fetcher("/batch-delete-users", "POST", {contactsToDelete: ids})
 
-				const users = response.result.contacts;
-				console.log("Delete Response: ", users);
 				this.loadUsers();
 				this.batchDeleting = false;
 				this.search = "";
