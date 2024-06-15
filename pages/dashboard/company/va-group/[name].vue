@@ -288,30 +288,6 @@ export default {
 			this.loadUsers(page)
 		},
 
-		async setTranscript(transcript, analyzedTranscript) {
-			this.transcript = transcript;
-
-			try {
-				const sent = await fetch(`https://intuitiveagents.io/review-transcript`, {
-					method: "POST",
-					body: JSON.stringify({
-						transcript: transcript.transcript
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
-				});
-
-				const data = await sent.json();
-				// console.log("Sentiment: ", data.result.message.content);
-				this.analyzedTranscript = data.result.message.content;
-			} catch (error) {
-				console.error("Error fetching data:", error);
-				// Return an empty object or handle the error as needed
-				this.analyzedTranscript = "";
-			}
-		},
-
 		closeTranscript() {
 			this.transcript = {};
 			this.analyzedTranscript = "";
@@ -378,25 +354,34 @@ export default {
 					} else {
 						// console.log("Actual")
 
-						try {
-							const response = await fetch(`https://intuitiveagents.io/search`, {
-								method: "POST",
-								body: JSON.stringify({
-									searchTerm: this.search,
-									agentId: this.agentDetails.id
-								}),
-								headers: {
-									"Content-Type": "application/json"
-								}
-							});
+						const response = await fetcher(`/search`, "POST", {
+							searchTerm: this.search,
+							agentId: this.agentDetails.id
+						});
 
-							const users = await response.json();
-							console.log("Search Response: ", users);
-							this.searches = users;
-						} catch (error) {
-							console.error("Error fetching data:", error);
-							this.searches = [];
-						}
+						console.log("Search Response: ", response);
+						this.searches = response;
+
+
+						// try {
+						// 	const response = await fetch(`https://intuitiveagents.io/search`, {
+						// 		method: "POST",
+						// 		body: JSON.stringify({
+						// 			searchTerm: this.search,
+						// 			agentId: this.agentDetails.id
+						// 		}),
+						// 		headers: {
+						// 			"Content-Type": "application/json"
+						// 		}
+						// 	});
+
+						// 	const users = await response.json();
+						// 	console.log("Search Response: ", users);
+						// 	this.searches = users;
+						// } catch (error) {
+						// 	console.error("Error fetching data:", error);
+						// 	this.searches = [];
+						// }
 					}
 				}
 			}, 1000); // Adjust debounce delay as needed
@@ -414,26 +399,42 @@ export default {
 			const ids = this.searches.map(user => user._id);
 
 			console.log("Batch Delete: ", ids);
+
 			try {
-				const response = await fetch(`https://intuitiveagents.io/batch-delete-users`, {
-					method: "POST",
-					body: JSON.stringify({
-						contactsToDelete: ids
-					}),
-					headers: {
-						"Content-Type": "application/json"
-					}
+				const response = await fetcher(`/batch-delete-users`, "POST", {
+					contactsToDelete: ids
 				});
 
-				const users = await response.json();
+				const users = response.result.contacts;
 				console.log("Delete Response: ", users);
 				this.loadUsers();
 				this.batchDeleting = false;
 				this.search = "";
 			} catch (error) {
 				console.error("Error fetching data:", error);
-				this.batchDeleting = false;
+				this.batchDeleting = false
 			}
+			
+			// try {
+			// 	const response = await fetch(`https://intuitiveagents.io/batch-delete-users`, {
+			// 		method: "POST",
+			// 		body: JSON.stringify({
+			// 			contactsToDelete: ids
+			// 		}),
+			// 		headers: {
+			// 			"Content-Type": "application/json"
+			// 		}
+			// 	});
+
+			// 	const users = await response.json();
+			// 	console.log("Delete Response: ", users);
+			// 	this.loadUsers();
+			// 	this.batchDeleting = false;
+			// 	this.search = "";
+			// } catch (error) {
+			// 	console.error("Error fetching data:", error);
+			// 	this.batchDeleting = false;
+			// }
 		}
 	},
 

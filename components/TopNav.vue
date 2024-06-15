@@ -31,6 +31,7 @@
 <script>
 import { mapState } from 'pinia'
 import { useStore } from '~/store/index'
+import fetcher from '~/utils/fetcher'
 
 export default {
 	data() {
@@ -126,17 +127,25 @@ export default {
 		},
 
 		async resetStatuses() {
+			console.log("Resetting statuses", fetcher)
+			
 			try {
+				const response = await fetcher('/users/status/reset', 'POST', {
+					agentId: this.agentDetails.id
+				})
+
+
+				
 				// Use fetch
-				const response = await fetch(`https://intuitiveagents.io/users/status/reset`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						agentId: this.agentDetails.id
-					})
-				});
+				// const response = await fetch(`https://intuitiveagents.io/users/status/reset`, {
+				// 	method: 'POST',
+				// 	headers: {
+				// 		'Content-Type': 'application/json'
+				// 	},
+				// 	body: JSON.stringify({
+				// 		agentId: this.agentDetails.id
+				// 	})
+				// });
 			} catch (err) {
 				//console.log(err);
 			}
@@ -144,6 +153,14 @@ export default {
 
 		closeSchedular() {
 			this.schedularModal = false
+		},
+
+		extrapolate(arr) {
+			const newArr = []
+
+			arr.forEach((item) => {
+				newArr.push(item.email)
+			})
 		}
 	}
 }
