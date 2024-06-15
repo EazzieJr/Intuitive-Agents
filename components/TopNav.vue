@@ -51,13 +51,13 @@ export default {
 						this.schedularModal = true
 						console.log(this.schedularModal)
 					}
-					}], [{
-						label: 'Create contact',
-						icon: 'i-heroicons-user-plus-20-solid',
-						click: () => {
-							this.createModal = true
-						}
-					}, {
+				}], [{
+					label: 'Create contact',
+					icon: 'i-heroicons-user-plus-20-solid',
+					click: () => {
+						this.createModal = true
+					}
+				}, {
 					label: 'Upload CSV',
 					icon: 'i-heroicons-arrow-up-on-square-stack-20-solid',
 					click: () => {
@@ -107,19 +107,13 @@ export default {
 			try {
 				// USe fetch
 
-				const response = await fetch(`https://intuitiveagents.io/deleteAll`, {
-					method: 'PATCH',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						agentId: this.agentDetails.id
-					})
+				const response = await fetch(er`/deleteAll`, 'PATCH', {
+					agentId: this.agentDetails.id
 				});
 
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
-				}
+				// if (!response.ok) {
+				// 	throw new Error(`HTTP error! Status: ${response.status}`);
+				// }
 
 			} catch (err) {
 				//console.log(err);
@@ -127,25 +121,10 @@ export default {
 		},
 
 		async resetStatuses() {
-			console.log("Resetting statuses", fetcher)
-			
 			try {
 				const response = await fetcher('/users/status/reset', 'POST', {
 					agentId: this.agentDetails.id
 				})
-
-
-				
-				// Use fetch
-				// const response = await fetch(`https://intuitiveagents.io/users/status/reset`, {
-				// 	method: 'POST',
-				// 	headers: {
-				// 		'Content-Type': 'application/json'
-				// 	},
-				// 	body: JSON.stringify({
-				// 		agentId: this.agentDetails.id
-				// 	})
-				// });
 			} catch (err) {
 				//console.log(err);
 			}

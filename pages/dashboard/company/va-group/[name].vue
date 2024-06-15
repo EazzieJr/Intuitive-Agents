@@ -29,9 +29,11 @@
 				<SmallTileCard title="Total contacts" icon="total-contacts" :value="stats?.totalContactForAgent || 0" />
 				<SmallTileCard title="Total Calls" icon="total-calls" :value="stats?.totalCalledForAgent || 0" />
 				<SmallTileCard title="Total Not Called" icon="total-not-called" :value="stats?.totalNotCalledForAgent || 0" />
-				<SmallTileCard title="Total Answered: VM/AM" icon="total-answered-vm-am" :value="stats?.totalAnsweredByVm || 0" />
+				<SmallTileCard title="Total Answered: VM/AM" icon="total-answered-vm-am"
+					:value="stats?.totalAnsweredByVm || 0" />
 				<SmallTileCard title="Total Calls: Failed" icon="total-calls-failed" :value="stats?.totalCallsFailed || 0" />
-				<SmallTileCard title="Total answered: Contacts" icon="total-answered-contacts" :value="stats?.totalAnsweredCalls || 0" />
+				<SmallTileCard title="Total answered: Contacts" icon="total-answered-contacts"
+					:value="stats?.totalAnsweredCalls || 0" />
 				<SmallTileCard title="Total calls: Transferred" icon="total-calls-transferred"
 					:value="stats?.totalCallsTransffered || 0" />
 				<SmallTileCard title="Total Appointments" icon="total-appointments" :value="stats?.totalAppointment || 0" />
@@ -401,7 +403,7 @@ export default {
 			console.log("Batch Delete: ", ids);
 
 			try {
-				const response = await fetcher("/batch-delete-users", "POST", {contactsToDelete: ids})
+				const response = await fetcher("/batch-delete-users", "POST", { contactsToDelete: ids })
 
 				this.loadUsers();
 				this.batchDeleting = false;
@@ -410,7 +412,7 @@ export default {
 				console.error("Error fetching data:", error);
 				this.batchDeleting = false
 			}
-			
+
 			// try {
 			// 	const response = await fetch(`https://intuitiveagents.io/batch-delete-users`, {
 			// 		method: "POST",

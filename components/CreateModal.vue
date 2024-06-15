@@ -49,6 +49,7 @@
 <script>
 import { mapState } from 'pinia'
 import { useStore } from '~/store/index'
+import fetcher from '~/utils/fetcher'
 
 export default {
 	props: {
@@ -81,23 +82,17 @@ export default {
 			try {
 				// Use fetch
 				console.log("Latest log: ", this.user, this.agentId);
-				const response = await fetch(`https://intuitiveagents.io/users/create`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						firstname: this.user.firstName,
-						email: this.user.email,
-						lastname: this.user.lastName,
-						phone: this.user.phone,
-						agentId: this.agentId,
-					})
+				const response = await fetcher(`/users/create`, 'POST', {
+					firstname: this.user.firstName,
+					email: this.user.email,
+					lastname: this.user.lastName,
+					phone: this.user.phone,
+					agentId: this.agentId,
 				});
 
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
-				}
+				// if (!response.ok) {
+				// 	throw new Error(`HTTP error! Status: ${response.status}`);
+				// }
 
 				// this.$emit("userCreated");
 				this.updating = false;
