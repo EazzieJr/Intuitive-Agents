@@ -57,21 +57,19 @@
 						<img class="animate-spin duration-1000 py-1 w-4" v-else src="/svg/loading.svg" alt="">
 					</button>
 
-					<UDropdown :items="searchItems" :popper="{ placement: 'bottom-start' }" size="xl">
-						<UButton color="white" :label="searchBy ? searchBy : 'Search by'"
+					<UDropdown :items="searchItems" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="searchBy ? searchBy : 'Search by'"
 							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 					</UDropdown>
 
-					<div class="Search start">
+					<div class="Search start" v-if="searchBy !== 'dates'">
 						<div class="Input border rounded-lg overflow-hidden">
 							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search..."
 								v-model="search" type="search" @input="searchContact($event)" />
-							<!-- <template #trailing>
-									<UButton class="text-gray-500 dark:text-gray-400 text-xs font-bold" @click="clearSearch">Clear</UButton>
-								</template> -->
-							<!-- </UInput> -->
 						</div>
 					</div>
+
+					<vue-date-picker v-model="date" mode="date" range v-else></vue-date-picker>
 				</div>
 			</div>
 
@@ -133,8 +131,6 @@ definePageMeta({
 })
 
 export default {
-	layout: "dashboard",
-
 	data() {
 		return {
 			users: [],
@@ -161,7 +157,6 @@ export default {
 					label: 'Contacts',
 					click: () => {
 						this.searchBy = 'contacts'
-						// console.log(this.schedularModal)
 					}
 				}, {
 					label: 'Dates',
@@ -180,8 +175,6 @@ export default {
 					}
 				}]
 			],
-
-			// store: useStore(),
 			moment
 		}
 	},
