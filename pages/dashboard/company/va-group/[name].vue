@@ -69,7 +69,8 @@
 						</div>
 					</div>
 
-					<vue-date-picker v-model="date" mode="date" range v-else></vue-date-picker>
+					<vue-date-picker v-model="date" @update:model-value="searchContact" mode="date" range
+						v-else></vue-date-picker>
 				</div>
 			</div>
 
@@ -145,7 +146,7 @@ export default {
 			fetching: false,
 			searching: false,
 			stats: null,
-			date: new Date(),
+			date: [],
 			totalPages: 0,
 			page: 1,
 			search: "",
@@ -337,10 +338,56 @@ export default {
 			// Debounce the searchContact method with a delay of 500 milliseconds
 			const debouncedSearchContact = this.debounce(async (searchTerm) => {
 				this.search = searchTerm;
+
+				if(this.search !== '') {
+					this.$toast.open({
+						message: `Searching by ${this.searchBy} - ${this.search}`,
+						type: 'info',
+						duration: 5000,
+						dismissible: true,
+						position: 'top'
+					});
+				}
+
 				if (this.search === '') {
 					this.searches = []
 					this.loadUsers();
 					return;
+				} else if (this.searchBy === 'dates') {
+					console.log("Dates: ", this.date);
+					const response = await fetcher(`/search`, "POST", {
+						// searchTerm: this.search,
+						startDate: this.date[0],
+						endDate: this.date[1],
+						agentId: this.agentDetails.id
+					});
+
+					console.log("Search Response: ", response);
+					this.searches = response;
+				} else if (this.searchBy === 'sentiments') {
+					
+					// this.$toast.info(`Searching by Sentiments - ${this.search}`, {
+					// 	timeout: 5000,
+					// 	position: 'top-center',
+					// })
+
+					const response = await fetcher(`/search`, "POST", {
+						searchTerm: "",
+						agentId: this.agentDetails.id,
+						sentimentOption: this.search
+					});
+
+					console.log("Search Response: ", response);
+					this.searches = response;
+				} else if (this.searchBy === 'statuses') {
+					const response = await fetcher(`/search`, "POST", {
+						searchTerm: "",
+						agentId: this.agentDetails.id,
+						statusOption: this.search
+					});
+
+					console.log("Search Response: ", response);
+					this.searches = response;
 				} else {
 					const searchItemChars = this.search.split(" ")
 					if (searchItemChars[searchItemChars.length - 1] == '') {
