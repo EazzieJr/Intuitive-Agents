@@ -47,7 +47,7 @@ export default {
 						// 	alias: "Virtual Help Desk"
 						// },
 						{
-							name: "ava",
+							name: "olivia",
 							alias: "Virtual Team Expert"
 						},
 						// {

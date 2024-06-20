@@ -303,9 +303,9 @@ export default {
 					id: "86f0db493888f1da69b7d46bfaecd360",
 					number: "+17026209498"
 				}
-			} else if (name == "ava") {
+			} else if (name == "olivia") {
 				this.agentDetails = {
-					name: "Ava",
+					name: "Olivia",
 					alias: "Virtual Team Expert",
 					id: "214e92da684138edf44368d371da764c",
 					number: "+17026209498"

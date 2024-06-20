@@ -12,7 +12,7 @@ export const useStore = defineStore({
 					// 	alias: "Virtual Help Desk"
 					// },
 					{
-						name: "Ava",
+						name: "Olivia",
 						alias: "Virtual Team Expert"
 					},
 					// {
