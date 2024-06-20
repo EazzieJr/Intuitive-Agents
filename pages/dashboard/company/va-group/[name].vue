@@ -80,8 +80,8 @@
 					@loadUsers="loadUsers" />
 
 				<Table v-else :users="searches" :searching="searching" :query="search" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					@updateSearch="updateSearch" />
+					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript" :searchBy="searchBy"
+					@updateSearch="updateSearch" filter />
 			</div>
 		</div>
 
@@ -190,6 +190,10 @@ export default {
 	watch: {
 		fetching(val) {
 			console.log("Fetching: ", val);
+		},
+
+		searches() {
+			console.log("From Name: ", this.searches)
 		}
 	},
 
@@ -473,7 +477,12 @@ export default {
 			// 	console.error("Error fetching data:", error);
 			// 	this.batchDeleting = false;
 			// }
-		}
+		},
+
+		setTranscript(data) {
+			this.transcript = data;
+			this.analyzedTranscript = data.analyzedTranscript;
+		},
 	},
 
 	beforeMount() {

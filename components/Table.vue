@@ -75,7 +75,7 @@
 						<div class="Transcript !block space-y-2.5 pr-2.5 overflow-hidden" :class="showTranscript ? 'h-fit' : 'h-5'">
 							<p class="block font-normal" v-for="(text, index) in transcriptArray(user?.referenceToCallId?.transcript)"
 								:key="index">
-								{{ text}}
+								{{ text }}
 							</p>
 
 							<p class="!mt-0" v-if="!user?.referenceToCallId?.transcript">
@@ -84,13 +84,13 @@
 						</div>
 
 						<div class="Summary pr-2.5 overflow-hidden" :class="showSummary ? 'h-fit' : 'h-5'">
-							<p :class="{ 'font-bold' : !user?.referenceToCallId?.retellCallSummary }">
-								{{ user?.referenceToCallId?.retellCallSummary || "No summary available"}}
+							<p :class="{ 'font-bold': !user?.referenceToCallId?.retellCallSummary }">
+								{{ user?.referenceToCallId?.retellCallSummary || "No summary available" }}
 							</p>
 						</div>
 
 						<div class="Sentiment">
-							{{ user?.analyzedTranscript }}
+							{{ getSentiment(user) }}
 						</div>
 
 						<div>
@@ -112,13 +112,13 @@
 					<p>
 						{{ fetching ? "Fetching table data" :
 						filter ? "No result for your search" :
-						"No Available Contact on this agent" }}
+							"No Available Contact on this agent" }}
 					</p>
 				</div>
 			</div>
 		</div>
 
-		<div class="Pagination between" v-if="users.length > 0 && !filter">
+		<div class="Pagination between" v-if="!filter">
 			<button class="Previous" @click="paginate(page - 1)" :disabled="page == 1 || fetching">
 				<span>
 					Previous
@@ -147,10 +147,10 @@
 			<div class="Popup relative rounded-3xl bg-white p-5 lg:p-7 flex flex-col items-center w-full max-w-[400px]">
 				<h3 class="font-bold text-2xl">
 					{{ formType === "create" ?
-					"Create a new contact" :
-					formType === "upload" ?
-					"Upload CSV file" :
-					"Update contact details" }}
+						"Create a new contact" :
+						formType === "upload" ?
+							"Upload CSV file" :
+							"Update contact details" }}
 				</h3>
 
 				<button class="Close absolute right-5 top-5" @click="closeModal">
@@ -282,6 +282,9 @@ export default {
 		query: {
 			type: String
 		},
+		searchBy: {
+			type: String
+		},
 	},
 
 	data() {
@@ -317,6 +320,10 @@ export default {
 			} else {
 				this.paginate(val)
 			}
+		},
+
+		user() {
+			console.log("From table: ", this.user)
 		}
 	},
 
@@ -454,17 +461,56 @@ export default {
 		},
 
 		async searchContact() {
+			let newSearchData;
 			try {
-				const users = await fetcher('/search', 'POST', {
-					searchTerm: this.query,
-					agentId: this.agentDetails.id
-				});
+				if (this.searchBy === 'dates') {
+					console.log("Dates: ", this.date);
+					const response = await fetcher(`/search`, "POST", {
+						startDate: this.date[0],
+						endDate: this.date[1],
+						agentId: this.agentDetails.id
+					});
 
-				console.log('Search Response: ', users);
-				this.$emit('updateSearch', users);
+					console.log("Search Response: ", response);
+					newSearchData = response;
+				} else if (this.searchBy === 'sentiments') {
+					const response = await fetcher(`/search`, "POST", {
+						searchTerm: "",
+						agentId: this.agentDetails.id,
+						sentimentOption: this.query
+					});
+
+					console.log("Search Response: ", response);
+					newSearchData = response;
+				} else if (this.searchBy === 'statuses') {
+					const response = await fetcher(`/search`, "POST", {
+						searchTerm: "",
+						agentId: this.agentDetails.id,
+						statusOption: this.query
+					});
+
+					console.log("Search Response: ", response);
+					newSearchData = response;
+				} else {
+					const searchItemChars = this.query.split(" ")
+					if (searchItemChars[searchItemChars.length - 1] == '') {
+						return
+					} else {
+						const response = await fetcher(`/search`, "POST", {
+							searchTerm: this.query,
+							agentId: this.agentDetails.id
+						});
+
+						console.log("Search Response: ", response);
+						newSearchData = response;
+					}
+				}
+
+				console.log('Search Response: ', newSearchData);
+				this.$emit('updateSearch', newSearchData);
 			} catch (error) {
 				console.error('Error fetching data:', error);
-				this.searches = [];
+				// this.searches = [];
 			}
 		},
 
@@ -492,7 +538,12 @@ export default {
 
 		transcriptArray(transcript) {
 			return transcript?.split("\n")
-		}
+		},
+
+		getSentiment(user) {
+			// console.log("Searching: ", user?.referenceToCallId)
+			return this.filter ? user?.referenceToCallId?.analyzedTranscript : user?.analyzedTranscript ? user?.analyzedTranscript : "Unavailable"
+		},
 	},
 
 	beforeMount() {
