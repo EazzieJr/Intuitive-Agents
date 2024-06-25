@@ -1,6 +1,13 @@
 <template>
 	<div class="Onboarding center h-screen">
-		<div class="Layout mx-auto w-full max-w-[460px] space-y-10 p-12 pt-16 border border-gray-200 rounded-3xl shadow-md bg-[#fafafa]">
+		<nav class="fixed top-10 left-10">
+			<div class="Logo bg-[#ececec]">
+				<img class="w-40 mix-blend-exclusion" src="/svg/intuitive-logo.svg" alt="">
+			</div>
+		</nav>
+		
+		<div
+			class="Layout mx-auto w-full max-w-[460px] space-y-10 p-12 pt-16 border border-gray-200 rounded-3xl shadow-md bg-[#fafafa]">
 			<header class="w-full space-y-2.5">
 				<h1 class="font-bold text-4xl text-[#010101]">
 					{{ page.title }}

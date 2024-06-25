@@ -1,5 +1,11 @@
 <template>
 	<div class="Home">
+		<nav class="fixed top-10 left-10">
+			<div class="Logo bg-white">
+				<img class="w-40 mix-blend-exclusion" src="/svg/intuitive-logo.svg" alt="">
+			</div>
+		</nav>
+
 		<header class="col-center">
 			<div class="Text">
 				<h1 class="w-fit">Welcome to Intuitive Agents</h1>
@@ -8,8 +14,9 @@
 			</div>
 
 			<div class="Links center">
-				<NuxtLink :to="company?.link ? company.link : `/dashboard/company/${company.name.toLowerCase().split(' ').join('-')}/${company.agents[0].name}`" class="Link"
-					v-for="company in companies" :key="company.name">
+				<NuxtLink
+					:to="company?.link ? company.link : `/dashboard/company/${company.name.toLowerCase().split(' ').join('-')}/${company.agents[0].name}`"
+					class="Link" v-for="company in companies" :key="company.name">
 					<div class="Image">
 						<img :src="`/images/companies/${company.name.toLowerCase().split(' ').join('-')}.png`" alt="">
 					</div>

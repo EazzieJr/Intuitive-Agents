@@ -62,26 +62,36 @@
 							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 					</UDropdown>
 
-					<div class="Search start" v-if="searchBy !== 'dates'">
+					<div class="Search start" v-if="searchBy == 'contacts'">
 						<div class="Input border rounded-lg overflow-hidden">
 							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search..."
 								v-model="search" type="search" @input="searchContact($event)" />
 						</div>
 					</div>
 
-					<vue-date-picker v-model="date" @update:model-value="searchContact" mode="date" range
-						v-else></vue-date-picker>
+					<UDropdown v-else-if="searchBy == 'sentiments' " :items="sentiments" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="search ? search : 'Select Sentiment'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+					</UDropdown>
+
+					<UDropdown v-else-if="searchBy == 'statuses' " :items="statuses" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="search ? search : 'Select Status'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+					</UDropdown>
+
+					<vue-date-picker v-model="date" @update:model-value="searchContactsByDate" mode="date" range
+						v-else-if="searchBy == 'dates'"></vue-date-picker>
 				</div>
 			</div>
 
 			<div class="Tables">
-				<Table v-if="search == ''" :users="users" :searching="searching" :totalPages="totalPages" :page="page"
+				<Table v-if="search == '' || searches.length == 0" :users="users" :searching="searching" :totalPages="totalPages" :page="page"
 					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
 					@loadUsers="loadUsers" />
 
 				<Table v-else :users="searches" :searching="searching" :query="search" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript" :searchBy="searchBy"
-					@updateSearch="updateSearch" filter />
+					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
+					:searchBy="searchBy" @updateSearch="updateSearch" filter />
 			</div>
 		</div>
 
@@ -168,6 +178,7 @@ export default {
 					label: 'Sentiments',
 					click: () => {
 						this.searchBy = 'sentiments'
+						console.log("Sentiments: ", this.searchBy);
 					}
 				}, {
 					label: 'Statuses',
@@ -175,6 +186,101 @@ export default {
 						this.searchBy = 'statuses'
 					}
 				}]
+			],
+
+			sentiments: [
+				[
+					{
+						label: 'Scheduled',
+						click: () => {
+							this.search = 'scheduled'
+							this.searchBySentiment()
+						}
+					},
+					{
+						label: 'Interested',
+						click: () => {
+							this.search = 'interested'
+							this.searchBySentiment()
+						}
+					},
+
+					{
+						label: 'Uninterested',
+						click: () => {
+							this.search = 'uninterested'
+							this.searchBySentiment()
+						}
+					},
+
+					{
+						label: 'Incomplete call',
+						click: () => {
+							this.search = 'incomplete-call'
+							this.searchBySentiment()
+						}
+					},
+
+					{
+						label: 'Voicemail',
+						click: () => {
+							this.search = 'voicemail'
+							this.searchBySentiment()
+						}
+					}
+				]
+			],
+
+			statuses: [
+				[
+					{
+						label: 'Call connected',
+						click: () => {
+							this.search = 'call-connected'
+							this.searchByStatuses()
+						}
+					},
+
+					{
+						label: 'Call failed',
+						click: () => {
+							this.search = 'call-failed'
+							this.searchByStatuses()
+						}
+					},
+
+					{
+						label: 'Call transferred',
+						click: () => {
+							this.search = 'call-transferred'
+							this.searchByStatuses()
+						}
+					},
+
+					{
+						label: 'Call answered',
+						click: () => {
+							this.search = 'call-answered'
+							this.searchByStatuses()
+						}
+					},
+
+					{
+						label: 'Called-NA-VM',
+						click: () => {
+							this.search = 'called-na-vm'
+							this.searchByStatuses()
+						}
+					},
+
+					{
+						label: 'Not Called',
+						click: () => {
+							this.search = 'not-called'
+							this.searchByStatuses()
+						}
+					}
+				]
 			],
 			moment
 		}
@@ -194,6 +300,10 @@ export default {
 
 		searches() {
 			console.log("From Name: ", this.searches)
+		},
+
+		searchBy() {
+			this.search = "";
 		}
 	},
 
@@ -434,6 +544,64 @@ export default {
 
 			// Call the debouncedSearchContact function with the search term from the input event
 			debouncedSearchContact(event.target.value);
+		},
+		
+		async searchContactsByDate() {
+			this.$toast.open({
+				message: `Searching by Dates - ${this.search}`,
+				type: 'info',
+				duration: 5000,
+				dismissible: true,
+				position: 'top'
+			});
+
+			// console.log("Dates: ", this.date[0]);
+			const response = await fetcher(`/search`, "POST", {
+				startDate: this.date[0],
+				endDate: this.date[1],
+				agentId: this.agentDetails.id
+			});
+
+			console.log("Search Response: ", response);
+			this.searches = response;
+		},
+
+		async searchBySentiment() {
+			this.$toast.open({
+				message: `Searching by Sentiments - ${this.search}`,
+				type: 'info',
+				duration: 5000,
+				dismissible: true,
+				position: 'top'
+			});
+			
+			const response = await fetcher(`/search`, "POST", {
+				searchTerm: "",
+				agentId: this.agentDetails.id,
+				sentimentOption: this.search
+			});
+
+			console.log("Search Response: ", response);
+			this.searches = response;
+		},
+
+		async searchByStatuses() {
+			this.$toast.open({
+				message: `Searching by Statuses - ${this.search}`,
+				type: 'info',
+				duration: 5000,
+				dismissible: true,
+				position: 'top'
+			});
+
+			const response = await fetcher(`/search`, "POST", {
+				searchTerm: "",
+				agentId: this.agentDetails.id,
+				statusOption: this.search
+			});
+
+			console.log("Search Response: ", response);
+			this.searches = response;
 		},
 
 		updateSearch(data) {

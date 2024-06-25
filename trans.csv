@@ -1,1 +1,51 @@
-FirstName,LastName,Email,Phone Number
+firstname,lastname,email,phone,status,transcript,call_recording_url,analyzedTranscript
+Nick,Feinberg,nick@frontline.net,(845) 304 - 5980,call-connected,"User: Hello?
+Agent: Hi, is this [Firstname]?
+User: Hi. Is this
+User: Excuse me?
+Agent: Hi, is this [Firstname]?
+User: I don't know what that means.
+Agent: Sorry about that! Is this [Firstname]?
+User: Can you say that again?
+Agent: Sure! Is this [Firstname]?
+User: And you are?
+Agent: Hi, I'm Olivia with Virtual Team Expert. I hope your day's going well. I'm just quickly following up on an inquiry we received a while back for our virtual assistant services. Were you still looking for help from a VA?
+User: Wow. Are you a human or AI.
+Agent: Yes, guilty as charged. I'm an AI-powered sales agent assisting with outreach for Virtual Team Expert. Would it be ok to continue the call, or would you like me to transfer you to our sales managers?
+User: Transfer me to your sales manager.
+Agent: Sure thing, I'll transfer you to our sales manager right away.
+",https://dxc03zgurdly9.cloudfront.net/9fad645e6e4d8c3fd29c94beed161fc0/recording.wav,Interested
+Taylor,J. Kishfy,taylor.kishfy@bgs-fg.com,973-572-2433,call-connected,"User: Hello?
+Agent: Hi, is this Taylor?
+User: Yeah. Who's this?
+Agent: Hi Taylor, I hope your day's going well. This is Olivia with Virtual Team Expert.I'm just quickly following up on an inquiry we received a while back for our virtual assistant services and wanted to see if you were still looking for help from a VA?
+User: I'm good. Thank you very much for the call.
+Agent: Great! Are you open to having a short Zoom call with our sales 
+User: Appreciate it.
+Agent: director to discuss in more detail and receive a customized quote?
+",https://dxc03zgurdly9.cloudfront.net/a594f5037a7fdd807b6c4f07629fa333/recording.wav,Interested
+Laurel,Stephenson,laurel@laurelstephenson.com,+1 651-755-4897,call-connected,"User: Hello?
+Agent: Hi, is this Laurel?
+User: Mhmm.
+Agent: Hi Laurel, I hope your day's going well. This 
+User: Yes.
+Agent: is Olivia with Virtual Team Expert.I'm just quickly following up on an inquiry we received a while back for our virtual assistant services and wanted to see if you were still looking for help from a VA?
+User: What are you what kind of things are they doing? Like, here's what I I have trouble keeping my calendar straight. I know they can do that. I have trouble, um, I just have I'm so scatterbrained with it, and I can't I can't I need help. I do need it.
+Agent: Absolutely, Laurel! Our virtual 
+User: Yeah.
+Agent: assistants can definitely help with managing your calendar and keeping things 
+User: Are you real? You're a bot. You're a bot.
+Agent: Yes, guilty as charged. I'm an 
+User: Are you real? You're
+User: Well, then mister AI bought kind of things can a virtual assistant help me with?
+Agent: Our virtual assistants can help with a variety of tasks, including managing your calendar, handling administrative tasks, social media management, accounting, and even graphic design. Would you be open for a short Zoom call with our sales director to discuss in more detail and receive a customized quote?
+User: Yes.
+Agent: Perfect! Let me take a look at our calendar and check for our next available appointment times.We have openings on Thursday at 6:00 AM and Monday at 6:00 AM. Which one works better for you?
+User: I had something that's not 6 AM.
+Agent: It looks like our next 
+User: Where where are these where excuse me, where are these virtual assistants living?
+Agent: Our virtual assistants are located in various parts of the world, allowing us to offer a wide range of skills and time zone coverage. This ensures we can match you with someone who fits your specific needs and schedule. Would you be open for a short Zoom call with our sales director to discuss in more detail and receive a customized quote?
+User: Yes. I would. But I don't I want you to find someone I can talk to is my time zone, so I don't have to have a 6 o'clock call. I can be available for a call at 9 AM
+User: CST. To 4 PM CST.
+Agent: It looks like our next available time is Tuesday at 6:00 AM. I understand that's not ideal for you. Let me transfer you to our sales manager who can better accommodate your schedule. One moment, please.
+",https://dxc03zgurdly9.cloudfront.net/b563cf3ecf813a2219c6c771e91d001f/recording.wav,Interested
