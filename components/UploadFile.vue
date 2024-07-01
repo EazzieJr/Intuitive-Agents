@@ -95,27 +95,27 @@ export default {
 
 			console.log("Input File: ", this.uploadedFiles)
 
-			// try {
-			// 	// Use fetch
-			// 	const response = await fetcher(`/upload/${this.agentId}`, "POST", {formData, day: this.day});
+			try {
+				// Use fetch
+				const response = await fetcher(`/upload/${this.agentId}`, "POST", {formData, day: this.day});
 
-			// 	if (!response.ok) {
-			// 		throw new Error(`HTTP error! Status: ${response.status}`);
-			// 	}
+				if (!response.ok) {
+					throw new Error(`HTTP error! Status: ${response.status}`);
+				}
 
-			// 	// const response = await axios.post(`https://intuitiveagents.io/upload/${this.agentId}`, formData, {
-			// 	// 	headers: {
-			// 	// 		"Content-Type": "multipart/form-data",
-			// 	// 	},
-			// 	// });
+				// const response = await axios.post(`https://intuitiveagents.io/upload/${this.agentId}`, formData, {
+				// 	headers: {
+				// 		"Content-Type": "multipart/form-data",
+				// 	},
+				// });
 
-			// 	toggleCreateModal();
-			// 	setUploadedFiles([]);
+				toggleCreateModal();
+				setUploadedFiles([]);
 
-			// 	//console.log("Response: ", response);
-			// } catch (err) {
-			// 	//console.log(err);
-			// }
+				//console.log("Response: ", response);
+			} catch (err) {
+				//console.log(err);
+			}
 		},
 
 		handleFileUpload(event) {
