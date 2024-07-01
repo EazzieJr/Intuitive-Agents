@@ -5,7 +5,7 @@
 				{{ title }}
 			</p>
 
-			<div class="Image w-10 h-10 overflow-hidden">
+			<div class="Image w-8 h-8 overflow-hidden">
 				<img :src="`/svg/${icon}.svg`" alt="">
 				</div>
 		</div>

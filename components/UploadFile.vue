@@ -20,6 +20,14 @@
 					</p>
 				</div>
 
+				<div class="end mt-5">
+					<UDropdown :items="days" :popper="{ placement: 'bottom-start' }">
+						<UButton class="capitalize" size="lg" color="white" :label="day ? day : 'Select Day'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" />
+					</UDropdown>
+				</div>
+				<!-- <UInput class="mt-5" size="lg" color="white" placeholder="Input day tag" v-model="day" type="text" /> -->
+
 				<div class="OtherDeats flex justify-between items-center mt-5 space-x-5">
 					<p class="text-[#282c34] text-xs">
 						File:
@@ -51,42 +59,63 @@ export default {
 
 	data() {
 		return {
-			uploadedFiles: null
+			uploadedFiles: null,
+			day: "",
+			days: [[
+				{
+					label: "Monday",
+					click: () => {
+						this.day = "Monday";
+					}
+				}, 
+
+				{
+					label: "Tuesday",
+					click: () => {
+						this.day = "Tuesday";
+					}
+				}, 
+
+				{
+					label: "Wednesday",
+					click: () => {
+						this.day = "Wednesday";
+					}
+				}]
+			]
 		}
 	},
 
 	methods: {
 		async uploadFile() {
 			const formData = new FormData();
-			formData.append("csvFile", this.uploadedFiles);
+			console.log("Form Data: ", formData)
+			console.log(Object.fromEntries(formData.entries()));
+			// formData.append("csvFile", this.uploadedFiles);
 
-			try {
-				// Use fetch
-				const response = await fetch(`https://intuitiveagents.io/upload/${this.agentId}`, {
-					method: "POST",
-					body: formData,
-					headers: {
-						"Content-Type": "multipart/form-data",
-					},
-				});
+			console.log("Input File: ", this.uploadedFiles)
 
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
-				}
+			// try {
+			// 	// Use fetch
+			// 	const response = await fetcher(`/upload/${this.agentId}`, "POST", {formData, day: this.day});
 
-				// const response = await axios.post(`https://intuitiveagents.io/upload/${this.agentId}`, formData, {
-				// 	headers: {
-				// 		"Content-Type": "multipart/form-data",
-				// 	},
-				// });
+			// 	if (!response.ok) {
+			// 		throw new Error(`HTTP error! Status: ${response.status}`);
+			// 	}
 
-				toggleCreateModal();
-				setUploadedFiles([]);
+			// 	// const response = await axios.post(`https://intuitiveagents.io/upload/${this.agentId}`, formData, {
+			// 	// 	headers: {
+			// 	// 		"Content-Type": "multipart/form-data",
+			// 	// 	},
+			// 	// });
 
-				//console.log("Response: ", response);
-			} catch (err) {
-				//console.log(err);
-			}
+			// 	toggleCreateModal();
+			// 	setUploadedFiles([]);
+
+			// 	//console.log("Response: ", response);
+			// } catch (err) {
+			// 	//console.log(err);
+			// }
 		},
 
 		handleFileUpload(event) {
