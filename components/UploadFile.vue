@@ -49,6 +49,8 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+
 export default {
 	props: {
 		agentId: {
@@ -89,33 +91,50 @@ export default {
 	methods: {
 		async uploadFile() {
 			const formData = new FormData();
-			console.log("Form Data: ", formData)
-			console.log(Object.fromEntries(formData.entries()));
-			// formData.append("csvFile", this.uploadedFiles);
+			// console.log("Form Data: ", formData)
+			// console.log(Object.fromEntries(formData.entries()));
+			formData.append("csvFile", this.uploadedFiles);
+			// formData.append('day', this.day)
 
-			console.log("Input File: ", this.uploadedFiles)
+			// console.log("Input File: ", this.uploadedFiles)
 
-			try {
-				// Use fetch
-				const response = await fetcher(`/upload/${this.agentId}`, "POST", {formData, day: this.day});
-
-				if (!response.ok) {
-					throw new Error(`HTTP error! Status: ${response.status}`);
+			const response = await fetch(`https://intuitiveagents.io/upload/${this.agentId}?day=${this.day.toLowerCase()}`, {
+				method: "POST",
+				body: formData,
+				headers: {
+					"Authorization": `Bearer ${Cookies.get("token")}`
 				}
+			});
 
-				// const response = await axios.post(`https://intuitiveagents.io/upload/${this.agentId}`, formData, {
-				// 	headers: {
-				// 		"Content-Type": "multipart/form-data",
-				// 	},
-				// });
+			const data = await response.json();
 
-				toggleCreateModal();
-				setUploadedFiles([]);
-
-				//console.log("Response: ", response);
-			} catch (err) {
-				//console.log(err);
+			if (!response.ok) {
+				throw new Error(data.message || "Something went wrong");
+			} else {
+				this.$emit("closeModal");
+				this.uploadedFiles = null;
 			}
+
+			// try {
+			// 	// Use fetch
+
+			// 	if (!response.ok) {
+			// 		throw new Error(`HTTP error! Status: ${response.status}`);
+			// 	}
+
+			// 	// const response = await axios.post(`https://intuitiveagents.io/upload/${this.agentId}`, formData, {
+			// 	// 	headers: {
+			// 	// 		"Content-Type": "multipart/form-data",
+			// 	// 	},
+			// 	// });
+
+			// 	toggleCreateModal();
+			// 	setUploadedFiles([]);
+
+			// 	//console.log("Response: ", response);
+			// } catch (err) {
+			// 	//console.log(err);
+			// }
 		},
 
 		handleFileUpload(event) {

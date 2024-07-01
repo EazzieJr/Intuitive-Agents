@@ -1,16 +1,21 @@
 import Cookies from 'js-cookie';
 
-const fetcher = async (url, method = 'GET', data = null) => {
-	const token = Cookies.get('token');
+const token = Cookies.get('token');
 
+const defaultHeaders = {
+	'Content-Type': 'application/json',
+	Authorization: `Bearer ${token}`
+}
+
+const fetcher = async (url, method = 'GET', data = null, headers = defaultHeaders) => {
 	if (!token) {
 		throw new Error('Unauthorized!');
 	}
 
-	const headers = {
-		'Content-Type': 'application/json',
-		Authorization: `Bearer ${token}`,
-	}
+	// const headers = {
+	// 	'Content-Type': 'application/json',
+	// 	Authorization: `Bearer ${token}`,
+	// }
 
 	try {
 		const response = await fetch(`https://intuitiveagents.io${url}`, {
