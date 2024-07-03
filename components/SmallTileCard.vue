@@ -6,7 +6,7 @@
 			</p>
 
 			<div class="Image w-8 h-8 overflow-hidden">
-				<img :src="`/svg/${icon}.svg`" alt="">
+				<img :src="`/svg/calls/${icon}.svg`" alt="">
 				</div>
 		</div>
 
