@@ -20,11 +20,14 @@
 					</p>
 				</div>
 
-				<div class="end mt-5">
-					<UDropdown :items="days" :popper="{ placement: 'bottom-start' }">
+				<div class="mt-5">
+					<div class="Input border rounded-lg overflow-hidden">
+						<UInput size="lg" color="white" placeholder="Add Tag" v-model="day" type="text" />
+					</div>
+					<!-- <UDropdown :items="days" :popper="{ placement: 'bottom-start' }">
 						<UButton class="capitalize" size="lg" color="white" :label="day ? day : 'Select Day'"
 							trailing-icon="i-heroicons-chevron-down-20-solid" />
-					</UDropdown>
+					</UDropdown> -->
 				</div>
 				<!-- <UInput class="mt-5" size="lg" color="white" placeholder="Input day tag" v-model="day" type="text" /> -->
 
@@ -69,14 +72,14 @@ export default {
 					click: () => {
 						this.day = "Monday";
 					}
-				}, 
+				},
 
 				{
 					label: "Tuesday",
 					click: () => {
 						this.day = "Tuesday";
 					}
-				}, 
+				},
 
 				{
 					label: "Wednesday",
@@ -98,7 +101,7 @@ export default {
 
 			// console.log("Input File: ", this.uploadedFiles)
 
-			const response = await fetch(`https://intuitiveagents.io/upload/${this.agentId}?day=${this.day.toLowerCase()}`, {
+			const response = await fetch(`https://intuitiveagents.io/upload/${this.agentId}?tag=${this.day.toLowerCase()}`, {
 				method: "POST",
 				body: formData,
 				headers: {
