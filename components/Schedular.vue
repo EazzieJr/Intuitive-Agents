@@ -22,11 +22,13 @@
 						</option>
 						))}
 					</select> -->
-					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedHour" :options="[...Array(24).keys()]" placeholder="Hours" />
+					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedHour" :options="[...Array(24).keys()]"
+						placeholder="Hours" />
 
 					<span class="block">:</span>
 
-					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedMinute" :options="[...Array(60).keys()]" placeholder="Minutes" />
+					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedMinute" :options="[...Array(60).keys()]"
+						placeholder="Minutes" />
 					<!-- <select class="rounded-xl p-2.5 border border-[#C4C4C4] h-fit max-h-[100px] block w-[60px] text-center"
 						value={selectedMinutes} onChange={handleMinutesChange}>
 						{[...Array(60).keys()].map((minute) => (
@@ -38,6 +40,13 @@
 					</select> -->
 
 					<UInput size="lg" class="w-28 h-10" v-model="limit" placeholder="Limit" />
+				</div>
+
+				<div class="Tag">
+					<div class="Input border rounded-lg overflow-hidden">
+						<UInput size="lg" color="white" placeholder="Tag to call"
+							v-model="tag" type="text" />
+					</div>
 				</div>
 
 				<button @click="schedule"
@@ -67,7 +76,8 @@ export default {
 			limit: "",
 			selectedHour: 0,
 			selectedMinute: 0,
-			loading: false
+			loading: false,
+			tag: ""
 		}
 	},
 
@@ -77,11 +87,11 @@ export default {
 		},
 
 		async schedule() {
-			const { agentId, fromNumber, limit, selectedHour, selectedMinute } = this
+			const { agentId, fromNumber, limit, selectedHour, selectedMinute, tag } = this
 			this.loading = true
 
 			const response = await fetcher("/schedule", "POST", {
-				agentId,
+				agentId, tag,
 				hour: selectedHour,
 				minute: selectedMinute,
 				limit,
