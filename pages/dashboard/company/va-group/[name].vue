@@ -12,14 +12,14 @@
 			</div>
 
 			<div class="Misc between">
-				<div class="Switches start">
+				<div class="Switches end">
 					<button class="Switch active">
 						Overview
 					</button>
 
-					<button class="Switch">
+					<!-- <button class="Switch">
 						Analytics
-					</button>
+					</button> -->
 				</div>
 
 				<ExportLogs :agentId="agentDetails.id" :agentName="agentDetails.name" />

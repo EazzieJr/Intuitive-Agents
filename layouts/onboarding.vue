@@ -1,8 +1,8 @@
 <template>
 	<div class="Onboarding center h-screen">
 		<nav class="fixed top-10 left-10">
-			<div class="Logo bg-[#ececec]">
-				<img class="w-40 mix-blend-exclusion" src="/svg/intuitive-logo.svg" alt="">
+			<div class="Logo">
+				<img class="w-40" src="/svg/intuitive-logo.svg" alt="">
 			</div>
 		</nav>
 		
