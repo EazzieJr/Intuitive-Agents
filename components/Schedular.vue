@@ -124,6 +124,11 @@ export default {
 			// } catch (err) {
 			// 	console.log(err);
 			// }
+		},
+
+		async getTags() {
+			const response = await fetcher("/get-tags")
+			console.log(response)
 		}
 	}
 }
