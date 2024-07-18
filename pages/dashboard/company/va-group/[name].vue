@@ -79,19 +79,25 @@
 							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 					</UDropdown>
 
+					<UDropdown v-else-if="searchBy == 'tags' " :items="tags" class="capitalize"
+						:popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="tag ? tag : 'Tag to schedule'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="!capitalize" />
+					</UDropdown>
+
 					<vue-date-picker v-model="date" @update:model-value="searchContactsByDate" mode="date" range
 						v-else-if="searchBy == 'dates'"></vue-date-picker>
 				</div>
 			</div>
 
 			<div class="Tables">
-				<Table v-if="search == '' || searches.length == 0" :users="users" :searching="searching" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					@loadUsers="loadUsers" />
-
-				<Table v-else :users="searches" :searching="searching" :query="search" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					:searchBy="searchBy" @updateSearch="updateSearch" filter />
+				<Table v-if="useSearchTable" :users="searches" :searching="searching" :query="search" :totalPages="totalPages"
+					:page="page" :agentDetails="agentDetails" @paginate="paginate" :fetching="fetching"
+					@setTranscript="setTranscript" :searchBy="searchBy" @updateSearch="updateSearch" filter />
+					
+					<Table v-else :users="users" :searching="searching" :totalPages="totalPages" :page="page"
+						:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
+						@loadUsers="loadUsers" />
 			</div>
 		</div>
 
@@ -163,6 +169,8 @@ export default {
 			debounceTimeout: null,
 			timeoutId: 0,
 			searchBy: '',
+			tag: "",
+			tags: [[]],
 			searchItems: [
 				[{
 					label: 'Contacts',
@@ -184,6 +192,11 @@ export default {
 					label: 'Statuses',
 					click: () => {
 						this.searchBy = 'statuses'
+					}
+				}], [{
+					label: "Tags",
+					click: () => {
+						this.searchBy = 'tags'
 					}
 				}]
 			],
@@ -291,6 +304,10 @@ export default {
 			// console.log("Stuff", this.transcript?.split("\n"));
 			return this.transcript?.transcript?.split("\n")
 		},
+
+		useSearchTable() {
+			return this.search !== '' || this.tag !== '' || this.searches.length > 0
+		}
 	},
 
 	watch: {
@@ -304,6 +321,12 @@ export default {
 
 		searchBy() {
 			this.search = "";
+
+			console.log("Search By: ", this.searchBy);
+
+			if(this.searchBy === 'tags') {
+				this.getTags()
+			}
 		}
 	},
 
@@ -679,6 +702,52 @@ export default {
 			this.transcript = data;
 			this.analyzedTranscript = data.analyzedTranscript;
 		},
+
+		async getTags() {
+			this.$toast.open({
+				message: `Fetching tags...`,
+				type: 'info',
+				duration: 2000,
+				dismissible: true,
+				position: 'top'
+			});
+
+			const response = await fetcher("/get-tags")
+			// this.tags = response
+			this.$toast.open({
+				message: `Fetched tags successfully`,
+				type: 'success',
+				duration: 2000,
+				dismissible: true,
+				position: 'top'
+			});
+
+			response.forEach(tag => {
+				this.tags[0].push({
+					label: tag,
+					click: async () => {
+						this.tag = tag
+
+						this.$toast.open({
+							message: `Searching by Tag - ${this.tag}`,
+							type: 'info',
+							duration: 5000,
+							dismissible: true,
+							position: 'top'
+						});
+
+						const searchResponse = await fetcher(`/search`, "POST", {
+							searchTerm: "",
+							agentId: this.agentDetails.id,
+							tag
+						});
+
+						console.log("Search Response: ", searchResponse);
+						this.searches = searchResponse;
+					}
+				})
+			})
+		}
 	},
 
 	beforeMount() {
