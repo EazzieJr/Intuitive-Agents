@@ -555,15 +555,43 @@ export default {
 				position: 'top'
 			});
 
-			// console.log("Dates: ", this.date[0]);
-			const response = await fetcher(`/search`, "POST", {
-				startDate: this.date[0],
-				endDate: this.date[1],
-				agentId: this.agentDetails.id
-			});
+			try {
+				// Ensure dates and agentId are available
+				if (!this.date || !this.date[0] || !this.date[1]) {
+					throw new Error("Start date and end date are required.");
+				}
+				if (!this.agentDetails || !this.agentDetails.id) {
+					throw new Error("Agent ID is required.");
+				}
 
-			console.log("Search Response: ", response);
-			this.searches = response;
+				// Log dates for debugging
+				console.log("Dates: ", this.date[0], this.date[1]);
+
+				// Perform the search request
+				const response = await fetcher(`/search`, "POST", {
+					startDate: this.date[0],
+					endDate: this.date[1],
+					agentId: this.agentDetails.id
+				});
+
+				// Log the response for debugging
+				console.log("Search Response: ", response);
+
+				// Update searches state with the response
+				this.searches = response;
+
+			} catch (error) {
+				console.error("Error during search: ", error);
+
+				// Show error toast notification
+				this.$toast.open({
+					message: `Error: ${error.message}`,
+					type: 'error',
+					duration: 5000,
+					dismissible: true,
+					position: 'top'
+				});
+			}
 		},
 
 		async searchBySentiment() {
