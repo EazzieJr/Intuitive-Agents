@@ -74,7 +74,7 @@ export default {
 		agentId: String,
 		fromNumber: String
 	},
-	
+
 	data() {
 		return {
 			limit: "",
@@ -113,8 +113,8 @@ export default {
 
 			this.loading = false
 			this.closeModal()
-			console.log(response)		
-			
+			//// console.log(response)		
+
 			// try {
 			// 	const response = await fetch("https://intuitiveagents.io/schedule", {
 			// 		method: "POST",
@@ -132,9 +132,9 @@ export default {
 
 			// 	this.loading = false
 			// 	this.closeModal()
-			// 	console.log(response);
+			// 	// console.log(response);
 			// } catch (err) {
-			// 	console.log(err);
+			// 	// console.log(err);
 			// }
 		},
 
@@ -146,7 +146,7 @@ export default {
 				dismissible: true,
 				position: 'top'
 			});
-			
+
 			const response = await fetcher("/get-tags")
 			// this.tags = response
 			this.$toast.open({
@@ -174,6 +174,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>

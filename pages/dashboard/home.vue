@@ -26,10 +26,10 @@
 
 						<div
 							class="center px-5 py-1.5 bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent text-sm">
-							<span :class="{'animate-pulse' : searching}" v-if="!searching">
+							<span :class="{ 'animate-pulse': searching }" v-if="!searching">
 								Search
 							</span>
-							
+
 							<img class="animate-spin duration-1000 py-1 w-3.5" v-else src="/svg/loading.svg" alt="">
 						</div>
 					</button>
@@ -125,7 +125,7 @@
 
 						<p>
 							{{ searching ? "Fetching logs for " + moment(date).format('ll') : "No data avalaible for " +
-							moment(date).format('ll') }}
+						moment(date).format('ll') }}
 						</p>
 					</div>
 
@@ -173,7 +173,7 @@ export default {
 	// async asyncData() {
 	// 	try {
 	// 		const pstDate = moment().tz("America/Los_Angeles").format('YYYY-MM-DD');
-	// 		console.log(pstDate);
+	// 		// console.log(pstDate);
 
 	// 		const response = await fetch("https://retell-backend-yy86.onrender.com/get-stats", {
 	// 			method: "POST",
@@ -206,7 +206,7 @@ export default {
 
 	// asyncData() {
 	// 	const pstDate = moment().tz("America/Los_Angeles").format('l');
-	// 	console.log(pstDate);
+	// 	// console.log(pstDate);
 	// 	try {
 	// 		const response = fetch("https://retell-backend-yy86.onrender.com/get-stats", {
 	// 			method: "POST",
@@ -220,7 +220,7 @@ export default {
 	// 				// date: 
 	// 			}
 	// 		})
-	// 		console.log(response)
+	// 		// console.log(response)
 
 	// 		return {
 	// 			stats: response.data
@@ -249,7 +249,7 @@ export default {
 
 	computed: {
 		transcriptArray() {
-			// console.log("Stuff", this.transcript?.split("\n"));
+			// // console.log("Stuff", this.transcript?.split("\n"));
 			return this.transcript?.split("\n")
 		}
 	},
@@ -272,7 +272,7 @@ export default {
 
 			try {
 				const pstDate = this.date ? moment(this.date).tz("America/Los_Angeles").format('YYYY-MM-DD') : moment().tz("America/Los_Angeles").format('YYYY-MM-DD');
-				// console.log(this.date, pstDate);
+				// // console.log(this.date, pstDate);
 
 				const response = await fetch("https://retell-backend-yy86.onrender.com/get-stats", {
 					method: "POST",
@@ -290,7 +290,7 @@ export default {
 
 				const stats = await response.json(); // Parse the response body as JSON
 
-				console.log(stats);
+				// console.log(stats);
 
 				this.stats = stats;
 				const logs = {

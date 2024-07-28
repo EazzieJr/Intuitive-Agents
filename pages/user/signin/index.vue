@@ -65,7 +65,7 @@ export default {
 
 				const { payload } = await response.json()
 
-				console.log(payload)
+				// console.log(payload)
 				Cookies.set('token', payload.token, { expires: 3 })
 				this.$toast.open({
 					message: payload.message,
@@ -80,9 +80,21 @@ export default {
 				this.loggingIn = false
 			} catch (error) {
 				this.loggingIn = false
-				console.log(error)
+				// console.log(error)
 				// this.$toast.error(error.response.data.message)
 			}
+		},
+	},
+
+	mounted() {
+		// If deployment is on development, auto login with the following credentials
+		if (process.env.NODE_ENV === 'development') {
+			this.user = {
+				username: 'eazzie',
+				password: 'asdf;lkj!'
+			}
+
+			this.login()
 		}
 	}
 }

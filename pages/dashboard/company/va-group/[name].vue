@@ -186,7 +186,7 @@ export default {
 					label: 'Sentiments',
 					click: () => {
 						this.searchBy = 'sentiments'
-						console.log("Sentiments: ", this.searchBy);
+						// console.log("Sentiments: ", this.searchBy);
 					}
 				}, {
 					label: 'Statuses',
@@ -301,7 +301,7 @@ export default {
 
 	computed: {
 		transcriptArray() {
-			// console.log("Stuff", this.transcript?.split("\n"));
+			// // console.log("Stuff", this.transcript?.split("\n"));
 			return this.transcript?.transcript?.split("\n")
 		},
 
@@ -312,17 +312,17 @@ export default {
 
 	watch: {
 		fetching(val) {
-			console.log("Fetching: ", val);
+			// console.log("Fetching: ", val);
 		},
 
 		searches() {
-			console.log("From Name: ", this.searches)
+			// console.log("From Name: ", this.searches)
 		},
 
 		searchBy() {
 			this.search = "";
 
-			console.log("Search By: ", this.searchBy);
+			// console.log("Search By: ", this.searchBy);
 
 			if (this.searchBy === 'tags') {
 				this.getTags()
@@ -340,14 +340,14 @@ export default {
 				page: page ? page : this.page
 			});
 
-			console.log("Responserrrrrr: ", response);
+			// console.log("Responserrrrrr: ", response);
 
 			// if (!response.ok) {
 			// 	throw new Error(`HTTP error! Status: ${response.status}`);
 			// 	return this.users = [];
 			// }
 
-			console.log("espanyol: ", response.result.contacts);
+			// console.log("espanyol: ", response.result.contacts);
 			this.users = response.result.contacts;
 			this.totalPages = response.result.totalPages;
 			this.stats = {
@@ -382,7 +382,7 @@ export default {
 			// 	}
 
 			// 	const users = await response.json(); // Parse the response body as JSON
-			// 	console.log("Response: ", users.result.contacts);
+			// 	// console.log("Response: ", users.result.contacts);
 
 			// 	this.users = users.result.contacts;
 			// 	this.totalPages = users.result.totalPages;
@@ -394,7 +394,7 @@ export default {
 			// 		vm: users.result.vm
 			// 	}
 			// 	if (page) this.page = page;
-			// 	// console.log("Total Pages: ", this.totalPages);
+			// 	// // console.log("Total Pages: ", this.totalPages);
 			// 	this.fetching = false;
 			// 	// this.searching = false;
 			// } catch (error) {
@@ -458,16 +458,16 @@ export default {
 		},
 
 		debounce(func, delay) {
-			console.log("Debounce", this.timeoutId);
+			// console.log("Debounce", this.timeoutId);
 			// timeoutId;
 			return (...args) => {
 				const context = this;
-				console.log("Before", this.timeoutId);
+				// console.log("Before", this.timeoutId);
 				clearTimeout(this.timeoutId);
 				this.timeoutId = setTimeout(() => {
 					func.apply(context, args);
 				}, delay);
-				console.log("After", this.timeoutId);
+				// console.log("After", this.timeoutId);
 			};
 		},
 
@@ -491,7 +491,7 @@ export default {
 					this.loadUsers();
 					return;
 				} else if (this.searchBy === 'dates') {
-					console.log("Dates: ", this.date);
+					// console.log("Dates: ", this.date);
 					const response = await fetcher(`/search`, "POST", {
 						// searchTerm: this.search,
 						startDate: this.date[0],
@@ -499,7 +499,7 @@ export default {
 						agentId: this.agentDetails.id
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					this.searches = response;
 				} else if (this.searchBy === 'sentiments') {
 
@@ -514,7 +514,7 @@ export default {
 						sentimentOption: this.search
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					this.searches = response;
 				} else if (this.searchBy === 'statuses') {
 					const response = await fetcher(`/search`, "POST", {
@@ -523,22 +523,22 @@ export default {
 						statusOption: this.search
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					this.searches = response;
 				} else {
 					const searchItemChars = this.search.split(" ")
 					if (searchItemChars[searchItemChars.length - 1] == '') {
-						// console.log("fake")
+						// // console.log("fake")
 						return
 					} else {
-						// console.log("Actual")
+						// // console.log("Actual")
 
 						const response = await fetcher(`/search`, "POST", {
 							searchTerm: this.search,
 							agentId: this.agentDetails.id
 						});
 
-						console.log("Search Response: ", response);
+						// console.log("Search Response: ", response);
 						this.searches = response;
 
 
@@ -555,7 +555,7 @@ export default {
 						// 	});
 
 						// 	const users = await response.json();
-						// 	console.log("Search Response: ", users);
+						// 	// console.log("Search Response: ", users);
 						// 	this.searches = users;
 						// } catch (error) {
 						// 	console.error("Error fetching data:", error);
@@ -588,7 +588,7 @@ export default {
 				}
 
 				// Log dates for debugging
-				console.log("Dates: ", this.date[0], this.date[1]);
+				// console.log("Dates: ", this.date[0], this.date[1]);
 
 				// Perform the search request
 				const response = await fetcher(`/search`, "POST", {
@@ -598,7 +598,7 @@ export default {
 				});
 
 				// Log the response for debugging
-				console.log("Search Response: ", response);
+				// console.log("Search Response: ", response);
 
 				// Update searches state with the response
 				this.searches = response;
@@ -632,7 +632,7 @@ export default {
 				sentimentOption: this.search
 			});
 
-			console.log("Search Response: ", response);
+			// console.log("Search Response: ", response);
 			this.searches = response;
 		},
 
@@ -651,7 +651,7 @@ export default {
 				statusOption: this.search
 			});
 
-			console.log("Search Response: ", response);
+			// console.log("Search Response: ", response);
 			this.searches = response;
 		},
 
@@ -663,7 +663,7 @@ export default {
 			this.batchDeleting = true;
 			const ids = this.searches.map(user => user._id);
 
-			console.log("Batch Delete: ", ids);
+			// console.log("Batch Delete: ", ids);
 
 			try {
 				const response = await fetcher("/batch-delete-users", "POST", { contactsToDelete: ids })
@@ -688,7 +688,7 @@ export default {
 			// 	});
 
 			// 	const users = await response.json();
-			// 	console.log("Delete Response: ", users);
+			// 	// console.log("Delete Response: ", users);
 			// 	this.loadUsers();
 			// 	this.batchDeleting = false;
 			// 	this.search = "";
@@ -728,7 +728,7 @@ export default {
 					click: async () => {
 						this.tag = tag
 						this.fetching = true
-						
+
 						this.$toast.open({
 							message: `Searching by Tag - ${this.tag}`,
 							type: 'info',
@@ -751,7 +751,7 @@ export default {
 							position: 'top'
 						});
 
-						console.log("Search Response: ", searchResponse);
+						// console.log("Search Response: ", searchResponse);
 						this.searches = searchResponse;
 					}
 				})

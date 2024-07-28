@@ -42,14 +42,14 @@ export default {
 					icon: 'i-heroicons-clock-20-solid',
 					click: () => {
 						this.scheduleModal = true
-						// console.log(this.schedularModal)
+						// // console.log(this.schedularModal)
 					}
 				}, {
 					label: 'Create Schedule',
 					icon: 'i-heroicons-plus-20-solid',
 					click: () => {
 						this.schedularModal = true
-						console.log(this.schedularModal)
+						// console.log(this.schedularModal)
 					}
 				}], [{
 					label: 'Create contact',
@@ -92,7 +92,7 @@ export default {
 	// watch: {
 	// 	agentDetails: {
 	// 		handler() {
-	// 			console.log("Agent details: ", this.agentDetails)
+	// 			// console.log("Agent details: ", this.agentDetails)
 	// 		},
 	// 		deep: true
 	// 	}
@@ -116,7 +116,7 @@ export default {
 				// }
 
 			} catch (err) {
-				//console.log(err);
+				//// console.log(err);
 			}
 		},
 
@@ -126,7 +126,7 @@ export default {
 					agentId: this.agentDetails.id
 				})
 			} catch (err) {
-				//console.log(err);
+				//// console.log(err);
 			}
 		},
 
