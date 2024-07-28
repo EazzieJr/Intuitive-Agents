@@ -22,15 +22,15 @@ export const useStore = defineStore({
 				]
 			},
 
-			{
-				name: "Be + well",
-				agents: [
-					{
-						name: "katherine",
-						alias: "Katherine"
-					}
-				]
-			}
+			// {
+			// 	name: "Be + well",
+			// 	agents: [
+			// 		{
+			// 			name: "katherine",
+			// 			alias: "Katherine"
+			// 		}
+			// 	]
+			// }
 		],
 
 		agentDetails: {},
