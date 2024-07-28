@@ -13,7 +13,7 @@
 				</div>
 
 				<div class="NavLinks">
-					<NuxtLink class="NavLink" v-for="company in selectedCompany?.agents" :key="company.name"
+					<NuxtLink class="NavLink" :class="{ 'active': agentParams === company.name.toLowerCase()}" v-for="company in selectedCompany?.agents" :key="company.name"
 						:to="`/dashboard/company/${companyName}/${company.name}`">
 						{{ company.alias }}
 					</NuxtLink>
@@ -54,9 +54,9 @@ export default {
 			return this.companies.find((company) => company.name.toLowerCase().split(' ').join('-') === this.companyName)
 		},
 
-		isExact() {
-			console.log(this.$route.matched)
-			return this.$route.matched.some((route) => route.path === this.$route.path)
+		agentParams() {
+			// console.log(this.$route.matched, this.$route)
+			return this.$route.params.name
 		}
 	},
 
@@ -89,7 +89,7 @@ export default {
 	},
 
 	mounted() {
-		console.log('Exact', this.isExact)
+		console.log('Exact', this.agentParams)
 		this.updatePageData()
 	}
 }
@@ -125,6 +125,10 @@ export default {
 					@apply rounded-xl block px-2.5 py-2 text-base font-medium text-[#333333];
 
 					&.router-link-exact-active {
+						@apply bg-[#F3F4F6]
+					}
+
+					&.active {
 						@apply bg-[#F3F4F6]
 					}
 				}
