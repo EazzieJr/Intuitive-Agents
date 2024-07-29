@@ -55,7 +55,6 @@ export default {
 		},
 
 		agentParams() {
-			// console.log(this.$route.matched, this.$route)
 			return this.$route.params.name
 		}
 	},
