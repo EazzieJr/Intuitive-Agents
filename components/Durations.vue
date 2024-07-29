@@ -51,7 +51,7 @@ export default {
 		},
 
 		fetchData(value) {
-			this.$emit('fetchData', value);
+			this.$emit('fetchData', 1, value);
 		}
 	}
 }

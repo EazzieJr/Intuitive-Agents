@@ -343,11 +343,33 @@ export default {
 		async loadUsers(page, duration) {
 			this.fetching = true;
 
+			console.log("Page: ", duration);
+
+			if (duration) {
+				this.$toast.open({
+					message: `Fetching data for ${duration}...`,
+					type: 'info',
+					duration: 5000,
+					dismissible: true,
+					position: 'top'
+				});
+			}
+
 			const response = await fetcher(`/users/${this.agentDetails.id}`, "POST", {
 				limit: 100,
 				dateOption: duration ? duration : "today",
 				page: page ? page : this.page
 			});
+
+			if (duration) {
+				this.$toast.open({
+					message: `Fetched data for ${duration}...`,
+					type: 'success',
+					duration: 5000,
+					dismissible: true,
+					position: 'top'
+				});
+			}
 
 			this.users = response.result.contacts;
 			this.totalPages = response.result.totalPages;

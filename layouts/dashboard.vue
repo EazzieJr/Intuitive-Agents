@@ -88,7 +88,7 @@ export default {
 	},
 
 	mounted() {
-		console.log('Exact', this.agentParams)
+		// console.log('Exact', this.agentParams)
 		this.updatePageData()
 	}
 }
