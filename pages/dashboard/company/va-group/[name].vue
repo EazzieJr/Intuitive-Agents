@@ -12,15 +12,24 @@
 			</div>
 
 			<div class="Misc between">
-				<div class="Switches end">
+				<div class="DataDuration">
+					<Durations @fetchData="loadUsers" />
+
+					<!-- <UDropdown :items="durations" class="capitalize" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="tag ? tag : 'Tag to schedule'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="!capitalize" />
+					</UDropdown> -->
+				</div>
+
+				<!-- <div class="Switches end">
 					<button class="Switch active">
 						Overview
 					</button>
 
-					<!-- <button class="Switch">
+					<button class="Switch">
 						Analytics
-					</button> -->
-				</div>
+					</button>
+				</div> -->
 
 				<ExportLogs :agentId="agentDetails.id" :agentName="agentDetails.name" />
 			</div>
@@ -331,23 +340,15 @@ export default {
 	},
 
 	methods: {
-		async loadUsers(page) {
-			// const { logId1, logId2, logId3 } = logs;
+		async loadUsers(page, duration) {
 			this.fetching = true;
 
 			const response = await fetcher(`/users/${this.agentDetails.id}`, "POST", {
 				limit: 100,
+				dateOption: duration ? duration : "today",
 				page: page ? page : this.page
 			});
 
-			// console.log("Responserrrrrr: ", response);
-
-			// if (!response.ok) {
-			// 	throw new Error(`HTTP error! Status: ${response.status}`);
-			// 	return this.users = [];
-			// }
-
-			// console.log("espanyol: ", response.result.contacts);
 			this.users = response.result.contacts;
 			this.totalPages = response.result.totalPages;
 			this.stats = {
@@ -363,49 +364,6 @@ export default {
 
 			if (page) this.page = page;
 			this.fetching = false;
-
-			// try {
-			// 	const response = await fetch(`https://intuitiveagents.io/users/${this.agentDetails.id}`, {
-			// 		method: "POST",
-			// 		body: JSON.stringify({
-			// 			limit: 100,
-			// 			page: page ? page : this.page
-			// 		}),
-			// 		headers: {
-			// 			"Content-Type": "application/json"
-			// 		}
-			// 	});
-
-			// 	if (!response.ok) {
-			// 		throw new Error(`HTTP error! Status: ${response.status}`);
-			// 		return this.users = [];
-			// 	}
-
-			// 	const users = await response.json(); // Parse the response body as JSON
-			// 	// console.log("Response: ", users.result.contacts);
-
-			// 	this.users = users.result.contacts;
-			// 	this.totalPages = users.result.totalPages;
-			// 	this.stats = {
-			// 		totalContactForAgent: users.result.totalContactForAgent,
-			// 		totalCalledForAgent: users.result.totalCalledForAgent,
-			// 		totalNotCalledForAgent: users.result.totalNotCalledForAgent,
-			// 		failedCalls: users.result.failedCalls,
-			// 		vm: users.result.vm
-			// 	}
-			// 	if (page) this.page = page;
-			// 	// // console.log("Total Pages: ", this.totalPages);
-			// 	this.fetching = false;
-			// 	// this.searching = false;
-			// } catch (error) {
-			// 	console.error("Error fetching data:", error);
-			// 	// Return an empty object or handle the error as needed
-			// 	this.users = [];
-			// }
-
-			// setInterval(() => {
-			// 	this.loadUsers()
-			// }, 15000);
 		},
 
 		async filterByDate() {
