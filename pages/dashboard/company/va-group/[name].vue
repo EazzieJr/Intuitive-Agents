@@ -244,6 +244,14 @@ export default {
 					},
 
 					{
+						label: 'Call back',
+						click: () => {
+							this.search = 'call-back'
+							this.searchBySentiment()
+						}
+					},
+
+					{
 						label: 'Voicemail',
 						click: () => {
 							this.search = 'voicemail'
