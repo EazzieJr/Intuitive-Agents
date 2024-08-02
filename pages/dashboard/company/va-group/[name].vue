@@ -105,8 +105,8 @@
 					@setTranscript="setTranscript" :searchBy="searchBy" @updateSearch="updateSearch" filter />
 
 				<Table v-else :users="users" :searching="searching" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					@loadUsers="loadUsers" />
+					:agentDetails="agentDetails" :currentDuration="currentDuration" @paginate="paginate" :fetching="fetching"
+					@setTranscript="setTranscript" @loadUsers="loadUsers" baseTable />
 			</div>
 		</div>
 
@@ -165,6 +165,7 @@ export default {
 			timerModal: false,
 			schedularModal: false,
 			batchDeleting: false,
+			currentDuration: "today",
 
 			transcript: {},
 			analyzedTranscript: {},
@@ -350,6 +351,7 @@ export default {
 	methods: {
 		async loadUsers(page, duration) {
 			this.fetching = true;
+			this.currentDuration = duration;
 
 			console.log("Page: ", duration);
 

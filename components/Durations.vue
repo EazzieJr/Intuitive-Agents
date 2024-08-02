@@ -14,7 +14,7 @@ export default {
 			durations: [
 				{
 					title: "Last schedule",
-					value: "last schedule"
+					value: "last-schedule"
 				},
 
 				{

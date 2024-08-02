@@ -285,6 +285,12 @@ export default {
 		searchBy: {
 			type: String
 		},
+		baseTable: {
+			type: Boolean
+		},
+		currentDuration: {
+			type: String
+		}
 	},
 
 	data() {
@@ -455,7 +461,11 @@ export default {
 					id: user._id
 				});
 
-				this.searchContact();
+				if (this.baseTable) {
+					this.loadUsers(this.page, this.currentDuration);
+				} else {
+					this.searchContact();
+				}
 			} catch (err) {
 				console.error(err);
 			}
