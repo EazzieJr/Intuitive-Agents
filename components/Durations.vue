@@ -38,7 +38,7 @@ export default {
 				}
 			],
 
-			selectedDuration: "week",
+			selectedDuration: "last-schedule",
 
 		}
 	},

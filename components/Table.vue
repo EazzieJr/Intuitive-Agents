@@ -383,8 +383,8 @@ export default {
 			this.modalOpened = !this.modalOpened;
 		},
 
-		loadUsers(page) {
-			this.$emit("loadUsers", page)
+		loadUsers(page, duration) {
+			this.$emit("loadUsers", page, duration);
 		},
 
 		async updateContact() {

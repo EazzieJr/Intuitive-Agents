@@ -165,7 +165,7 @@ export default {
 			timerModal: false,
 			schedularModal: false,
 			batchDeleting: false,
-			currentDuration: "today",
+			currentDuration: "last-schedule",
 
 			transcript: {},
 			analyzedTranscript: {},
@@ -367,7 +367,7 @@ export default {
 
 			const response = await fetcher(`/users/${this.agentDetails.id}`, "POST", {
 				limit: 100,
-				dateOption: duration ? duration : "today",
+				dateOption: duration ? duration : "last-schedule",
 				page: page ? page : this.page
 			});
 
