@@ -13,6 +13,15 @@
 
 			<div class="Schedular w-full space-y-5 mt-7">
 				<div class="Selectors space-x-2 flex justify-center items-center">
+					<!-- <select class="rounded-xl p-2.5 border border-[#C4C4C4] h-fit max-h-[100px] block w-[60px] text-center"
+						value={selectedHours} onChange={handleHoursChange}>
+						{[...Array(24).keys()].map((hour) => (
+						<option key={hour} value={hour}>
+							{hour > 9 ? "" : "0"}
+							{hour}
+						</option>
+						))}
+					</select> -->
 					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedHour" :options="[...Array(24).keys()]"
 						placeholder="Hours" />
 
@@ -20,6 +29,16 @@
 
 					<USelectMenu size="lg" class="w-28 h-10" v-model="selectedMinute" :options="[...Array(60).keys()]"
 						placeholder="Minutes" />
+					<!-- <select class="rounded-xl p-2.5 border border-[#C4C4C4] h-fit max-h-[100px] block w-[60px] text-center"
+						value={selectedMinutes} onChange={handleMinutesChange}>
+						{[...Array(60).keys()].map((minute) => (
+						<option key={minute} value={minute}>
+							{minute > 9 ? "" : "0"}
+							{minute}
+						</option>
+						))}
+					</select> -->
+
 					<UInput size="lg" class="w-28 h-10" v-model="limit" placeholder="Limit" />
 				</div>
 
@@ -51,7 +70,6 @@ export default {
 		agentId: String,
 		fromNumber: String
 	},
-
 	
 	data() {
 		return {
