@@ -2,7 +2,19 @@
 	<nav class="TopNav">
 		<div class="NavContainer between">
 			<div class="Left start">
-				<div class="Navlinks start">
+				<div class="NavHeader start">
+					<NuxtLink to="/" class="start">
+						<div class="Image">
+							<img :src="`/images/companies/${companyName}.png`" alt="">
+						</div>
+
+						<span>
+							{{ companyName?.split('-').join(' ') }}
+						</span>
+					</NuxtLink>
+				</div>
+
+				<!-- <div class="Navlinks start">
 					<NuxtLink to="/dashboard/home">
 						Home
 					</NuxtLink>
@@ -10,7 +22,7 @@
 					<NuxtLink to="/dashboard/home">
 						Agents
 					</NuxtLink>
-				</div>
+				</div> -->
 			</div>
 
 			<div class="More">
@@ -42,14 +54,14 @@ export default {
 					icon: 'i-heroicons-clock-20-solid',
 					click: () => {
 						this.scheduleModal = true
-						// console.log(this.schedularModal)
+						// // console.log(this.schedularModal)
 					}
 				}, {
 					label: 'Create Schedule',
 					icon: 'i-heroicons-plus-20-solid',
 					click: () => {
 						this.schedularModal = true
-						console.log(this.schedularModal)
+						// console.log(this.schedularModal)
 					}
 				}], [{
 					label: 'Create contact',
@@ -80,8 +92,8 @@ export default {
 					}
 				]
 			],
+			page: {},
 
-			// agentId: "",
 			createModal: false,
 			scheduleModal: false,
 			schedularModal: false,
@@ -89,34 +101,24 @@ export default {
 		}
 	},
 
-	// watch: {
-	// 	agentDetails: {
-	// 		handler() {
-	// 			console.log("Agent details: ", this.agentDetails)
-	// 		},
-	// 		deep: true
-	// 	}
-	// },
-
 	computed: {
-		...mapState(useStore, ['agentDetails'])
+		...mapState(useStore, ['agentDetails']),
+
+		companyName() {
+			const { fullPath } = this.page
+
+			return fullPath?.split('/')[3]
+		},
 	},
 
 	methods: {
 		async deleteAllContacts() {
 			try {
-				// USe fetch
-
 				const response = await fetch(er`/deleteAll`, 'PATCH', {
 					agentId: this.agentDetails.id
 				});
-
-				// if (!response.ok) {
-				// 	throw new Error(`HTTP error! Status: ${response.status}`);
-				// }
-
 			} catch (err) {
-				//console.log(err);
+				//// console.log(err);
 			}
 		},
 
@@ -126,7 +128,7 @@ export default {
 					agentId: this.agentDetails.id
 				})
 			} catch (err) {
-				//console.log(err);
+				//// console.log(err);
 			}
 		},
 
@@ -140,7 +142,16 @@ export default {
 			arr.forEach((item) => {
 				newArr.push(item.email)
 			})
+		},
+
+		updatePageData() {
+			this.page = this.$route
+			// // console.log(this.$route)
 		}
+	},
+
+	mounted() {
+		this.updatePageData()
 	}
 }
 </script>
@@ -153,7 +164,23 @@ export default {
 		@apply flex justify-between items-center;
 
 		.Left {
-			@apply space-x-20;
+			@apply space-x-10;
+
+			.NavHeader {
+				/* @apply p-5 py-6 border-b border-[#E6E6E6]; */
+
+				a {
+					@apply text-2xl font-bold uppercase space-x-5;
+
+					.Image {
+						@apply w-10 h-10 rounded-full overflow-hidden bg-[#FAFAFA] border;
+
+						img {
+							@apply w-full h-full object-cover object-center;
+						}
+					}
+				}
+			}
 
 			.Logo {
 				a {

@@ -295,7 +295,7 @@ export default {
 				endDate
 			});
 
-			console.log("Response: ", response);
+			// console.log("Response: ", response);
 
 			this.users = response.dailyStats;
 			this.fetching = false;
@@ -344,16 +344,16 @@ export default {
 		},
 
 		debounce(func, delay) {
-			console.log("Debounce", this.timeoutId);
+			//console.log("Debounce", this.timeoutId);
 			// timeoutId;
 			return (...args) => {
 				const context = this;
-				console.log("Before", this.timeoutId);
+				//console.log("Before", this.timeoutId);
 				clearTimeout(this.timeoutId);
 				this.timeoutId = setTimeout(() => {
 					func.apply(context, args);
 				}, delay);
-				console.log("After", this.timeoutId);
+				//console.log("After", this.timeoutId);
 			};
 		},
 

@@ -12,15 +12,24 @@
 			</div>
 
 			<div class="Misc between">
-				<div class="Switches end">
+				<div class="DataDuration">
+					<Durations @fetchData="loadUsers" />
+
+					<!-- <UDropdown :items="durations" class="capitalize" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="tag ? tag : 'Tag to schedule'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="!capitalize" />
+					</UDropdown> -->
+				</div>
+
+				<!-- <div class="Switches end">
 					<button class="Switch active">
 						Overview
 					</button>
 
-					<!-- <button class="Switch">
+					<button class="Switch">
 						Analytics
-					</button> -->
-				</div>
+					</button>
+				</div> -->
 
 				<ExportLogs :agentId="agentDetails.id" :agentName="agentDetails.name" />
 			</div>
@@ -69,14 +78,20 @@
 						</div>
 					</div>
 
-					<UDropdown v-else-if="searchBy == 'sentiments' " :items="sentiments" :popper="{ placement: 'bottom-start' }">
+					<UDropdown v-else-if="searchBy == 'sentiments'" :items="sentiments" :popper="{ placement: 'bottom-start' }">
 						<UButton size="lg" color="white" :label="search ? search : 'Select Sentiment'"
 							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 					</UDropdown>
 
-					<UDropdown v-else-if="searchBy == 'statuses' " :items="statuses" :popper="{ placement: 'bottom-start' }">
+					<UDropdown v-else-if="searchBy == 'statuses'" :items="statuses" :popper="{ placement: 'bottom-start' }">
 						<UButton size="lg" color="white" :label="search ? search : 'Select Status'"
 							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+					</UDropdown>
+
+					<UDropdown v-else-if="searchBy == 'tags'" :items="tags" class="capitalize"
+						:popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="tag ? tag : 'Tag to schedule'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="!capitalize" />
 					</UDropdown>
 
 					<vue-date-picker v-model="date" @update:model-value="searchContactsByDate" mode="date" range
@@ -85,13 +100,13 @@
 			</div>
 
 			<div class="Tables">
-				<Table v-if="search == '' || searches.length == 0" :users="users" :searching="searching" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					@loadUsers="loadUsers" />
+				<Table v-if="useSearchTable" :users="searches" :searching="searching" :query="search" :totalPages="totalPages"
+					:page="page" :agentDetails="agentDetails" @paginate="paginate" :fetching="fetching"
+					@setTranscript="setTranscript" :searchBy="searchBy" @updateSearch="updateSearch" filter />
 
-				<Table v-else :users="searches" :searching="searching" :query="search" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					:searchBy="searchBy" @updateSearch="updateSearch" filter />
+				<Table v-else :users="users" :searching="searching" :totalPages="totalPages" :page="page"
+					:agentDetails="agentDetails" :currentDuration="currentDuration" @paginate="paginate" :fetching="fetching"
+					@setTranscript="setTranscript" @loadUsers="loadUsers" baseTable />
 			</div>
 		</div>
 
@@ -150,6 +165,7 @@ export default {
 			timerModal: false,
 			schedularModal: false,
 			batchDeleting: false,
+			currentDuration: "last-schedule",
 
 			transcript: {},
 			analyzedTranscript: {},
@@ -163,6 +179,8 @@ export default {
 			debounceTimeout: null,
 			timeoutId: 0,
 			searchBy: '',
+			tag: "",
+			tags: [[]],
 			searchItems: [
 				[{
 					label: 'Contacts',
@@ -178,12 +196,17 @@ export default {
 					label: 'Sentiments',
 					click: () => {
 						this.searchBy = 'sentiments'
-						console.log("Sentiments: ", this.searchBy);
+						// console.log("Sentiments: ", this.searchBy);
 					}
 				}, {
 					label: 'Statuses',
 					click: () => {
 						this.searchBy = 'statuses'
+					}
+				}], [{
+					label: "Tags",
+					click: () => {
+						this.searchBy = 'tags'
 					}
 				}]
 			],
@@ -217,6 +240,14 @@ export default {
 						label: 'Incomplete call',
 						click: () => {
 							this.search = 'incomplete-call'
+							this.searchBySentiment()
+						}
+					},
+
+					{
+						label: 'Call back',
+						click: () => {
+							this.search = 'call-back'
 							this.searchBySentiment()
 						}
 					},
@@ -288,43 +319,68 @@ export default {
 
 	computed: {
 		transcriptArray() {
-			// console.log("Stuff", this.transcript?.split("\n"));
+			// // console.log("Stuff", this.transcript?.split("\n"));
 			return this.transcript?.transcript?.split("\n")
 		},
+
+		useSearchTable() {
+			return this.search !== '' || this.tag !== '' || this.searches.length > 0
+		}
 	},
 
 	watch: {
 		fetching(val) {
-			console.log("Fetching: ", val);
+			// console.log("Fetching: ", val);
 		},
 
 		searches() {
-			console.log("From Name: ", this.searches)
+			// console.log("From Name: ", this.searches)
 		},
 
 		searchBy() {
 			this.search = "";
+
+			// console.log("Search By: ", this.searchBy);
+
+			if (this.searchBy === 'tags') {
+				this.getTags()
+			}
 		}
 	},
 
 	methods: {
-		async loadUsers(page) {
-			// const { logId1, logId2, logId3 } = logs;
+		async loadUsers(page, duration) {
 			this.fetching = true;
+			this.currentDuration = duration;
+
+			console.log("Page: ", duration);
+
+			if (duration) {
+				this.$toast.open({
+					message: `Fetching data for ${duration}...`,
+					type: 'info',
+					duration: 5000,
+					dismissible: true,
+					position: 'top'
+				});
+			}
 
 			const response = await fetcher(`/users/${this.agentDetails.id}`, "POST", {
 				limit: 100,
+				dateOption: duration ? duration : "last-schedule",
 				page: page ? page : this.page
 			});
 
-			console.log("Responserrrrrr: ", response);
+			if (duration) {
+				this.$toast.open({
+					message: `Fetched data for ${duration}...`,
+					type: 'success',
+					duration: 5000,
+					dismissible: true,
+					position: 'top'
+				});
+			}
 
-			// if (!response.ok) {
-			// 	throw new Error(`HTTP error! Status: ${response.status}`);
-			// 	return this.users = [];
-			// }
-
-			console.log("espanyol: ", response.result.contacts);
 			this.users = response.result.contacts;
 			this.totalPages = response.result.totalPages;
 			this.stats = {
@@ -340,49 +396,6 @@ export default {
 
 			if (page) this.page = page;
 			this.fetching = false;
-
-			// try {
-			// 	const response = await fetch(`https://intuitiveagents.io/users/${this.agentDetails.id}`, {
-			// 		method: "POST",
-			// 		body: JSON.stringify({
-			// 			limit: 100,
-			// 			page: page ? page : this.page
-			// 		}),
-			// 		headers: {
-			// 			"Content-Type": "application/json"
-			// 		}
-			// 	});
-
-			// 	if (!response.ok) {
-			// 		throw new Error(`HTTP error! Status: ${response.status}`);
-			// 		return this.users = [];
-			// 	}
-
-			// 	const users = await response.json(); // Parse the response body as JSON
-			// 	console.log("Response: ", users.result.contacts);
-
-			// 	this.users = users.result.contacts;
-			// 	this.totalPages = users.result.totalPages;
-			// 	this.stats = {
-			// 		totalContactForAgent: users.result.totalContactForAgent,
-			// 		totalCalledForAgent: users.result.totalCalledForAgent,
-			// 		totalNotCalledForAgent: users.result.totalNotCalledForAgent,
-			// 		failedCalls: users.result.failedCalls,
-			// 		vm: users.result.vm
-			// 	}
-			// 	if (page) this.page = page;
-			// 	// console.log("Total Pages: ", this.totalPages);
-			// 	this.fetching = false;
-			// 	// this.searching = false;
-			// } catch (error) {
-			// 	console.error("Error fetching data:", error);
-			// 	// Return an empty object or handle the error as needed
-			// 	this.users = [];
-			// }
-
-			// setInterval(() => {
-			// 	this.loadUsers()
-			// }, 15000);
 		},
 
 		async filterByDate() {
@@ -435,16 +448,16 @@ export default {
 		},
 
 		debounce(func, delay) {
-			console.log("Debounce", this.timeoutId);
+			// console.log("Debounce", this.timeoutId);
 			// timeoutId;
 			return (...args) => {
 				const context = this;
-				console.log("Before", this.timeoutId);
+				// console.log("Before", this.timeoutId);
 				clearTimeout(this.timeoutId);
 				this.timeoutId = setTimeout(() => {
 					func.apply(context, args);
 				}, delay);
-				console.log("After", this.timeoutId);
+				// console.log("After", this.timeoutId);
 			};
 		},
 
@@ -453,7 +466,7 @@ export default {
 			const debouncedSearchContact = this.debounce(async (searchTerm) => {
 				this.search = searchTerm;
 
-				if(this.search !== '') {
+				if (this.search !== '') {
 					this.$toast.open({
 						message: `Searching by ${this.searchBy} - ${this.search}`,
 						type: 'info',
@@ -468,7 +481,7 @@ export default {
 					this.loadUsers();
 					return;
 				} else if (this.searchBy === 'dates') {
-					console.log("Dates: ", this.date);
+					// console.log("Dates: ", this.date);
 					const response = await fetcher(`/search`, "POST", {
 						// searchTerm: this.search,
 						startDate: this.date[0],
@@ -476,10 +489,10 @@ export default {
 						agentId: this.agentDetails.id
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					this.searches = response;
 				} else if (this.searchBy === 'sentiments') {
-					
+
 					// this.$toast.info(`Searching by Sentiments - ${this.search}`, {
 					// 	timeout: 5000,
 					// 	position: 'top-center',
@@ -491,7 +504,7 @@ export default {
 						sentimentOption: this.search
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					this.searches = response;
 				} else if (this.searchBy === 'statuses') {
 					const response = await fetcher(`/search`, "POST", {
@@ -500,22 +513,22 @@ export default {
 						statusOption: this.search
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					this.searches = response;
 				} else {
 					const searchItemChars = this.search.split(" ")
 					if (searchItemChars[searchItemChars.length - 1] == '') {
-						// console.log("fake")
+						// // console.log("fake")
 						return
 					} else {
-						// console.log("Actual")
+						// // console.log("Actual")
 
 						const response = await fetcher(`/search`, "POST", {
 							searchTerm: this.search,
 							agentId: this.agentDetails.id
 						});
 
-						console.log("Search Response: ", response);
+						// console.log("Search Response: ", response);
 						this.searches = response;
 
 
@@ -532,7 +545,7 @@ export default {
 						// 	});
 
 						// 	const users = await response.json();
-						// 	console.log("Search Response: ", users);
+						// 	// console.log("Search Response: ", users);
 						// 	this.searches = users;
 						// } catch (error) {
 						// 	console.error("Error fetching data:", error);
@@ -545,7 +558,7 @@ export default {
 			// Call the debouncedSearchContact function with the search term from the input event
 			debouncedSearchContact(event.target.value);
 		},
-		
+
 		async searchContactsByDate() {
 			this.$toast.open({
 				message: `Searching by Dates - ${this.search}`,
@@ -555,15 +568,43 @@ export default {
 				position: 'top'
 			});
 
-			// console.log("Dates: ", this.date[0]);
-			const response = await fetcher(`/search`, "POST", {
-				startDate: this.date[0],
-				endDate: this.date[1],
-				agentId: this.agentDetails.id
-			});
+			try {
+				// Ensure dates and agentId are available
+				if (!this.date || !this.date[0] || !this.date[1]) {
+					throw new Error("Start date and end date are required.");
+				}
+				if (!this.agentDetails || !this.agentDetails.id) {
+					throw new Error("Agent ID is required.");
+				}
 
-			console.log("Search Response: ", response);
-			this.searches = response;
+				// Log dates for debugging
+				// console.log("Dates: ", this.date[0], this.date[1]);
+
+				// Perform the search request
+				const response = await fetcher(`/search`, "POST", {
+					startDate: this.date[0],
+					endDate: this.date[1],
+					agentId: this.agentDetails.id
+				});
+
+				// Log the response for debugging
+				// console.log("Search Response: ", response);
+
+				// Update searches state with the response
+				this.searches = response;
+
+			} catch (error) {
+				console.error("Error during search: ", error);
+
+				// Show error toast notification
+				this.$toast.open({
+					message: `Error: ${error.message}`,
+					type: 'error',
+					duration: 5000,
+					dismissible: true,
+					position: 'top'
+				});
+			}
 		},
 
 		async searchBySentiment() {
@@ -574,14 +615,14 @@ export default {
 				dismissible: true,
 				position: 'top'
 			});
-			
+
 			const response = await fetcher(`/search`, "POST", {
 				searchTerm: "",
 				agentId: this.agentDetails.id,
 				sentimentOption: this.search
 			});
 
-			console.log("Search Response: ", response);
+			// console.log("Search Response: ", response);
 			this.searches = response;
 		},
 
@@ -600,7 +641,7 @@ export default {
 				statusOption: this.search
 			});
 
-			console.log("Search Response: ", response);
+			// console.log("Search Response: ", response);
 			this.searches = response;
 		},
 
@@ -612,7 +653,7 @@ export default {
 			this.batchDeleting = true;
 			const ids = this.searches.map(user => user._id);
 
-			console.log("Batch Delete: ", ids);
+			// console.log("Batch Delete: ", ids);
 
 			try {
 				const response = await fetcher("/batch-delete-users", "POST", { contactsToDelete: ids })
@@ -637,7 +678,7 @@ export default {
 			// 	});
 
 			// 	const users = await response.json();
-			// 	console.log("Delete Response: ", users);
+			// 	// console.log("Delete Response: ", users);
 			// 	this.loadUsers();
 			// 	this.batchDeleting = false;
 			// 	this.search = "";
@@ -651,6 +692,61 @@ export default {
 			this.transcript = data;
 			this.analyzedTranscript = data.analyzedTranscript;
 		},
+
+		async getTags() {
+			this.$toast.open({
+				message: `Fetching tags...`,
+				type: 'info',
+				duration: 2000,
+				dismissible: true,
+				position: 'top'
+			});
+
+			const response = await fetcher("/get-tags")
+			// this.tags = response
+			this.$toast.open({
+				message: `Fetched tags successfully`,
+				type: 'success',
+				duration: 2000,
+				dismissible: true,
+				position: 'top'
+			});
+
+			response.forEach(tag => {
+				this.tags[0].push({
+					label: tag,
+					click: async () => {
+						this.tag = tag
+						this.fetching = true
+
+						this.$toast.open({
+							message: `Searching by Tag - ${this.tag}`,
+							type: 'info',
+							duration: 10000,
+							dismissible: true,
+							position: 'top'
+						});
+
+						const searchResponse = await fetcher(`/search`, "POST", {
+							searchTerm: "",
+							agentId: this.agentDetails.id,
+							tag
+						});
+
+						this.$toast.open({
+							message: `Search by Tag - ${this.tag} successful`,
+							type: 'success',
+							duration: 2000,
+							dismissible: true,
+							position: 'top'
+						});
+
+						// console.log("Search Response: ", searchResponse);
+						this.searches = searchResponse;
+					}
+				})
+			})
+		}
 	},
 
 	beforeMount() {

@@ -84,8 +84,8 @@ export default {
 		schedules() {
 			const filteredData = this.tempSchedules?.filter((schedule) => schedule.agentId === this.agentId);
 
-			console.log("AgentID: ", this.agentId)
-			console.log("filtered :", filteredData);
+			// // console.log("AgentID: ", this.agentId)
+			// // console.log("filtered :", filteredData);
 			return filteredData;
 		}
 	},
@@ -108,11 +108,11 @@ export default {
 				// )
 
 				const schedules = await response.json();
-				console.log("Schedules: ", schedules);
+				// // console.log("Schedules: ", schedules);
 				this.loading = false
 				this.tempSchedules = schedules.result;
 			} catch (error) {
-				console.log(error)
+				// // console.log(error)
 			}
 		},
 		
@@ -145,7 +145,7 @@ export default {
 			// 	// );
 
 
-			// 	// console.log(response);
+			// 	// // console.log(response);
 			// } catch (error) {
 			// 	console.error(error);
 			// }
@@ -158,7 +158,7 @@ export default {
 
 	mounted() {
 		this.getSchedules()
-		console.log("Get sched: ", this.agentId);
+		// console.log("Get sched: ", this.agentId);
 	}
 }
 </script>

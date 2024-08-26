@@ -81,7 +81,7 @@ export default {
 			this.updating = true;
 			try {
 				// Use fetch
-				console.log("Latest log: ", this.user, this.agentId);
+				//// console.log("Latest log: ", this.user, this.agentId);
 				const response = await fetcher(`/users/create`, 'POST', {
 					firstname: this.user.firstName,
 					email: this.user.email,
@@ -98,7 +98,7 @@ export default {
 				this.updating = false;
 				this.closeModal();
 			} catch (err) {
-				//console.log(err);
+				//// console.log(err);
 			}
 		},
 
@@ -108,8 +108,8 @@ export default {
 	},
 
 	mounted() {
-		console.log("Agent ID: ", this.agentId);
-		console.log("Agent Details 2: ", this.agentDetails);
+		// // console.log("Agent ID: ", this.agentId);
+		// // console.log("Agent Details 2: ", this.agentDetails);
 	}
 }
 </script>

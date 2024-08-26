@@ -19,7 +19,7 @@ export default {
 			this.lenis = new Lenis({ duration: 2 })
 
 			this.lenis.on('scroll', (e) => {
-				// console.log(e)
+				// // console.log(e)
 			})
 
 			const raf = (time) => {

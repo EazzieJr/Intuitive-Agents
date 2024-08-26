@@ -94,12 +94,12 @@ export default {
 	methods: {
 		async uploadFile() {
 			const formData = new FormData();
-			// console.log("Form Data: ", formData)
-			// console.log(Object.fromEntries(formData.entries()));
+			// // console.log("Form Data: ", formData)
+			// // console.log(Object.fromEntries(formData.entries()));
 			formData.append("csvFile", this.uploadedFiles);
 			// formData.append('day', this.day)
 
-			// console.log("Input File: ", this.uploadedFiles)
+			// // console.log("Input File: ", this.uploadedFiles)
 
 			const response = await fetch(`https://intuitiveagents.io/upload/${this.agentId}?tag=${this.day.toLowerCase()}`, {
 				method: "POST",
@@ -134,9 +134,9 @@ export default {
 			// 	toggleCreateModal();
 			// 	setUploadedFiles([]);
 
-			// 	//console.log("Response: ", response);
+			// 	//// console.log("Response: ", response);
 			// } catch (err) {
-			// 	//console.log(err);
+			// 	//// console.log(err);
 			// }
 		},
 

@@ -30,7 +30,7 @@ const fetcher = async (url, method = 'GET', data = null, headers = defaultHeader
 			throw new Error(responseData.message || 'Something went wrong!');
 		}
 
-		console.log('Response Data', response);
+		// console.log('Response Data', response);
 		return responseData;
 	} catch (error) {
 		throw new Error(error.message || 'Something went wrong!');

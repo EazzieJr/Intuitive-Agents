@@ -12,7 +12,7 @@ export const useStore = defineStore({
 					// 	alias: "Virtual Help Desk"
 					// },
 					{
-						name: "Olivia",
+						name: "olivia",
 						alias: "Virtual Team Expert"
 					},
 					// {
@@ -22,15 +22,15 @@ export const useStore = defineStore({
 				]
 			},
 
-			{
-				name: "Be + well",
-				agents: [
-					{
-						name: "katherine",
-						alias: "Katherine"
-					}
-				]
-			}
+			// {
+			// 	name: "Be + well",
+			// 	agents: [
+			// 		{
+			// 			name: "katherine",
+			// 			alias: "Katherine"
+			// 		}
+			// 	]
+			// }
 		],
 
 		agentDetails: {},
@@ -46,7 +46,7 @@ export const useStore = defineStore({
 	actions: {
 		// Define your store actions here
 		signIn() {
-			console.log('signing in')
+			// console.log('signing in')
 		}
 	},
 })

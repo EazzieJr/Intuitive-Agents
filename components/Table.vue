@@ -285,6 +285,12 @@ export default {
 		searchBy: {
 			type: String
 		},
+		baseTable: {
+			type: Boolean
+		},
+		currentDuration: {
+			type: String
+		}
 	},
 
 	data() {
@@ -323,7 +329,7 @@ export default {
 		},
 
 		user() {
-			console.log("From table: ", this.user)
+			// console.log("From table: ", this.user)
 		}
 	},
 
@@ -377,8 +383,8 @@ export default {
 			this.modalOpened = !this.modalOpened;
 		},
 
-		loadUsers(page) {
-			this.$emit("loadUsers", page)
+		loadUsers(page, duration) {
+			this.$emit("loadUsers", page, duration);
 		},
 
 		async updateContact() {
@@ -410,10 +416,11 @@ export default {
 					fromNumber: this.agentDetails.number,
 					toNumber: phone,
 					userId: _id,
-					agentId: this.agentDetails.id
+					// agentId: this.agentDetails.id
+					agentId: "9a58be689b142d884b6a1fdbf9db9f16"
 				});
 
-				//console.log("Response: ", response);
+				//// console.log("Response: ", response);
 			} catch (err) {
 				console.error(err);
 			}
@@ -454,7 +461,11 @@ export default {
 					id: user._id
 				});
 
-				this.searchContact();
+				if (this.baseTable) {
+					this.loadUsers(this.page, this.currentDuration);
+				} else {
+					this.searchContact();
+				}
 			} catch (err) {
 				console.error(err);
 			}
@@ -464,14 +475,14 @@ export default {
 			let newSearchData;
 			try {
 				if (this.searchBy === 'dates') {
-					console.log("Dates: ", this.date);
+					// console.log("Dates: ", this.date);
 					const response = await fetcher(`/search`, "POST", {
 						startDate: this.date[0],
 						endDate: this.date[1],
 						agentId: this.agentDetails.id
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					newSearchData = response;
 				} else if (this.searchBy === 'sentiments') {
 					const response = await fetcher(`/search`, "POST", {
@@ -480,7 +491,7 @@ export default {
 						sentimentOption: this.query
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					newSearchData = response;
 				} else if (this.searchBy === 'statuses') {
 					const response = await fetcher(`/search`, "POST", {
@@ -489,7 +500,7 @@ export default {
 						statusOption: this.query
 					});
 
-					console.log("Search Response: ", response);
+					// console.log("Search Response: ", response);
 					newSearchData = response;
 				} else {
 					const searchItemChars = this.query.split(" ")
@@ -501,12 +512,12 @@ export default {
 							agentId: this.agentDetails.id
 						});
 
-						console.log("Search Response: ", response);
+						// console.log("Search Response: ", response);
 						newSearchData = response;
 					}
 				}
 
-				console.log('Search Response: ', newSearchData);
+				// console.log('Search Response: ', newSearchData);
 				this.$emit('updateSearch', newSearchData);
 			} catch (error) {
 				console.error('Error fetching data:', error);
@@ -515,7 +526,7 @@ export default {
 		},
 
 		paginate(page) {
-			console.log(page);
+			// console.log(page);
 			this.$emit("paginate", page)
 		},
 
@@ -541,7 +552,7 @@ export default {
 		},
 
 		getSentiment(user) {
-			// console.log("Searching: ", user?.referenceToCallId)
+			// // console.log("Searching: ", user?.referenceToCallId)
 			return this.filter ? user?.referenceToCallId?.analyzedTranscript : user?.analyzedTranscript ? user?.analyzedTranscript : "Unavailable"
 		},
 	},

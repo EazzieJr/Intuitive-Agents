@@ -7,19 +7,15 @@
 				<div class="NavHeader start">
 					<NuxtLink to="/" class="start">
 						<div class="Image">
-							<img :src="`/images/companies/${companyName}.png`" alt="">
+							<img :src="`/svg/intuitive-logo.svg`" alt="">
 						</div>
-
-						<span>
-							{{ companyName?.split('-').join(' ')}}
-						</span>
 					</NuxtLink>
 				</div>
 
 				<div class="NavLinks">
-					<NuxtLink class="NavLink" v-for="company in selectedCompany?.agents" :key="company.name"
+					<NuxtLink class="NavLink" :class="{ 'active': agentParams === company.name.toLowerCase()}" v-for="company in selectedCompany?.agents" :key="company.name"
 						:to="`/dashboard/company/${companyName}/${company.name}`">
-					{{ company.alias }}
+						{{ company.alias }}
 					</NuxtLink>
 				</div>
 			</div>
@@ -49,13 +45,17 @@ export default {
 
 		companyName() {
 			const { fullPath } = this.page
-			// console.log(fullPath?.split('/')[3])
+			// // console.log(fullPath?.split('/')[3])
 
 			return fullPath?.split('/')[3]
 		},
 
 		selectedCompany() {
 			return this.companies.find((company) => company.name.toLowerCase().split(' ').join('-') === this.companyName)
+		},
+
+		agentParams() {
+			return this.$route.params.name
 		}
 	},
 
@@ -70,7 +70,7 @@ export default {
 			this.lenis = new Lenis({ duration: 2 })
 
 			this.lenis.on('scroll', (e) => {
-				// console.log(e)
+				// // console.log(e)
 			})
 
 			const raf = (time) => {
@@ -83,11 +83,12 @@ export default {
 
 		updatePageData() {
 			this.page = this.$route
-			// console.log(this.$route)
+			// // console.log(this.$route)
 		}
 	},
 
 	mounted() {
+		// console.log('Exact', this.agentParams)
 		this.updatePageData()
 	}
 }
@@ -106,10 +107,11 @@ export default {
 					@apply text-2xl font-bold uppercase space-x-5;
 
 					.Image {
-						@apply w-10 h-10 rounded-full overflow-hidden bg-[#FAFAFA] border;
+						/* @apply w-10 h-10 rounded-full overflow-hidden bg-[#FAFAFA] border; */
 
 						img {
-							@apply w-full h-full object-cover object-center;
+							@apply w-48;
+							/* @apply w-full h-full object-cover object-center; */
 						}
 					}
 				}
@@ -119,9 +121,13 @@ export default {
 				@apply space-y-2.5 p-5 py-10;
 
 				.NavLink {
-					@apply rounded-xl block px-2.5 py-2  text-base font-medium text-[#333333];
+					@apply rounded-xl block px-2.5 py-2 text-base font-medium text-[#333333];
 
 					&.router-link-exact-active {
+						@apply bg-[#F3F4F6]
+					}
+
+					&.active {
 						@apply bg-[#F3F4F6]
 					}
 				}
