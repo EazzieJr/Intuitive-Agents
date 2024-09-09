@@ -13,7 +13,7 @@
 				</div>
 
 				<div class="NavLinks">
-					<NuxtLink class="NavLink" :class="{ 'active': agentParams === company.name.toLowerCase()}" v-for="company in selectedCompany?.agents" :key="company.name"
+					<NuxtLink class="NavLink" :class="{ active: agentParams === company.name.toLowerCase()}" v-for="company in selectedCompany?.agents" :key="company.name"
 						:to="`/dashboard/company/${companyName}/${company.name}`">
 						{{ company.alias }}
 					</NuxtLink>
