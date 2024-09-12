@@ -211,6 +211,52 @@ export default {
 				}]
 			],
 
+			sentiment: "",
+			sentimentOptions: [
+				[
+					{
+						label: 'Scheduled',
+						click: () => {
+							this.sentiment = 'scheduled'
+						}
+					},
+					{
+						label: 'Interested',
+						click: () => {
+							this.sentiment = 'interested'
+						}
+					},
+
+					{
+						label: 'Uninterested',
+						click: () => {
+							this.sentiment = 'uninterested'
+						}
+					},
+
+					{
+						label: 'Incomplete call',
+						click: () => {
+							this.sentiment = 'incomplete-call'
+						}
+					},
+
+					{
+						label: 'Call back',
+						click: () => {
+							this.sentiment = 'call-back'
+						}
+					},
+
+					{
+						label: 'Voicemail',
+						click: () => {
+							this.sentiment = 'voicemail'
+						}
+					}
+				]
+			],
+
 			sentiments: [
 				[
 					{

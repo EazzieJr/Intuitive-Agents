@@ -239,9 +239,9 @@
 								placeholder="Phone Number" />
 						</div>
 
-						<UDropdown :items="dropdownItems(user)" mode=hover
-							:popper="{ offsetDistance: 0, placement: 'bottom-start' }">
-							<UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
+						<UDropdown :items="sentiments" :popper="{ placement: 'bottom-start' }">
+							<UButton size="lg" color="white" :label="user.sentiment ? user.sentiment : 'None'"
+								trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 						</UDropdown>
 					</div>
 
@@ -305,7 +305,8 @@ export default {
 				lastName: "",
 				email: "",
 				phone: "",
-				id: ""
+				id: "",
+				sentiment: "",
 			},
 			formType: "",
 			stats: null,
@@ -316,47 +317,46 @@ export default {
 			showTranscript: false,
 			showSummary: false,
 			deleting: {},
-			sentiment: "",
 			sentiments: [
 				[
 					{
 						label: 'Scheduled',
 						click: () => {
-							this.sentiment = 'scheduled'
+							this.user.sentiment = 'scheduled'
 						}
 					},
 					{
 						label: 'Interested',
 						click: () => {
-							this.sentiment = 'interested'
+							this.user.sentiment = 'interested'
 						}
 					},
 
 					{
 						label: 'Uninterested',
 						click: () => {
-							this.sentiment = 'uninterested'
+							this.user.sentiment = 'uninterested'
 						}
 					},
 
 					{
 						label: 'Incomplete call',
 						click: () => {
-							this.sentiment = 'incomplete-call'
+							this.user.sentiment = 'incomplete-call'
 						}
 					},
 
 					{
 						label: 'Call back',
 						click: () => {
-							this.sentiment = 'call-back'
+							this.user.sentiment = 'call-back'
 						}
 					},
 
 					{
 						label: 'Voicemail',
 						click: () => {
-							this.sentiment = 'voicemail'
+							this.user.sentiment = 'voicemail'
 						}
 					}
 				]
@@ -421,13 +421,18 @@ export default {
 			if (user) {
 				const { _id, phone, firstname, lastname, email } = user;
 
+				console.log("USer:", user, this.getSentiment(user))
+
 				this.user = {
 					id: _id,
 					firstName: firstname,
 					lastName: lastname,
+					sentiment: this.getSentiment(user),
 					email,
 					phone
 				}
+
+				console.log("this user", this.user)
 			}
 
 			this.modalOpened = !this.modalOpened;
@@ -438,13 +443,14 @@ export default {
 		},
 
 		async updateContact() {
-			const { email, firstName, lastName, phone, id } = this.user;
+			const { email, firstName, lastName, phone, id, sentiment } = this.user;
 			try {
 				await fetcher('/users/update', 'PATCH', {
 					id,
 					fields: {
 						firstname: firstName,
 						lastname: lastName,
+						analyzedTranscript: sentiment,
 						email,
 						phone,
 					}
