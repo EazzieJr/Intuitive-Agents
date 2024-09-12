@@ -14,23 +14,8 @@
 			<div class="Misc between">
 				<div class="DataDuration">
 					<Durations @fetchData="loadUsers" />
-
-					<!-- <UDropdown :items="durations" class="capitalize" :popper="{ placement: 'bottom-start' }">
-						<UButton size="lg" color="white" :label="tag ? tag : 'Tag to schedule'"
-							trailing-icon="i-heroicons-chevron-down-20-solid" class="!capitalize" />
-					</UDropdown> -->
 				</div>
-
-				<!-- <div class="Switches end">
-					<button class="Switch active">
-						Overview
-					</button>
-
-					<button class="Switch">
-						Analytics
-					</button>
-				</div> -->
-
+				
 				<ExportLogs :agentId="agentDetails.id" :agentName="agentDetails.name" />
 			</div>
 
