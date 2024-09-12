@@ -112,7 +112,7 @@
 					<p>
 						{{ fetching ? "Fetching table data" :
 						filter ? "No result for your search" :
-							"No Available Contact on this agent" }}
+						"No Available Contact on this agent" }}
 					</p>
 				</div>
 			</div>
@@ -147,10 +147,10 @@
 			<div class="Popup relative rounded-3xl bg-white p-5 lg:p-7 flex flex-col items-center w-full max-w-[400px]">
 				<h3 class="font-bold text-2xl">
 					{{ formType === "create" ?
-						"Create a new contact" :
-						formType === "upload" ?
-							"Upload CSV file" :
-							"Update contact details" }}
+					"Create a new contact" :
+					formType === "upload" ?
+					"Upload CSV file" :
+					"Update contact details" }}
 				</h3>
 
 				<button class="Close absolute right-5 top-5" @click="closeModal">
@@ -238,6 +238,11 @@
 							<input class=" py-3 px-2.5 focus:outline-none w-full" type="phone" v-model="user.phone"
 								placeholder="Phone Number" />
 						</div>
+
+						<UDropdown :items="dropdownItems(user)" mode=hover
+							:popper="{ offsetDistance: 0, placement: 'bottom-start' }">
+							<UButton color="white" label="Actions" trailing-icon="i-heroicons-chevron-down-20-solid" />
+						</UDropdown>
 					</div>
 
 					<button @click="updateContact"
@@ -311,6 +316,51 @@ export default {
 			showTranscript: false,
 			showSummary: false,
 			deleting: {},
+			sentiment: "",
+			sentiments: [
+				[
+					{
+						label: 'Scheduled',
+						click: () => {
+							this.sentiment = 'scheduled'
+						}
+					},
+					{
+						label: 'Interested',
+						click: () => {
+							this.sentiment = 'interested'
+						}
+					},
+
+					{
+						label: 'Uninterested',
+						click: () => {
+							this.sentiment = 'uninterested'
+						}
+					},
+
+					{
+						label: 'Incomplete call',
+						click: () => {
+							this.sentiment = 'incomplete-call'
+						}
+					},
+
+					{
+						label: 'Call back',
+						click: () => {
+							this.sentiment = 'call-back'
+						}
+					},
+
+					{
+						label: 'Voicemail',
+						click: () => {
+							this.sentiment = 'voicemail'
+						}
+					}
+				]
+			],
 			moment
 		}
 	},
