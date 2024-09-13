@@ -246,8 +246,12 @@
 					</div>
 
 					<button @click="updateContact"
-						class="Submit py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full mt-10">
-						Update
+						class="Submit py-3 px-5 rounded-lg text-sm font-medium bg-black text-white w-full mt-10 center">
+						<span v-if="!updating">
+							Update
+						</span>
+
+						<img class="animate-spin duration-1000 py-1 w-4" v-else src="/svg/loading.svg" alt="">
 					</button>
 				</form>
 			</div>
@@ -322,20 +326,20 @@ export default {
 					{
 						label: 'Scheduled',
 						click: () => {
-							this.user.sentiment = 'scheduled'
+							this.user.sentiment = 'Scheduled'
 						}
 					},
 					{
 						label: 'Interested',
 						click: () => {
-							this.user.sentiment = 'interested'
+							this.user.sentiment = 'Interested'
 						}
 					},
 
 					{
 						label: 'Uninterested',
 						click: () => {
-							this.user.sentiment = 'uninterested'
+							this.user.sentiment = 'Uninterested'
 						}
 					},
 
@@ -419,7 +423,7 @@ export default {
 			}
 
 			if (user) {
-				const { _id, phone, firstname, lastname, email } = user;
+				const { _id, phone, firstname, lastname, email, referenceToCallId } = user;
 
 				console.log("USer:", user, this.getSentiment(user))
 
@@ -428,6 +432,7 @@ export default {
 					firstName: firstname,
 					lastName: lastname,
 					sentiment: this.getSentiment(user),
+					referenceToCallId,
 					email,
 					phone
 				}
@@ -443,25 +448,52 @@ export default {
 		},
 
 		async updateContact() {
-			const { email, firstName, lastName, phone, id, sentiment } = this.user;
+			const { email, firstName, lastName, phone, id, sentiment, referenceToCallId } = this.user;
+
+			this.updating = true
+
 			try {
-				await fetcher('/users/update', 'PATCH', {
-					id,
-					fields: {
-						firstname: firstName,
-						lastname: lastName,
-						analyzedTranscript: sentiment,
-						email,
-						phone,
-					}
+				await fetcher('/update/metadata', 'POST', {
+					updates: [
+						{
+							id,
+							updateFields: {
+								firstname: firstName,
+								lastname: lastName,
+								email, phone,
+								referencetocallid: {
+									id: referenceToCallId._id,
+									updateFields: {
+										analyzedTranscript: sentiment
+									}
+								}
+							}
+						}
+					]
+				});
+
+				this.$toast.open({
+					message: 'Update successful',
+					type: 'success',
+					duration: 2000,
+					dismissible: true,
+					position: 'top'
 				});
 
 				this.searchContact();
-				// this.loadUsers(this.page);
+				this.updating = false
 
 				this.toggleCreateModal();
 			} catch (err) {
 				console.error(err);
+				this.$toast.open({
+					message: 'An error occured',
+					type: 'error',
+					duration: 2000,
+					dismissible: true,
+					position: 'top'
+				});
+				this.updating = false
 			}
 		},
 
