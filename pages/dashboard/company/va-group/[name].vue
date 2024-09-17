@@ -418,7 +418,7 @@ export default {
 				totalContactForAgent: response.result.totalContactForAgent,
 				totalCalledForAgent: response.result.totalCalls,
 				totalNotCalledForAgent: response.result.totalNotCalledForAgent,
-				totalCallsFailed: response.result.totalCallsFailed,
+				totalFailedCalls: response.result.totalFailedCalls,
 				totalAnsweredByVm: response.result.totalAnsweredByVm,
 				totalAnsweredCalls: response.result.totalAnsweredCalls,
 				totalCallsTransffered: response.result.totalCallsTransffered,
