@@ -25,7 +25,7 @@
 				<SmallTileCard title="Total Not Called" icon="total-not-called" :value="stats?.totalNotCalledForAgent || 0" />
 				<SmallTileCard title="Total Answered: VM/AM" icon="total-answered-vm-am"
 					:value="stats?.totalAnsweredByVm || 0" />
-				<SmallTileCard title="Total Calls: Failed" icon="total-calls-failed" :value="stats?.totalCallsFailed || 0" />
+				<SmallTileCard title="Total Calls: Failed" icon="total-calls-failed" :value="stats?.totalFailedCalls || 0" />
 				<SmallTileCard title="Total Calls Connected" icon="total-answered-contacts"
 					:value="stats?.totalAnsweredCalls || 0" />
 				<SmallTileCard title="Total calls: Transferred" icon="total-calls-transferred"
