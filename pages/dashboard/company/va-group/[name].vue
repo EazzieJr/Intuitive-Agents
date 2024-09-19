@@ -331,7 +331,7 @@ export default {
 						label: 'Called-NA-VM',
 						click: () => {
 							this.search = 'called-na-vm'
-							this.searchByStatuses()
+							this.searchByStatuses()``
 						}
 					},
 
@@ -467,9 +467,9 @@ export default {
 			} else if (name == "chloe") {
 				this.agentDetails = {
 					name: "Chloe",
-					alias: "Remote Solutions Team",
-					id: "0411eeeb12d17a340941e91a98a766d0",
-					number: "+17025533532"
+					alias: "Arrow Roofing Services",
+					id: "agent_d3c051ae4598c2423e59526ec8",
+					number: "+17347498637"
 				}
 			}
 
