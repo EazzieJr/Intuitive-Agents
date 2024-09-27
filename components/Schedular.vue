@@ -128,7 +128,9 @@ export default {
 				position: 'top'
 			});
 
-			const response = await fetcher("/get-tags")
+			const response = await fetcher("/get-tags", "POST", {
+				agentId: this.agentDetails.id
+			})
 			// this.tags = response
 			this.$toast.open({
 				message: `Fetched tags successfully`,
@@ -138,11 +140,44 @@ export default {
 				position: 'top'
 			});
 
-			response.forEach(tag => {
+
+			response.payload.forEach(tag => {
+				const tagExists = this.tags[0].some(existingTag => existingTag.label === tag);
+
+				if (tagExists) {
+					console.log("Tag already exists, returning");
+					return; // Skip if the tag already exists
+				}
 				this.tags[0].push({
 					label: tag,
-					click: () => {
+					click: async () => {
 						this.tag = tag
+						this.fetching = true
+
+						this.$toast.open({
+							message: `Searching by Tag - ${this.tag}`,
+							type: 'info',
+							duration: 10000,
+							dismissible: true,
+							position: 'top'
+						});
+
+						const searchResponse = await fetcher(`/search`, "POST", {
+							searchTerm: "",
+							agentId: this.agentDetails.id,
+							tag
+						});
+
+						this.$toast.open({
+							message: `Search by Tag - ${this.tag} successful`,
+							type: 'success',
+							duration: 2000,
+							dismissible: true,
+							position: 'top'
+						});
+
+						// console.log("Search Response: ", searchResponse);
+						this.searches = searchResponse;
 					}
 				})
 			})
