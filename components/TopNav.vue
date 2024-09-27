@@ -113,6 +113,7 @@ export default {
 
 	methods: {
 		async deleteAllContacts() {
+			console.log("deleting");
 			try {
 				const response = await fetch(er`/deleteAll`, 'PATCH', {
 					agentId: this.agentDetails.id

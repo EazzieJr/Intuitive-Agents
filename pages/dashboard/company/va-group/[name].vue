@@ -468,7 +468,7 @@ export default {
 				this.agentDetails = {
 					name: "Chloe",
 					alias: "Arrow Roofing Services",
-					id: "agent_d3c051ae4598c2423e59526ec8",
+					id: "agent_994b2edd92765094d0fcb2703d",
 					number: "+17347498637"
 				}
 			}
@@ -733,7 +733,9 @@ export default {
 				position: 'top'
 			});
 
-			const response = await fetcher("/get-tags")
+			const response = await fetcher("/get-tags", "POST", {
+				agentId: this.agentDetails.id
+			})
 			// this.tags = response
 			this.$toast.open({
 				message: `Fetched tags successfully`,
@@ -743,7 +745,14 @@ export default {
 				position: 'top'
 			});
 
-			response.forEach(tag => {
+			
+			response.payload.forEach(tag => {
+				const tagExists = this.tags[0].some(existingTag => existingTag.label === tag);
+	
+				if (tagExists) {
+					console.log("Tag already exists, returning");
+					return; // Skip if the tag already exists
+				}
 				this.tags[0].push({
 					label: tag,
 					click: async () => {
