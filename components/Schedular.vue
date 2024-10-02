@@ -129,7 +129,7 @@ export default {
 			});
 
 			const response = await fetcher("/get-tags", "POST", {
-				agentId: this.agentDetails.id
+				agentId: this.agentId
 			})
 			// this.tags = response
 			this.$toast.open({
@@ -161,23 +161,6 @@ export default {
 							dismissible: true,
 							position: 'top'
 						});
-
-						const searchResponse = await fetcher(`/search`, "POST", {
-							searchTerm: "",
-							agentId: this.agentDetails.id,
-							tag
-						});
-
-						this.$toast.open({
-							message: `Search by Tag - ${this.tag} successful`,
-							type: 'success',
-							duration: 2000,
-							dismissible: true,
-							position: 'top'
-						});
-
-						// console.log("Search Response: ", searchResponse);
-						this.searches = searchResponse;
 					}
 				})
 			})
