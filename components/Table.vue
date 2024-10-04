@@ -548,6 +548,15 @@ export default {
 					id: user._id
 				});
 
+				console.log("Contact deleted")
+				this.$toast.open({
+					message: 'Contact deleted',
+					type: 'success',
+					duration: 2000,
+					dismissible: true,
+					position: 'top'
+				});
+
 				if (this.baseTable) {
 					this.loadUsers(this.page, this.currentDuration);
 				} else {
