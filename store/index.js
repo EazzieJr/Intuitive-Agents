@@ -14,6 +14,10 @@ export const useStore = defineStore({
 					{
 						name: "chloe",
 						alias: "Arrow Roofing Services"
+					},
+					{
+						name: "daniel",
+						alias: "Global Strategic Alliance"
 					}
 				]
 			},

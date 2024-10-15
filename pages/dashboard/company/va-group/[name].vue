@@ -41,7 +41,7 @@
 				</h2>
 
 				<div class="Actions start space-x-2.5">
-					<button v-if="search"
+					<button v-if="search || searchBy == 'tags'"
 						class="BatchDelete center py-2.5 w-[160px] rounded-lg bg-red-600 text-white font-medium text-sm"
 						@click="batchDelete">
 						<span v-if="!batchDeleting">
@@ -93,6 +93,10 @@
 					:agentDetails="agentDetails" :currentDuration="currentDuration" @paginate="paginate" :fetching="fetching"
 					@setTranscript="setTranscript" @loadUsers="loadUsers" baseTable />
 			</div>
+		</div>
+
+		<div class="SideDialogue">
+
 		</div>
 
 		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="closeTranscript">
@@ -452,10 +456,10 @@ export default {
 
 			if (name == "daniel") {
 				this.agentDetails = {
-					name: "Daniel",
-					alias: "Virtual Help Desk",
-					id: "86f0db493888f1da69b7d46bfaecd360",
-					number: "+17026209498"
+					name: "Chloe",
+					alias: "Global Strategic Alliance",
+					id: "agent_06e79f76e9952c7f4ec72f82f6",
+					number: "+19843422762"
 				}
 			} else if (name == "olivia") {
 				this.agentDetails = {
@@ -468,7 +472,7 @@ export default {
 				this.agentDetails = {
 					name: "Chloe",
 					alias: "Arrow Roofing Services",
-					id: "agent_994b2edd92765094d0fcb2703d",
+					id: "agent_7cc8f816b0fd2c020037ec31b5",
 					number: "+17347498637"
 				}
 			}
@@ -684,39 +688,32 @@ export default {
 			this.batchDeleting = true;
 			const ids = this.searches.map(user => user._id);
 
-			// console.log("Batch Delete: ", ids);
-
 			try {
 				const response = await fetcher("/batch-delete-users", "POST", { contactsToDelete: ids })
 
+				this.$toast.open({
+					message: 'Batch deletee successful',
+					type: 'success',
+					duration: 2000,
+					dismissible: true,
+					position: 'top'
+				})
+				
 				this.loadUsers();
 				this.batchDeleting = false;
 				this.search = "";
+				this.searches = []
 			} catch (error) {
-				console.error("Error fetching data:", error);
 				this.batchDeleting = false
+
+				this.$toast.open({
+					message: 'A problem occured, try again later.',
+					type: 'error',
+					duration: 2000,
+					dismissible: true,
+					position: 'top'
+				})
 			}
-
-			// try {
-			// 	const response = await fetch(`https://intuitiveagents.io/batch-delete-users`, {
-			// 		method: "POST",
-			// 		body: JSON.stringify({
-			// 			contactsToDelete: ids
-			// 		}),
-			// 		headers: {
-			// 			"Content-Type": "application/json"
-			// 		}
-			// 	});
-
-			// 	const users = await response.json();
-			// 	// console.log("Delete Response: ", users);
-			// 	this.loadUsers();
-			// 	this.batchDeleting = false;
-			// 	this.search = "";
-			// } catch (error) {
-			// 	console.error("Error fetching data:", error);
-			// 	this.batchDeleting = false;
-			// }
 		},
 
 		setTranscript(data) {
@@ -960,6 +957,10 @@ export default {
 				}
 			}
 		}
+	}
+
+	.SideDialogue {
+		@apply fixed inset-y-0 right-0 w-[500px] bg-white
 	}
 }
 </style>
