@@ -18,7 +18,7 @@ const fetcher = async (url, method = 'GET', data = null, headers = defaultHeader
 	// }
 
 	try {
-		const response = await fetch(`https://intuitiveagents.io${url}`, {
+		const response = await fetch(`https://intuitiveagents.ai${url}`, {
 			method,
 			headers,
 			body: data && JSON.stringify(data),

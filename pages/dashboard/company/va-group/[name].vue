@@ -15,7 +15,7 @@
 				<div class="DataDuration">
 					<Durations @fetchData="loadUsers" />
 				</div>
-				
+
 				<ExportLogs :agentId="agentDetails.id" :agentName="agentDetails.name" />
 			</div>
 
@@ -95,9 +95,7 @@
 			</div>
 		</div>
 
-		<div class="SideDialogue">
-
-		</div>
+		<!-- <div class="SideDialogue"></div> -->
 
 		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="closeTranscript">
 			<div class="Popup">
@@ -568,7 +566,7 @@ export default {
 
 
 						// try {
-						// 	const response = await fetch(`https://intuitiveagents.io/search`, {
+						// 	const response = await fetch(`https://intuitiveagents.ai/search`, {
 						// 		method: "POST",
 						// 		body: JSON.stringify({
 						// 			searchTerm: this.search,
@@ -698,7 +696,7 @@ export default {
 					dismissible: true,
 					position: 'top'
 				})
-				
+
 				this.loadUsers();
 				this.batchDeleting = false;
 				this.search = "";
@@ -742,10 +740,10 @@ export default {
 				position: 'top'
 			});
 
-			
+
 			response.payload.forEach(tag => {
 				const tagExists = this.tags[0].some(existingTag => existingTag.label === tag);
-	
+
 				if (tagExists) {
 					console.log("Tag already exists, returning");
 					return; // Skip if the tag already exists

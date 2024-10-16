@@ -1,6 +1,5 @@
 <template>
-	<div
-		class="SchedularModel bg-black bg-opacity-20 fixed top-0 bottom-0 left-0 right-0 center">
+	<div class="SchedularModel bg-black bg-opacity-20 fixed top-0 bottom-0 left-0 right-0 center">
 		<div class="Popup relative rounded-3xl bg-white p-5 lg:p-7 flex flex-col items-center w-full max-w-[400px]">
 			<h3 class="font-bold text-2xl text-center">Schedules</h3>
 
@@ -50,7 +49,8 @@
 							</button>
 						</div>
 
-						<div v-if="!loading && schedules?.length === 0" class="NoSchedule h-[100px] w-full flex items-center justify-center">
+						<div v-if="!loading && schedules?.length === 0"
+							class="NoSchedule h-[100px] w-full flex items-center justify-center">
 							<span class="block text-sm font-semibold text-black">
 								No Schedule Available
 							</span>
@@ -98,7 +98,7 @@ export default {
 				this.tempSchedules = response.result;
 				this.loading = false
 				// const response = await fetch(
-				// 	"https://intuitiveagents.io/schedules/get",
+				// 	"https://intuitiveagents.ai/schedules/get",
 				// 	{
 				// 		method: "GET",
 				// 		headers: {
@@ -115,15 +115,15 @@ export default {
 				console.log(error)
 			}
 		},
-		
+
 		async endSchedule(jobId, status) {
-			const response = await fetcher(status.toLowerCase() === "calling" ? "/stop-job" : "/cancel-schedule", "POST", {jobId})
-			
+			const response = await fetcher(status.toLowerCase() === "calling" ? "/stop-job" : "/cancel-schedule", "POST", { jobId })
+
 			// try {
 			// 	// Use fetch
 
 			// 	const response = await fetch(
-			// 		`https://intuitiveagents.io/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"}`,
+			// 		`https://intuitiveagents.ai/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"}`,
 			// 		{
 			// 			method: "POST",
 			// 			headers: {
@@ -137,7 +137,7 @@ export default {
 
 			// 	const schedules = await response.json();
 			// 	// const response = await axios.post(
-			// 	// 	`https://intuitiveagents.io/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"
+			// 	// 	`https://intuitiveagents.ai/${status.toLowerCase() === "calling" ? "stop-job" : "cancel-schedule"
 			// 	// 	}`,
 			// 	// 	{
 			// 	// 		jobId,
@@ -163,5 +163,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

@@ -110,7 +110,7 @@ export default {
 			const token = Cookies.get('token')
 
 			try {
-				const response = await fetch(`https://intuitiveagents.io/call-logs-csv`, {
+				const response = await fetch(`https://intuitiveagents.ai/call-logs-csv`, {
 					method: "POST",
 					body: JSON.stringify({
 						agentId: this.agentId,
@@ -132,7 +132,7 @@ export default {
 
 				const logs = await response.text();
 				const blob = new Blob([logs], { type: "text/csv;charset=utf-8" });
-				Filesaver.saveAs(blob, `${statusOption ? statusOption :sentimentOption ? sentimentOption : 'Call'}-logs-${this.agentName == 'Olivia' ? 'TVAG' : this.agentName}-${date}.csv`);
+				Filesaver.saveAs(blob, `${statusOption ? statusOption : sentimentOption ? sentimentOption : 'Call'}-logs-${this.agentName == 'Olivia' ? 'TVAG' : this.agentName}-${date}.csv`);
 				this.exporting = false;
 			} catch (error) {
 				console.error("Error fetching data:", error);

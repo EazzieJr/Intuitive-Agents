@@ -63,8 +63,8 @@
 				<div class="Actions start space-x-5">
 					<div class="Search start">
 						<div class="Input border rounded-lg overflow-hidden">
-							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search for contact..."
-								v-model="search" type="search" @input="searchContact($event)" />
+							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white"
+								placeholder="Search for contact..." v-model="search" type="search" @input="searchContact($event)" />
 							<!-- <template #trailing>
 									<UButton class="text-gray-500 dark:text-gray-400 text-xs font-bold" @click="clearSearch">Clear</UButton>
 								</template> -->
@@ -131,7 +131,7 @@ export default {
 	// 		const pstDate = moment().tz("America/Los_Angeles").format('YYYY-MM-DD');
 	// 		console.log(pstDate);
 
-	// 		const response = await fetch("https://intuitiveagents.io/get-stats", {
+	// 		const response = await fetch("https://intuitiveagents.ai/get-stats", {
 	// 			method: "POST",
 	// 			headers: {
 	// 				"ContentType: "application / json" // Set the Content-Type header
@@ -164,7 +164,7 @@ export default {
 	// 	const pstDate = moment().tz("America/Los_Angeles").format('l');
 	// 	console.log(pstDate);
 	// 	try {
-	// 		const response = fetch("https://intuitiveagents.io/get-stats", {
+	// 		const response = fetch("https://intuitiveagents.ai/get-stats", {
 	// 			method: "POST",
 	// 			body: {
 	// 				agents: [
@@ -245,10 +245,10 @@ export default {
 			});
 
 			this.stats = response;
-				this.loadUsers(startDate, endDate);
+			this.loadUsers(startDate, endDate);
 
 			// try {
-			// 	const response = await fetch("https://intuitiveagents.io/get-stats", {
+			// 	const response = await fetch("https://intuitiveagents.ai/get-stats", {
 			// 		method: "POST",
 			// 		headers: {
 			// 			"Content-Type": "application/json"
@@ -303,9 +303,9 @@ export default {
 			this.page = page == undefined ? 1 : page;
 			this.totalPages = response.totalPages;
 
-			
+
 			// try {
-			// 	const response = await fetch("https://intuitiveagents.io/get-metadata", {
+			// 	const response = await fetch("https://intuitiveagents.ai/get-metadata", {
 			// 		method: "POST",
 			// 		body: JSON.stringify({
 			// 			limit: 100,
@@ -373,7 +373,7 @@ export default {
 
 					this.searches = response;
 					// try {
-					// 	const response = await fetch(`https://intuitiveagents.io/search-va-group`, {
+					// 	const response = await fetch(`https://intuitiveagents.ai/search-va-group`, {
 					// 		method: "POST",
 					// 		body: JSON.stringify({
 					// 			searchTerm: this.search,
@@ -403,7 +403,7 @@ export default {
 			this.transcript = transcript;
 
 			try {
-				const sent = await fetch(`https://intuitiveagents.io/review-transcript`, {
+				const sent = await fetch(`https://intuitiveagents.ai/review-transcript`, {
 					method: "POST",
 					body: JSON.stringify({
 						transcript: transcript.transcript

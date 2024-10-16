@@ -69,12 +69,12 @@
 						</div>
 					</div>
 
-					<UDropdown v-else-if="searchBy == 'sentiments' " :items="sentiments" :popper="{ placement: 'bottom-start' }">
+					<UDropdown v-else-if="searchBy == 'sentiments'" :items="sentiments" :popper="{ placement: 'bottom-start' }">
 						<UButton size="lg" color="white" :label="search ? search : 'Select Sentiment'"
 							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 					</UDropdown>
 
-					<UDropdown v-else-if="searchBy == 'statuses' " :items="statuses" :popper="{ placement: 'bottom-start' }">
+					<UDropdown v-else-if="searchBy == 'statuses'" :items="statuses" :popper="{ placement: 'bottom-start' }">
 						<UButton size="lg" color="white" :label="search ? search : 'Select Status'"
 							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
 					</UDropdown>
@@ -85,9 +85,9 @@
 			</div>
 
 			<div class="Tables">
-				<Table v-if="search == '' || searches.length == 0" :users="users" :searching="searching" :totalPages="totalPages" :page="page"
-					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
-					@loadUsers="loadUsers" />
+				<Table v-if="search == '' || searches.length == 0" :users="users" :searching="searching"
+					:totalPages="totalPages" :page="page" :agentDetails="agentDetails" @paginate="paginate" :fetching="fetching"
+					@setTranscript="setTranscript" @loadUsers="loadUsers" />
 
 				<Table v-else :users="searches" :searching="searching" :query="search" :totalPages="totalPages" :page="page"
 					:agentDetails="agentDetails" @paginate="paginate" :fetching="fetching" @setTranscript="setTranscript"
@@ -342,7 +342,7 @@ export default {
 			this.fetching = false;
 
 			// try {
-			// 	const response = await fetch(`https://intuitiveagents.io/users/${this.agentDetails.id}`, {
+			// 	const response = await fetch(`https://intuitiveagents.ai/users/${this.agentDetails.id}`, {
 			// 		method: "POST",
 			// 		body: JSON.stringify({
 			// 			limit: 100,
@@ -453,7 +453,7 @@ export default {
 			const debouncedSearchContact = this.debounce(async (searchTerm) => {
 				this.search = searchTerm;
 
-				if(this.search !== '') {
+				if (this.search !== '') {
 					this.$toast.open({
 						message: `Searching by ${this.searchBy} - ${this.search}`,
 						type: 'info',
@@ -479,7 +479,7 @@ export default {
 					console.log("Search Response: ", response);
 					this.searches = response;
 				} else if (this.searchBy === 'sentiments') {
-					
+
 					// this.$toast.info(`Searching by Sentiments - ${this.search}`, {
 					// 	timeout: 5000,
 					// 	position: 'top-center',
@@ -520,7 +520,7 @@ export default {
 
 
 						// try {
-						// 	const response = await fetch(`https://intuitiveagents.io/search`, {
+						// 	const response = await fetch(`https://intuitiveagents.ai/search`, {
 						// 		method: "POST",
 						// 		body: JSON.stringify({
 						// 			searchTerm: this.search,
@@ -545,7 +545,7 @@ export default {
 			// Call the debouncedSearchContact function with the search term from the input event
 			debouncedSearchContact(event.target.value);
 		},
-		
+
 		async searchContactsByDate() {
 			this.$toast.open({
 				message: `Searching by Dates - ${this.search}`,
@@ -574,7 +574,7 @@ export default {
 				dismissible: true,
 				position: 'top'
 			});
-			
+
 			const response = await fetcher(`/search`, "POST", {
 				searchTerm: "",
 				agentId: this.agentDetails.id,
@@ -626,7 +626,7 @@ export default {
 			}
 
 			// try {
-			// 	const response = await fetch(`https://intuitiveagents.io/batch-delete-users`, {
+			// 	const response = await fetch(`https://intuitiveagents.ai/batch-delete-users`, {
 			// 		method: "POST",
 			// 		body: JSON.stringify({
 			// 			contactsToDelete: ids

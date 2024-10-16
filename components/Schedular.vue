@@ -97,7 +97,7 @@ export default {
 			//// console.log(response)		
 
 			// try {
-			// 	const response = await fetch("https://intuitiveagents.io/schedule", {
+			// 	const response = await fetch("https://intuitiveagents.ai/schedule", {
 			// 		method: "POST",
 			// 		headers: {
 			// 			"Content-Type": "application/json"

@@ -55,7 +55,7 @@ export default {
 			this.loggingIn = true
 
 			try {
-				const response = await fetch('https://intuitiveagents.io/admin/login', {
+				const response = await fetch('https://intuitiveagents.ai/admin/login', {
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json'

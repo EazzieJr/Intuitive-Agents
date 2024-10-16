@@ -110,7 +110,7 @@ export default {
 			const token = Cookies.get('token')
 
 			try {
-				const response = await fetch(`https://intuitiveagents.io/call-logs-csv`, {
+				const response = await fetch(`https://intuitiveagents.ai/call-logs-csv`, {
 					method: "POST",
 					body: JSON.stringify({
 						agentId: this.agentId,

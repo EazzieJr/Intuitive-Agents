@@ -44,8 +44,7 @@
 
 				<div class="Tag">
 					<div class="Input border rounded-lg overflow-hidden">
-						<UInput size="lg" color="white" placeholder="Tag to call"
-							v-model="tag" type="text" />
+						<UInput size="lg" color="white" placeholder="Tag to call" v-model="tag" type="text" />
 					</div>
 				</div>
 
@@ -70,7 +69,7 @@ export default {
 		agentId: String,
 		fromNumber: String
 	},
-	
+
 	data() {
 		return {
 			limit: "",
@@ -101,10 +100,10 @@ export default {
 			this.loading = false
 			this.closeModal()
 			console.log(response)
-			
-			
+
+
 			// try {
-			// 	const response = await fetch("https://intuitiveagents.io/schedule", {
+			// 	const response = await fetch("https://intuitiveagents.ai/schedule", {
 			// 		method: "POST",
 			// 		headers: {
 			// 			"Content-Type": "application/json"
@@ -129,6 +128,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
