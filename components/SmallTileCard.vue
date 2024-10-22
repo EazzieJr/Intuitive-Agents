@@ -1,5 +1,5 @@
 <template>
-	<div class="SmallTileCard">
+	<div class="SmallTileCard cursor-pointer" @click="fetchData(status)">
 		<div class="Top between">
 			<p>
 				{{ title }}
@@ -7,7 +7,7 @@
 
 			<div class="Image w-8 h-8 overflow-hidden">
 				<img :src="`/svg/calls/${icon}.svg`" alt="">
-				</div>
+			</div>
 		</div>
 
 		<div class="Bottom">
@@ -19,11 +19,45 @@
 </template>
 
 <script>
+import fetcher from "~/utils/fetcher"
+
 export default {
 	props: {
 		title: String,
 		icon: String,
-		value: String | Number
+		value: String | Number,
+		status: String,
+		agentId: String,
+		duration: String
+	},
+
+	methods: {
+		async fetchData(status) {
+			this.$toast.open({
+				message: `Populating KPI`,
+				type: 'info',
+				duration: 2000,
+				dismissible: true,
+				position: 'top'
+			});
+
+			console.log(this.duration)
+			const response = await fetcher("/user/populate", "POST", {
+				agentId: this.agentId,
+				status: this.status,
+				dateOption: "last-schedule"
+			})
+			this.$toast.open({
+				message: `Populated KPI data`,
+				type: 'success',
+				duration: 2000,
+				dismissible: true,
+				position: 'top'
+			});
+			this.$emit("setUsers", response)
+
+			console.log(response);
+		}
 	}
 }
 </script>

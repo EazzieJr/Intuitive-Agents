@@ -20,17 +20,8 @@
 			</div>
 
 			<div class="Numbers start">
-				<SmallTileCard title="Total contacts" icon="total-contacts" :value="stats?.totalContactForAgent || 0" />
-				<SmallTileCard title="Total Calls" icon="total-calls" :value="stats?.totalCalledForAgent || 0" />
-				<SmallTileCard title="Total Not Called" icon="total-not-called" :value="stats?.totalNotCalledForAgent || 0" />
-				<SmallTileCard title="Total Answered: VM/AM" icon="total-answered-vm-am"
-					:value="stats?.totalAnsweredByVm || 0" />
-				<SmallTileCard title="Total Calls: Failed" icon="total-calls-failed" :value="stats?.totalFailedCalls || 0" />
-				<SmallTileCard title="Total Calls Connected" icon="total-answered-contacts"
-					:value="stats?.totalAnsweredCalls || 0" />
-				<SmallTileCard title="Total calls: Transferred" icon="total-calls-transferred"
-					:value="stats?.totalCallsTransffered || 0" />
-				<SmallTileCard title="Total Appointments" icon="total-appointments" :value="stats?.totalAppointment || 0" />
+				<SmallTileCard v-for="(stat, index) in statCards" :key="index" @setUsers="setUsers" :title="stat.title"
+					:icon="stat.icon" :value="stat.value" :agentId="agentDetails?.id" />
 			</div>
 		</header>
 
@@ -94,8 +85,67 @@
 					@setTranscript="setTranscript" @loadUsers="loadUsers" baseTable />
 			</div>
 		</div>
+		
+		<div class="Logs">
+			<div class="Texts between">
+				<h2>
+					Call Logs
+				</h2>
 
-		<!-- <div class="SideDialogue"></div> -->
+				<div class="Actions start space-x-2.5">
+					<button v-if="search || searchBy == 'tags'"
+						class="BatchDelete center py-2.5 w-[160px] rounded-lg bg-red-600 text-white font-medium text-sm"
+						@click="batchDelete">
+						<span v-if="!batchDeleting">
+							Batch delete
+						</span>
+
+						<img class="animate-spin duration-1000 py-1 w-4" v-else src="/svg/loading.svg" alt="">
+					</button>
+
+					<UDropdown :items="searchItems" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="searchBy ? searchBy : 'Search by'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+					</UDropdown>
+
+					<div class="Search start" v-if="searchBy == 'contacts'">
+						<div class="Input border rounded-lg overflow-hidden">
+							<UInput icon="i-heroicons-magnifying-glass-20-solid" size="lg" color="white" placeholder="Search..."
+								v-model="search" type="search" @input="searchContact($event)" />
+						</div>
+					</div>
+
+					<UDropdown v-else-if="searchBy == 'sentiments'" :items="sentiments" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="search ? search : 'Select Sentiment'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+					</UDropdown>
+
+					<UDropdown v-else-if="searchBy == 'statuses'" :items="statuses" :popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="search ? search : 'Select Status'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="capitalize" />
+					</UDropdown>
+
+					<UDropdown v-else-if="searchBy == 'tags'" :items="tags" class="capitalize"
+						:popper="{ placement: 'bottom-start' }">
+						<UButton size="lg" color="white" :label="tag ? tag : 'Tag to schedule'"
+							trailing-icon="i-heroicons-chevron-down-20-solid" class="!capitalize" />
+					</UDropdown>
+
+					<vue-date-picker v-model="date" @update:model-value="searchContactsByDate" mode="date" range
+						v-else-if="searchBy == 'dates'"></vue-date-picker>
+				</div>
+			</div>
+
+			<div class="Tables">
+				<Table v-if="useSearchTable" :users="searches" :searching="searching" :query="search" :totalPages="totalPages"
+					:page="page" :agentDetails="agentDetails" @paginate="paginate" :fetching="fetching"
+					@setTranscript="setTranscript" :searchBy="searchBy" @updateSearch="updateSearch" filter />
+
+				<Table v-else :users="users" :searching="searching" :totalPages="totalPages" :page="page"
+					:agentDetails="agentDetails" :currentDuration="currentDuration" @paginate="paginate" :fetching="fetching"
+					@setTranscript="setTranscript" @loadUsers="loadUsers" baseTable />
+			</div>
+		</div>
 
 		<div class="Modal" v-if="transcriptArray?.length > 1" @click.self="closeTranscript">
 			<div class="Popup">
@@ -358,6 +408,19 @@ export default {
 
 		useSearchTable() {
 			return this.search !== '' || this.tag !== '' || this.searches.length > 0
+		},
+
+		statCards() {
+			return [
+				{ title: "Total contacts", icon: "total-contacts", value: this.stats?.totalContactForAgent || 0 },
+				{ title: "Total Calls", icon: "total-calls", value: this.stats?.totalCalledForAgent || 0 },
+				{ title: "Total Not Called", icon: "total-not-called", value: this.stats?.totalNotCalledForAgent || 0 },
+				{ title: "Total Answered: VM/AM", icon: "total-answered-vm-am", value: this.stats?.totalAnsweredByVm || 0 },
+				{ title: "Total Calls: Failed", icon: "total-calls-failed", value: this.stats?.totalFailedCalls || 0 },
+				{ title: "Total Calls Connected", icon: "total-answered-contacts", value: this.stats?.totalAnsweredCalls || 0 },
+				{ title: "Total calls: Transferred", icon: "total-calls-transferred", value: this.stats?.totalCallsTransffered || 0 },
+				{ title: "Total Appointments", icon: "total-appointments", value: this.stats?.totalAppointment || 0 }
+			];
 		}
 	},
 
@@ -781,6 +844,10 @@ export default {
 					}
 				})
 			})
+		},
+
+		setUsers(users) {
+			this.users = users
 		}
 	},
 
