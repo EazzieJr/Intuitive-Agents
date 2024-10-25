@@ -20,7 +20,7 @@
 			</div>
 
 			<div class="Numbers start">
-				<SmallTileCard v-for="(stat, index) in statCards" :key="index" @setUsers="setUsers" :title="stat.title"
+				<SmallTileCard v-for="(stat, index) in statCards" :key="index" @setUsers="setUsers" :title="stat.title" :status="stat.status"
 					:icon="stat.icon" :value="stat.value" :agentId="agentDetails?.id" />
 			</div>
 		</header>
@@ -85,7 +85,7 @@
 					@setTranscript="setTranscript" @loadUsers="loadUsers" baseTable />
 			</div>
 		</div>
-		
+
 		<div class="Logs">
 			<div class="Texts between">
 				<h2>
@@ -299,7 +299,7 @@ export default {
 					{
 						label: 'Scheduled',
 						click: () => {
-							this.search = 'scheduled'
+							this.search = 'appointment'
 							this.searchBySentiment()
 						}
 					},
@@ -412,14 +412,14 @@ export default {
 
 		statCards() {
 			return [
-				{ title: "Total contacts", icon: "total-contacts", value: this.stats?.totalContactForAgent || 0 },
-				{ title: "Total Calls", icon: "total-calls", value: this.stats?.totalCalledForAgent || 0 },
-				{ title: "Total Not Called", icon: "total-not-called", value: this.stats?.totalNotCalledForAgent || 0 },
-				{ title: "Total Answered: VM/AM", icon: "total-answered-vm-am", value: this.stats?.totalAnsweredByVm || 0 },
-				{ title: "Total Calls: Failed", icon: "total-calls-failed", value: this.stats?.totalFailedCalls || 0 },
-				{ title: "Total Calls Connected", icon: "total-answered-contacts", value: this.stats?.totalAnsweredCalls || 0 },
-				{ title: "Total calls: Transferred", icon: "total-calls-transferred", value: this.stats?.totalCallsTransffered || 0 },
-				{ title: "Total Appointments", icon: "total-appointments", value: this.stats?.totalAppointment || 0 }
+				{ title: "Total contacts", icon: "total-contacts", value: this.stats?.totalContactForAgent || 0, status: "total" },
+				{ title: "Total Calls", icon: "total-calls", value: this.stats?.totalCalledForAgent || 0, status: "called" },
+				{ title: "Total Not Called", icon: "total-not-called", value: this.stats?.totalNotCalledForAgent || 0, status: "total-not-called" },
+				{ title: "Total Answered: VM/AM", icon: "total-answered-vm-am", value: this.stats?.totalAnsweredByVm || 0, status: "voicemail" },
+				{ title: "Total Calls: Failed", icon: "total-calls-failed", value: this.stats?.totalFailedCalls || 0, status: "total-calls-failed" },
+				{ title: "Total Calls Connected", icon: "total-answered-contacts", value: this.stats?.totalAnsweredCalls || 0, status: "total-answered-contacts" },
+				{ title: "Total calls: Transferred", icon: "total-calls-transferred", value: this.stats?.totalCallsTransffered || 0, status: "total-calls-transferred" },
+				{ title: "Total Appointments", icon: "total-appointments", value: this.stats?.totalAppointment || 0, status: "total-appointments" }
 			];
 		}
 	},
